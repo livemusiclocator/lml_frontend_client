@@ -1,12 +1,22 @@
-import { MapContainer, TileLayer, Marker} from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { useState, useEffect } from "react";
 import "leaflet/dist/leaflet.css";
 
 const Map = () => {
-  const position = [-37.840935, 144.946457]; // Melbourne
+  const [gigs, setGigs] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:8080/gigs")
+      .then((response) => response.json())
+      .then((data) => setGigs(data.gigs))
+      .catch((error) => console.error("Error fetching gigs:", error));
+  }, []);
+
+  const defaultPosition = [-37.840935, 144.946457]; // Melbourne
 
   return (
     <MapContainer
-      center={position}
+      center={defaultPosition}
       zoom={13}
       style={{ height: "400px", width: "100%" }}
     >
@@ -14,7 +24,20 @@ const Map = () => {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <Marker position={position}></Marker>
+      {gigs.map((gig, index) => {
+        const position = gig["Venue Latlong"]
+          ? [gig["Venue Latlong"].lat, gig["Venue Latlong"].lng]
+          : defaultPosition;
+
+        return (
+          <Marker key={index} position={position}>
+            <Popup>
+              {gig["Gig Name"]} <br />
+              {gig["Venue Name"]}
+            </Popup>
+          </Marker>
+        );
+      })}
     </MapContainer>
   );
 };
