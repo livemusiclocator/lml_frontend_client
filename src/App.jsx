@@ -6,7 +6,7 @@ function App() {
     <>
       <h1>Map Sandbox</h1>
       <p className="read-the-docs">
-        Hopefully we come out with something nice out of this.
+        Hopefully something nicer as we progress
       </p>
       <div style={{ margin: "20px 0" }}>
         <Map />
