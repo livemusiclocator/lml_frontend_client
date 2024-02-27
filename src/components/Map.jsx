@@ -1,4 +1,5 @@
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { Icon } from "leaflet";
 import { useState, useEffect } from "react";
 import "leaflet/dist/leaflet.css";
 
@@ -14,11 +15,16 @@ const Map = () => {
 
   const defaultPosition = [-37.840935, 144.946457]; // Melbourne
 
+  const customIcon = new Icon({
+    iconUrl: "marker.png",
+    iconSize: [38, 38],
+  });
+
   return (
     <MapContainer
       center={defaultPosition}
       zoom={13}
-      style={{ height: "400px", width: "100%" }}
+      style={{ height: "calc(100vh - 100px)", width: "100%" }}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -30,7 +36,7 @@ const Map = () => {
           : defaultPosition;
 
         return (
-          <Marker key={index} position={position}>
+          <Marker key={index} position={position} icon={customIcon}>
             <Popup>
               {gig["Gig Name"]} <br />
               {gig["Venue Name"]}
