@@ -1,13 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800;900&display=swap');
+
 * {
   box-sizing: border-box;
 }
 
 :root {
   min-height: 100vh;
-  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 16px;
   line-height: 24px;
-  font-weight: 400;
+  font-weight: 800;
   background-image: #ffffff;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -17,8 +19,20 @@
 }
 
 body {
+  background-color: #4d7ee0;
   margin: 0;
-  color: #05010e;
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+  display: block;
+  color: #6290C8;
+}
+
+button {
+  outline: none;
+  border: none;
 }
 
 .navbar {
@@ -27,7 +41,7 @@ body {
   bottom: 0;
   right: 0;
   height: 85px;
-  background-color: #ffffff;
+  background-color: #f2f2f2;
   z-index: 1000;
   display: flex;
   justify-content: center;
@@ -71,4 +85,126 @@ body {
 
 .navbarListItem:last-child {
   margin-right: 0;
+}
+
+.pageContainer {
+  margin: 1rem;
+}
+
+@media (min-width: 1024px) {
+  .pageContainer {
+    margin: 3rem;
+  }
+}
+
+.pageHeader {
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.input,
+.passwordInput,
+.emailInput {
+  box-shadow: rgba(0, 0, 0, 0.11);
+  border: 1px solid #D6D6D6;
+  background: #ffffff;
+  border-radius: 3rem;
+  height: 3rem;
+  width: 100%;
+  outline: none;
+  font-family: 'Montserrat', sans-serif;
+  padding: 0 3rem;
+  font-size: 1rem;
+}
+
+@media (min-width: 1100px) {
+
+  .input,
+  .passwordInput,
+  .emailInput {
+    padding: 0 5rem;
+  }
+}
+
+
+.emailInput {
+  margin-bottom: 2rem;
+  background: url('./assets/svg/personIcon.svg') #ffffff 2.5% center no-repeat;
+}
+
+.passwordInputDiv {
+  position: relative;
+}
+
+.passwordInput {
+  margin-bottom: 2rem;
+  background: url('./assets/svg/lockIcon.svg') #ffffff 2.5% center no-repeat;
+}
+
+.forgotPasswordLink {
+  cursor: pointer;
+  color: #333333;
+  font-weight: 600;
+  text-align: right;
+}
+
+.showPassword {
+  cursor: pointer;
+  position: absolute;
+  top: -4%;
+  right: 1%;
+  padding: 1rem;
+}
+
+.signInBar,
+.signUpBar {
+  margin-top: 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: inherit;
+}
+
+.signInButton,
+.signInText {
+  cursor: pointer;
+}
+
+@media (min-width: 1024px) {
+
+  .signInBar,
+  .signUpBar {
+    justify-content: start;
+  }
+}
+
+.signInText {
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.signInButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 3rem;
+  height: 3rem;
+  background-color: #3561A7;
+  border-radius: 50%;
+}
+
+@media (min-width: 1024px) {
+
+  .signInButton,
+  .signUpButton {
+    margin-left: 3rem;
+  }
+}
+
+.registerLink {
+  margin-top: 4rem;
+  color: #FF6B6B;
+  font-weight: 500;
+  text-align: center;
+  margin-bottom: 3rem;
 }
