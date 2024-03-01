@@ -208,3 +208,25 @@ button {
   text-align: center;
   margin-bottom: 3rem;
 }
+
+.date-slider {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.date-slider button {
+  background-color: transparent;
+  color: inherit;
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0 15px;
+}
+
+.date-slider span {
+  margin: 0 20px;
+  font-size: 1rem;
+  font-weight: 600;
+}
