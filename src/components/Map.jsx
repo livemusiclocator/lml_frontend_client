@@ -31,15 +31,16 @@ const Map = () => {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       {gigs.map((gig, index) => {
-        const position = gig["Venue Latlong"]
-          ? [gig["Venue Latlong"].lat, gig["Venue Latlong"].lng]
-          : defaultPosition;
+        const position = [
+          parseFloat(gig.venue.latitude),
+          parseFloat(gig.venue.longitude),
+        ];
 
         return (
           <Marker key={index} position={position} icon={customIcon}>
             <Popup>
-              {gig["Gig Name"]} <br />
-              {gig["Venue Name"]}
+              {gig.name} <br />
+              {gig.venue.name}
             </Popup>
           </Marker>
         );
