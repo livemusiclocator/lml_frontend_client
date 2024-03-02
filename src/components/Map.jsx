@@ -54,11 +54,19 @@ const Map = () => {
             parseFloat(gig.venue.longitude),
           ];
 
+          const startTime = new Date(gig.start_time);
+          const formattedStartTime = startTime.toLocaleTimeString("en-AU", {
+            hour: "numeric",
+            hour12: true,
+          });
+
           return (
             <Marker key={index} position={position} icon={customIcon}>
               <Popup>
                 {gig.name} <br />
-                {gig.venue.name}
+                {gig.venue.name} <br />
+                {"Starts at " + formattedStartTime} <br />
+                {gig.venue.address}
               </Popup>
             </Marker>
           );
