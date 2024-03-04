@@ -30,7 +30,7 @@ function Navbar() {
                   : "navbarListItemName"
               }
             >
-              Home
+              List
             </p>
           </li>
           <li className="navbarListItem" onClick={() => navigate("/map")}>

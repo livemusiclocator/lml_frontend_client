@@ -1,12 +1,13 @@
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { Icon } from "leaflet";
 import { useState, useEffect } from "react";
+import { useDate } from "../contexts/DateContext";
 import DateSlider from "./DateSlider";
 import "leaflet/dist/leaflet.css";
 
 const Map = () => {
   const [gigs, setGigs] = useState([]);
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const { date: selectedDate, setDate: setSelectedDate } = useDate();
 
   useEffect(() => {
     fetch("http://localhost:8080/gigs")
@@ -38,7 +39,7 @@ const Map = () => {
 
   return (
     <>
-      <DateSlider initialDate={new Date()} onChange={handleDateChange} />
+      <DateSlider initialDate={selectedDate} onChange={handleDateChange} />
       <MapContainer
         center={defaultPosition}
         zoom={13}
