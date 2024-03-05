@@ -20,6 +20,9 @@ html {
 }
 
 .navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   background-color: #fff;
   border-bottom: 1px solid #eaeaea;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
@@ -27,8 +30,22 @@ html {
   z-index: 1030;
 }
 
+.navbar .form-inline {
+  flex-grow: 1;
+}
+
+.form-control {
+  margin-right: 1rem;
+}
+
 .navbar-nav {
+  margin-left: auto;
   list-style: none;
+}
+
+li {
+  list-style: none;
+  margin-left: 1rem;
 }
 
 .nav-link {
@@ -37,6 +54,11 @@ html {
   display: flex;
   align-items: center;
   padding: 0.5rem 1rem;
+}
+
+.nav-item .nav-link {
+  display: flex;
+  align-items: center;
 }
 
 .nav-link img {
@@ -78,6 +100,11 @@ html {
   transition: transform 0.2s ease-in-out;
 }
 
+.icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 0.5rem;
+}
 
 @media (min-width: 768px) {
   .pageContainer {
