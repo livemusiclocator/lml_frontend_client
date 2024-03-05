@@ -1,73 +1,40 @@
-import HomeIcon from "../assets/svg/HomeIcon.svg?react";
+import ListIcon from "../assets/svg/ListIcon.svg?react";
 import MapIcon from "../assets/svg/MapIcon.svg?react";
-import PersonIcon from "../assets/svg/PersonIcon.svg?react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function Navbar() {
-  const navigate = useNavigate();
   const location = useLocation();
 
   const pathMatchRoute = (route) => {
-    if (route === location.pathname) {
-      return true;
-    }
+    return route === location.pathname;
   };
 
+  const isMapView = pathMatchRoute("/map");
+
   return (
-    <footer className="navbar">
-      <nav className="navBarNav">
-        <ul className="navbarListItems">
-          <li className="navbarListItem" onClick={() => navigate("/")}>
-            <HomeIcon
-              fill={pathMatchRoute("/") ? "#2c2c2c" : "#8f8f8f"}
-              width="36px"
-              height="36px"
-            />
-            <p
-              className={
-                pathMatchRoute("/")
-                  ? "navbarListItemNameActive"
-                  : "navbarListItemName"
-              }
-            >
-              List
-            </p>
-          </li>
-          <li className="navbarListItem" onClick={() => navigate("/map")}>
-            <MapIcon
-              fill={pathMatchRoute("/map") ? "#2c2c2c" : "#8f8f8f"}
-              width="36px"
-              height="36px"
-            />
-            <p
-              className={
-                pathMatchRoute("/map")
-                  ? "navbarListItemNameActive"
-                  : "navbarListItemName"
-              }
-            >
-              Map
-            </p>
-          </li>
-          <li className="navbarListItem" onClick={() => navigate("/profile")}>
-            <PersonIcon
-              fill={pathMatchRoute("/profile") ? "#2c2c2c" : "#8f8f8f"}
-              width="36px"
-              height="36px"
-            />
-            <p
-              className={
-                pathMatchRoute("/profile")
-                  ? "navbarListItemNameActive"
-                  : "navbarListItemName"
-              }
-            >
-              Profile
-            </p>
-          </li>
-        </ul>
-      </nav>
-    </footer>
+    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+      <div className="container-fluid">
+        <div className="collapse navbar-collapse" id="navbarNav">
+          <ul className="navbar-nav ml-auto">
+            {isMapView && (
+              <li className="nav-item">
+                <Link className="nav-link" to="/">
+                  <ListIcon className="icon" alt="List" /> <span>List</span>
+                </Link>
+              </li>
+            )}
+            {!isMapView && (
+              <li className="nav-item">
+                <Link className="nav-link" to="/map">
+                  <MapIcon className="icon" alt="Map" /> <span>Map</span>
+                </Link>
+              </li>
+            )}
+          </ul>
+        </div>
+      </div>
+    </nav>
   );
 }
 
