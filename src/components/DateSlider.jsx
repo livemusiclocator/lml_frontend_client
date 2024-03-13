@@ -1,35 +1,42 @@
-import { useState } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { useDate } from "../contexts/DateContext";
 
-const DateSlider = ({ initialDate, onChange }) => {
-  const [currentDate, setCurrentDate] = useState(initialDate);
+const DateSlider = () => {
+  const { date: selectedDate, setDate: setSelectedDate } = useDate();
 
   const handlePreviousDay = () => {
-    const newDate = new Date(currentDate.setDate(currentDate.getDate() - 1));
-    setCurrentDate(newDate);
-    onChange(newDate);
+    const newDate = new Date(selectedDate);
+    newDate.setDate(newDate.getDate() - 1);
+    setSelectedDate(newDate);
   };
 
   const handleNextDay = () => {
-    const newDate = new Date(currentDate.setDate(currentDate.getDate() + 1));
-    setCurrentDate(newDate);
-    onChange(newDate);
+    const newDate = new Date(selectedDate);
+    newDate.setDate(newDate.getDate() + 1);
+    setSelectedDate(newDate);
   };
 
-  const formatDate = (date) => {
-    const options = {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    };
-    return date.toLocaleDateString("en-AU", options);
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
   };
 
   return (
-    <div className="date-slider">
-      <button onClick={handlePreviousDay}>◀</button>
-      <span>{formatDate(currentDate)}</span>
-      <button onClick={handleNextDay}>▶</button>
+    <div id="root-portal" className="date-slider">
+      <button onClick={handlePreviousDay} className="arrow-button">
+        ◀
+      </button>
+      <DatePicker
+        selected={selectedDate}
+        onChange={handleDateChange}
+        dateFormat="MM/dd/yyyy"
+        wrapperClassName="date-picker-wrapper"
+        withPortal
+        portalId="root-portal"
+      />
+      <button onClick={handleNextDay} className="arrow-button">
+        ▶
+      </button>
     </div>
   );
 };

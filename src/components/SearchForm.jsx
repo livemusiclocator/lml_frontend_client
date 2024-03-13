@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useSearch } from "../contexts/SearchContext";
+import Form from "react-bootstrap/Form";
+import "react-datepicker/dist/react-datepicker.css";
 
 function SearchForm() {
   const { setSearchParams } = useSearch();
@@ -11,19 +13,19 @@ function SearchForm() {
   };
 
   return (
-    <form className="d-flex me-auto" role="search" onSubmit={handleSubmit}>
-      <input
-        className="form-control me-2"
-        type="search"
-        placeholder="Search gig, ..."
-        aria-label="Search"
-        value={postcode}
-        onChange={(e) => setPostcode(e.target.value)}
-      />
-      <button className="btn btn-outline-success" type="submit">
-        Search
-      </button>
-    </form>
+    <Form onSubmit={handleSubmit}>
+      <Form.Group>
+        <Form.Control
+          type="text"
+          value={postcode}
+          onChange={(e) => setPostcode(e.target.value)}
+          placeholder="Search gig, ..."
+        />
+      </Form.Group>
+      <Form.Group>
+        <Form.Control type="submit" value="Search" />
+      </Form.Group>
+    </Form>
   );
 }
 
