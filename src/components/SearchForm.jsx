@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useSearch } from "../contexts/SearchContext";
 import Form from "react-bootstrap/Form";
+import InputGroup from "react-bootstrap/InputGroup";
 import "react-datepicker/dist/react-datepicker.css";
 
 function SearchForm() {
@@ -13,18 +14,15 @@ function SearchForm() {
   };
 
   return (
-    <Form onSubmit={handleSubmit}>
-      <Form.Group>
+    <Form onSubmit={handleSubmit} inline>
+      <InputGroup>
         <Form.Control
           type="text"
           value={postcode}
           onChange={(e) => setPostcode(e.target.value)}
           placeholder="Search gig, ..."
         />
-      </Form.Group>
-      <Form.Group>
-        <Form.Control type="submit" value="Search" />
-      </Form.Group>
+      </InputGroup>
     </Form>
   );
 }
