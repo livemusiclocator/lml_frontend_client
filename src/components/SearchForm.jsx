@@ -14,6 +14,8 @@ function SearchForm() {
     setSearchParams({ postcode });
   };
 
+  const handleFilterClick = () => {};
+
   return (
     <Form onSubmit={handleSubmit}>
       <InputGroup>
@@ -22,9 +24,17 @@ function SearchForm() {
           value={postcode}
           onChange={(e) => setPostcode(e.target.value)}
           placeholder="Search gig, ..."
+          size="sm"
         />
-        <Button variant="outline-primary" type="submit">
+        <Button variant="danger" type="submit" size="sm">
           Search
+        </Button>
+        <Button
+          variant="outline-secondary"
+          size="sm"
+          onClick={handleFilterClick}
+        >
+          Filters
         </Button>
       </InputGroup>
     </Form>
