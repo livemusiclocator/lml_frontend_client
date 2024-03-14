@@ -2,7 +2,12 @@ import { Modal, Button } from "react-bootstrap";
 
 const FilterModal = ({ showModal, handleClose }) => {
   return (
-    <Modal show={showModal} onHide={handleClose}>
+    <Modal
+      id="fullScreenModalId"
+      show={showModal}
+      onHide={handleClose}
+      fullscreen={true}
+    >
       <Modal.Header closeButton>
         <Modal.Title>Filters</Modal.Title>
       </Modal.Header>
