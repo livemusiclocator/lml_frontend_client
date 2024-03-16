@@ -54,6 +54,12 @@ const Map = () => {
                   <Marker key={index} position={position} icon={customIcon}>
                     <Popup>
                       {gig.name} <br />
+                      {gig.headline_act.genres.map((genre, genreIndex) => (
+                        <span key={genreIndex} style={{ marginRight: "10px" }}>
+                          {genre}
+                        </span>
+                      ))}{" "}
+                      <br />
                       {gig.venue.name} <br />
                       {"Starts at " + formattedStartTime} <br />
                       {gig.venue.address}

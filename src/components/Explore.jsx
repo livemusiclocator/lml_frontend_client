@@ -28,6 +28,13 @@ function Explore() {
                     }}
                   >
                     <h2>{gig.name}</h2>
+                    <p>
+                      {gig.headline_act.genres.map((genre, genreIndex) => (
+                        <span key={genreIndex} style={{ marginRight: "10px" }}>
+                          {genre}
+                        </span>
+                      ))}
+                    </p>
                     <p>{gig.venue.name}</p>
                     <p>{new Date(gig.start_time).toLocaleString()}</p>
                     <p>{gig.venue.address}</p>
