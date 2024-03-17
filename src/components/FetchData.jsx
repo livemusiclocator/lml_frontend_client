@@ -8,10 +8,10 @@ const FetchData = ({ render }) => {
   const { date: selectedDate } = useDate();
 
   useEffect(() => {
-    fetch("http://localhost:8080/gigs")
+    fetch("https://lml.live/gigs/query")
       .then((response) => response.json())
       .then((data) => {
-        const filteredGigs = data.gigs.filter((gig) => {
+        const filteredGigs = data.filter((gig) => {
           const gigDate = new Date(gig.start_time);
           const isSameDay =
             gigDate.getDate() === selectedDate.getDate() && // returns day of the month, 1 to 31
