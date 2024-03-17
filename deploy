@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+export sha=$(cat .git/refs/heads/main)
+pushd ../livemusiclocator.github.io
+git pull
+rm index.html
+rm -rf assets
+cp -r ../lml_frontend_client/dist/* .
+git add .
+git commit -m "Release ${sha}"
+git push
+popd
+

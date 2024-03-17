@@ -1,20 +1,13 @@
 # Sandbox frontend
 
-More details to come here
+This is an example client to the https://lml.live/gigs/query api endpoint.
+
+Gigs occuring on a selected date are displayed in a list or on a map.
 
 ## Deployment
 
+You need to have cloned the https://github.com/livemusiclocator/livemusiclocator.github.io project
+
 ```
-export sha=$(cat .git/refs/heads/main)
-npm install
-npm run build
-cd ..
-git clone git@github.com:livemusiclocator/livemusiclocator.github.io.git
-cd livemusiclocator.github.io
-rm index.html
-rm -rf assets
-cp -r ../lml_frontend_client/dist/* .
-git add .
-git commit -m "Release $(sha)"
-git push
+./deploy
 ```
