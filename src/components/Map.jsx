@@ -49,12 +49,13 @@ const Map = () => {
                     hour12: true,
                   }
                 );
+                const genres = gig.headline_act && gig.headline_act.genres ? gig.headline_act.genres : [];
 
                 return (
                   <Marker key={index} position={position} icon={customIcon}>
                     <Popup>
                       {gig.name} <br />
-                      {gig.headline_act.genres.map((genre, genreIndex) => (
+                      {genres.map((genre, genreIndex) => (
                         <span key={genreIndex} style={{ marginRight: "10px" }}>
                           {genre}
                         </span>
