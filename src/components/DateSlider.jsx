@@ -24,7 +24,7 @@ const DateSlider = ({ date, onChange }) => {
       <DatePicker
         selected={date}
         onChange={handleDateChange}
-        dateFormat="MM/dd/yyyy"
+        dateFormat="dd/MM/yyyy"
         wrapperClassName="date-picker-wrapper"
         withPortal
         portalId="root-portal"
