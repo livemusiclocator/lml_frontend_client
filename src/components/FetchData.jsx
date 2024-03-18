@@ -1,21 +1,27 @@
 import { useState, useEffect } from "react";
-import { useDate } from "../contexts/DateContext";
 import { useSearch } from "../contexts/SearchContext";
 
-const FetchData = ({ render }) => {
+const FetchData = ({ render, date }) => {
   const { searchParams } = useSearch();
   const [gigs, setGigs] = useState([]);
-  const { date: selectedDate } = useDate();
 
   useEffect(() => {
-    const date = selectedDate.toISOString().slice(0, 10);
-    fetch(`https://lml.live/gigs/query?date_from=${date}&date_to=${date}`)
+    const dateString = date.toISOString().slice(0, 10);
+    fetch(
+      `https://lml.live/gigs/query?date_from=${dateString}&date_to=${dateString}`
+    )
       .then((response) => response.json())
       .then((data) => {
-        setGigs(data);
+        const filteredGigs = data.filter((gig) => {
+          const matchesPostcode = searchParams.postcode
+            ? gig.venue.address.endsWith(searchParams.postcode)
+            : true;
+          return matchesPostcode;
+        });
+        setGigs(filteredGigs);
       })
       .catch((error) => console.error("Error fetching gigs:", error));
-  }, [selectedDate, searchParams.postcode]);
+  }, [date, searchParams.postcode]);
 
   return render({
     gigs,

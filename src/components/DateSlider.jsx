@@ -1,24 +1,19 @@
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { useDate } from "../contexts/DateContext";
 
-const DateSlider = () => {
-  const { date: selectedDate, setDate: setSelectedDate } = useDate();
-
+const DateSlider = ({ date, onChange }) => {
   const handlePreviousDay = () => {
-    const newDate = new Date(selectedDate);
-    newDate.setDate(newDate.getDate() - 1);
-    setSelectedDate(newDate);
+    const newDate = new Date(date.setDate(date.getDate() - 1));
+    onChange(newDate);
   };
 
   const handleNextDay = () => {
-    const newDate = new Date(selectedDate);
-    newDate.setDate(newDate.getDate() + 1);
-    setSelectedDate(newDate);
+    const newDate = new Date(date.setDate(date.getDate() + 1));
+    onChange(newDate);
   };
 
   const handleDateChange = (date) => {
-    setSelectedDate(date);
+    onChange(date);
   };
 
   return (
@@ -27,7 +22,7 @@ const DateSlider = () => {
         ◀
       </button>
       <DatePicker
-        selected={selectedDate}
+        selected={date}
         onChange={handleDateChange}
         dateFormat="MM/dd/yyyy"
         wrapperClassName="date-picker-wrapper"
