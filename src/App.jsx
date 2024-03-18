@@ -1,16 +1,11 @@
 import { BrowserRouter as Router } from "react-router-dom";
-import Navbar from "./components/NavBar";
-import { SearchProvider } from "./contexts/SearchContext";
-import GigsLoader from "./components/GigsLoader";
+import SearchHandler from "./components/SearchHandler";
 
 function App() {
   return (
-    <SearchProvider>
-      <Router>
-        <Navbar />
-        <GigsLoader />
-      </Router>
-    </SearchProvider>
+    <Router>
+      <SearchHandler />
+    </Router>
   );
 }
 

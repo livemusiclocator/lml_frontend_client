@@ -5,7 +5,7 @@ import Map from "./Map";
 import FetchData from "./FetchData";
 import DateSlider from "./DateSlider";
 
-export default function GigsLoader() {
+export default function GigsLoader({ searchParams }) {
   const [selectedDate, setSelectedDate] = useState(new Date());
 
   const renderExplorerOrMap = ({ gigs }) => {
@@ -20,7 +20,11 @@ export default function GigsLoader() {
   return (
     <>
       <DateSlider date={selectedDate} onChange={setSelectedDate} />
-      <FetchData render={renderExplorerOrMap} date={selectedDate} />
+      <FetchData
+        render={renderExplorerOrMap}
+        date={selectedDate}
+        searchParams={searchParams}
+      />
     </>
   );
 }

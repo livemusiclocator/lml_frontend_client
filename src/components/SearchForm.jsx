@@ -1,13 +1,11 @@
 import { useState } from "react";
-import { useSearch } from "../contexts/SearchContext";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import "react-datepicker/dist/react-datepicker.css";
 import Button from "react-bootstrap/Button";
 import FilterModal from "./FilterModal";
 
-function SearchForm() {
-  const { setSearchParams } = useSearch();
+function SearchForm({ setSearchParams }) {
   const [postcode, setPostcode] = useState("");
   const [showModal, setShowModal] = useState(false);
 

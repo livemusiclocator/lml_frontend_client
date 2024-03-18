@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 import SearchForm from "./SearchForm";
 
-function Navbar() {
+function Navbar({ setSearchParams }) {
   const location = useLocation();
 
   const pathMatchRoute = (route) => {
@@ -16,7 +16,7 @@ function Navbar() {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container-fluid">
-        <SearchForm />
+        <SearchForm setSearchParams={setSearchParams} />
         <div className="navbar-nav"></div>
         <li className="nav-item">
           {isMapView ? (

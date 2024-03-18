@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
-import { useSearch } from "../contexts/SearchContext";
 
-const FetchData = ({ render, date }) => {
-  const { searchParams } = useSearch();
+const FetchData = ({ render, date, searchParams }) => {
   const [gigs, setGigs] = useState([]);
 
   useEffect(() => {
