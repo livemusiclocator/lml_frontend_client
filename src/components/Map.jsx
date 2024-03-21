@@ -22,37 +22,41 @@ const Map = ({ gigs }) => {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       {gigs.map((gig, index) => {
-        const position = [
-          parseFloat(gig.venue.latitude),
-          parseFloat(gig.venue.longitude),
-        ];
+        const latitude = parseFloat(gig.venue.latitude);
+        const longitude = parseFloat(gig.venue.longitude);
 
-        const startTime = new Date(gig.start_time);
-        const formattedStartTime = startTime.toLocaleTimeString("en-AU", {
-          hour: "numeric",
-          hour12: true,
-        });
-        const genres =
-          gig.headline_act && gig.headline_act.genres
-            ? gig.headline_act.genres
-            : [];
+        if (!isNaN(latitude) && !isNaN(longitude)) {
+          const position = [latitude, longitude];
 
-        return (
-          <Marker key={index} position={position} icon={customIcon}>
-            <Popup>
-              {gig.name} <br />
-              {genres.map((genre, genreIndex) => (
-                <span key={genreIndex} style={{ marginRight: "10px" }}>
-                  {genre}
-                </span>
-              ))}{" "}
-              <br />
-              {gig.venue.name} <br />
-              {"Starts at " + formattedStartTime} <br />
-              {gig.venue.address}
-            </Popup>
-          </Marker>
-        );
+          const startTime = new Date(gig.start_time);
+          const formattedStartTime = startTime.toLocaleTimeString("en-AU", {
+            hour: "numeric",
+            hour12: true,
+          });
+          const genres =
+            gig.headline_act && gig.headline_act.genres
+              ? gig.headline_act.genres
+              : [];
+
+          return (
+            <Marker key={index} position={position} icon={customIcon}>
+              <Popup>
+                {gig.name} <br />
+                {genres.map((genre, genreIndex) => (
+                  <span key={genreIndex} style={{ marginRight: "10px" }}>
+                    {genre}
+                  </span>
+                ))}{" "}
+                <br />
+                {gig.venue.name} <br />
+                {"Starts at " + formattedStartTime} <br />
+                {gig.venue.address}
+              </Popup>
+            </Marker>
+          );
+        } else {
+          return null;
+        }
       })}
     </MapContainer>
   );
