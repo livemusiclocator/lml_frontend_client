@@ -1,6 +1,14 @@
 import { Modal, Button } from "react-bootstrap";
+import { useState } from "react";
+import TagsInput from "./TagsInputs";
 
-const FilterModal = ({ showModal, handleClose }) => {
+const FilterModal = ({ showModal, handleClose, setFilterTags }) => {
+  const [tags, setTags] = useState([]);
+  const handleApplyFilters = () => {
+    setFilterTags(tags);
+    handleClose();
+  };
+
   return (
     <Modal
       id="fullScreenModalId"
@@ -12,13 +20,14 @@ const FilterModal = ({ showModal, handleClose }) => {
         <Modal.Title>Filters</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p>Lot of filtering going on here...</p>
+        <h2>Filter by postcodes</h2>
+        <TagsInput tags={tags} setTags={setTags} />
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>
           Close
         </Button>
-        <Button variant="primary" onClick={handleClose}>
+        <Button variant="primary" onClick={handleApplyFilters}>
           Apply Filters
         </Button>
       </Modal.Footer>

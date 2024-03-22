@@ -7,15 +7,20 @@ import FilterModal from "./FilterModal";
 
 function SearchForm({ setSearchParams }) {
   const [postcode, setPostcode] = useState("");
+  const [tags, setTags] = useState([]);
   const [showModal, setShowModal] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setSearchParams({ postcode });
+    setSearchParams({ postcode, tags });
   };
 
   const handleFilterClick = () => setShowModal(true);
-  const handleCloseModal = () => setShowModal(false);
+
+  const handleApplyFilters = (newTags) => {
+    setSearchParams((prevParams) => ({ ...prevParams, tags: newTags }));
+    setShowModal(false);
+  };
 
   return (
     <>
@@ -39,8 +44,13 @@ function SearchForm({ setSearchParams }) {
             Filters
           </Button>
         </InputGroup>
+        <FilterModal
+          showModal={showModal}
+          handleClose={() => setShowModal(false)}
+          setFilterTags={handleApplyFilters}
+          tags={tags}
+        />
       </Form>
-      <FilterModal showModal={showModal} handleClose={handleCloseModal} />
     </>
   );
 }

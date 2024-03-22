@@ -3,7 +3,7 @@ import Navbar from "./NavBar";
 import GigsLoader from "./GigsLoader";
 
 export default function SearchHandler() {
-  const [searchParams, setSearchParams] = useState({ postcode: "" });
+  const [searchParams, setSearchParams] = useState({ postcode: "", tags: [] });
 
   return (
     <>

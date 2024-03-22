@@ -10,16 +10,26 @@ const FetchData = ({ render, date, searchParams }) => {
     )
       .then((response) => response.json())
       .then((data) => {
-        const filteredGigs = data.filter((gig) => {
-          const matchesPostcode = searchParams.postcode
-            ? gig.venue.address.endsWith(searchParams.postcode)
-            : true;
-          return matchesPostcode;
-        });
+        let filteredGigs = data;
+        if (searchParams.tags && searchParams.tags.length > 0) {
+          filteredGigs = filteredGigs.filter((gig) =>
+            searchParams.tags.some((tag) => gig.venue.address.includes(tag))
+          );
+        }
+
+        if (
+          searchParams.postcode &&
+          (!searchParams.tags ||
+            !searchParams.tags.includes(searchParams.postcode))
+        ) {
+          filteredGigs = filteredGigs.filter((gig) =>
+            gig.venue.address.includes(searchParams.postcode)
+          );
+        }
         setGigs(filteredGigs);
       })
       .catch((error) => console.error("Error fetching gigs:", error));
-  }, [date, searchParams.postcode]);
+  }, [date, searchParams]);
 
   return render({
     gigs,
