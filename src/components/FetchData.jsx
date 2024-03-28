@@ -23,7 +23,7 @@ const FetchData = ({ render, date, searchParams }) => {
             !searchParams.tags.includes(searchParams.postcode))
         ) {
           filteredGigs = filteredGigs.filter((gig) =>
-            gig.venue.address.includes(searchParams.postcode)
+            gig.venue.address?.includes(searchParams.postcode)
           );
         }
         setGigs(filteredGigs);
