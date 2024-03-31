@@ -1,32 +1,19 @@
 import { useRef, useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { Icon } from "leaflet";
+import { getPosition } from "../getLocation";
 
 import "leaflet/dist/leaflet.css";
 
 const Map = ({ gigs }) => {
   const mapRef = useRef();
-  const defaultPosition = [-37.840935, 144.946457]; // Melbourne
+  const defaultPosition = getPosition();
   const [userPosition, setUserPosition] = useState(null);
-
-  const showUserLocation = () => {
-    if (mapRef.current) {
-      mapRef.current
-        .locate({ setView: true, maxZoom: 13 })
-        .on("locationfound", (e) => {
-          setUserPosition(e.latlng);
-        });
-    }
-  };
 
   const customIcon = new Icon({
     iconUrl: "marker.png",
     iconSize: [38, 38],
   });
-
-  useEffect(() => {
-    showUserLocation();
-  }, []);
 
   return (
     <MapContainer

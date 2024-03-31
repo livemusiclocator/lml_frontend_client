@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { getLocation } from "../getLocation";
 
 const FetchData = ({ render, date, searchParams }) => {
   const [gigs, setGigs] = useState([]);
@@ -6,7 +7,7 @@ const FetchData = ({ render, date, searchParams }) => {
   useEffect(() => {
     const dateString = date.toISOString().slice(0, 10);
     fetch(
-      `https://lml.live/gigs/query?date_from=${dateString}&date_to=${dateString}`
+      `https://lml.live/gigs/query?location=${getLocation()}&date_from=${dateString}&date_to=${dateString}`
     )
       .then((response) => response.json())
       .then((data) => {
