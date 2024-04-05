@@ -146,6 +146,45 @@ li {
   outline: none;
 }
 
+.gig-details-tile-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050;
+  color: white;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.gig-details-tile {
+  background-color: #fff;
+  color: #333;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.gig-details-tile-overlay button.close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+
 @media (min-width: 768px) {
   .pageContainer {
     padding: 2rem;
