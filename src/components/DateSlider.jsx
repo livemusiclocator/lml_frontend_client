@@ -16,8 +16,8 @@ export default function DateSlider({ date, onChange }) {
     onChange(newDate);
   };
 
-  const handleDateChange = (date) => {
-    onChange(date);
+  const handleDateChange = (e) => {
+    onChange(e.target.valueAsDate);
   };
 
   return (
