@@ -49,15 +49,11 @@ export default function FiltersAndGigs({
   const { id } = useParams();
   const gig = gigs.find((gig) => gig.id === id);
 
-  if (showSingleGig && !gig) {
-    throw "NOT IMPLEMENTED YET";
-  }
-
   const renderer = () => {
     if (showSingleGig) {
       return (
         <div className="p-3">
-          <SingleGigDetails gig={gig} />
+          {isLoading ? <LoadingSpinner /> : <SingleGigDetails gig={gig} />}
         </div>
       );
     }

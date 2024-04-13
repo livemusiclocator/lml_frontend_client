@@ -1,8 +1,9 @@
-import { useRef, useEffect, useState } from "react";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { useRef, useState } from "react";
+import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import { Icon } from "leaflet";
 import { getPosition } from "../getLocation";
 import GigDetailsTile from "./GigDetailsTile";
+import { useNavigate } from "react-router-dom";
 
 import "leaflet/dist/leaflet.css";
 
@@ -13,9 +14,11 @@ const Map = ({ gigs }) => {
   const [selectedGig, setSelectedGig] = useState(null);
 
   const customIcon = new Icon({
-    iconUrl: "marker.png",
+    iconUrl: "/marker.png",
     iconSize: [38, 38],
   });
+
+  const navigate = useNavigate();
 
   return (
     <>
@@ -42,11 +45,9 @@ const Map = ({ gigs }) => {
                 position={position}
                 icon={customIcon}
                 eventHandlers={{
-                  click: () => {
-                    setSelectedGig(gig);
-                  },
+                  click: () => navigate(`/gigs/${gig.id}`),
                 }}
-              />
+              ></Marker>
             );
           } else {
             return null;
