@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import Map from "../Map";
+import FiltersAndGigs from "./FiltersAndGigs";
+import LoadingOverlay from "../loading/LoadingOverlay";
 import { getLocation } from "../../getLocation";
-import LoadingOverlay from "./LoadingOverlay";
-import GigsList from "../explorers/GigsList";
+import Map from "../Map";
 
 const loadData = async (date) => {
   const response = await fetch(
@@ -11,7 +11,14 @@ const loadData = async (date) => {
   return response.json();
 };
 
-export default function ListLoader({ date, gigs, setGigs }) {
+export default function Explorer({
+  date,
+  setDate,
+  gigs,
+  setGigs,
+  expandList,
+  showSingleGig,
+}) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -20,12 +27,20 @@ export default function ListLoader({ date, gigs, setGigs }) {
       setGigs(data);
       setLoading(false);
     });
-  }, [date]);
+  }, [date, setGigs]);
 
   return (
     <>
       {loading && <LoadingOverlay />}
-      <GigsList gigs={gigs} />
+      <Map gigs={gigs} />
+      <FiltersAndGigs
+        date={date}
+        setDate={setDate}
+        gigs={gigs}
+        expandList={expandList}
+        showSingleGig={showSingleGig}
+        isLoading={loading}
+      />
     </>
   );
 }

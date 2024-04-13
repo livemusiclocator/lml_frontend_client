@@ -1,14 +1,10 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import MapExplorer from "./explorers/MapExplorer";
-import ListExplorer from "./explorers/ListExplorer";
 import { useState } from "react";
-import SingleGigExplorer from "./explorers/SingleGigExplorer";
+import Explorer from "./explorer/Explorer";
 
 export default function GigExplorer() {
   const [date, setDate] = useState(new Date());
   const [gigs, setGigs] = useState([]);
-
-  console.log(gigs);
 
   return (
     <Router>
@@ -16,7 +12,7 @@ export default function GigExplorer() {
         <Route
           path="/"
           element={
-            <MapExplorer
+            <Explorer
               date={date}
               setDate={setDate}
               gigs={gigs}
@@ -27,17 +23,27 @@ export default function GigExplorer() {
         <Route
           path="/list"
           element={
-            <ListExplorer
+            <Explorer
               date={date}
               setDate={setDate}
               gigs={gigs}
               setGigs={setGigs}
+              expandList={true}
             />
           }
         ></Route>
         <Route
           path="/gigs/:id"
-          element={<SingleGigExplorer gigs={gigs} />}
+          element={
+            <Explorer
+              date={date}
+              setDate={setDate}
+              gigs={gigs}
+              setGigs={setGigs}
+              expandList={true}
+              showSingleGig={true}
+            />
+          }
         ></Route>
       </Routes>
     </Router>
