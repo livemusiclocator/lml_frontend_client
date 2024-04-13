@@ -1,16 +1,8 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import SearchHandler from "./components/SearchHandler";
-import NewLayout from "./temp";
+import GigExplorer from "./components/GigExplorer";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
-  return (
-    <Router>
-      <Routes>
-        <Route path="/newlayout" element={<NewLayout/>}/>
-    <Route path="*" element={<SearchHandler/>}/>
-      </Routes>
-    </Router>
-  );
+  return <GigExplorer />;
 }
 
 export default App;

@@ -1,7 +1,11 @@
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import styled from "styled-components";
 
-const DateSlider = ({ date, onChange }) => {
+const DateSliderWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
+export default function DateSlider({ date, onChange }) {
   const handlePreviousDay = () => {
     const newDate = new Date(date.setDate(date.getDate() - 1));
     onChange(newDate);
@@ -17,23 +21,19 @@ const DateSlider = ({ date, onChange }) => {
   };
 
   return (
-    <div id="root-portal" className="date-slider">
-      <button onClick={handlePreviousDay} className="arrow-button">
+    <DateSliderWrapper>
+      <button onClick={handlePreviousDay} className="btn btn-outline-dark">
         ◀
       </button>
-      <DatePicker
-        selected={date}
+      <input
+        className="form-control mx-2"
+        type="date"
         onChange={handleDateChange}
-        dateFormat="dd/MM/yyyy"
-        wrapperClassName="date-picker-wrapper"
-        withPortal
-        portalId="root-portal"
+        value={date.toISOString().split("T")[0]}
       />
-      <button onClick={handleNextDay} className="arrow-button">
+      <button onClick={handleNextDay} className="btn btn-outline-dark">
         ▶
       </button>
-    </div>
+    </DateSliderWrapper>
   );
-};
-
-export default DateSlider;
+}
