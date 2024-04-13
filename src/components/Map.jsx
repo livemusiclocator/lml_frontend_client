@@ -6,6 +6,7 @@ import GigDetailsTile from "./GigDetailsTile";
 import { useNavigate } from "react-router-dom";
 
 import "leaflet/dist/leaflet.css";
+import { gigIsSaved } from "../savedGigs";
 
 const Map = ({ gigs }) => {
   const mapRef = useRef();
@@ -13,10 +14,19 @@ const Map = ({ gigs }) => {
   const [userPosition, setUserPosition] = useState(null);
   const [selectedGig, setSelectedGig] = useState(null);
 
-  const customIcon = new Icon({
-    iconUrl: "/marker.png",
-    iconSize: [38, 38],
-  });
+  const customIcon = (gig) => {
+    if (gigIsSaved(gig)) {
+      return new Icon({
+        iconUrl: "/alt-marker-2-saved.png",
+        iconSize: [40, 40],
+      });
+    }
+
+    return new Icon({
+      iconUrl: "/alt-marker-2.png",
+      iconSize: [45, 45],
+    });
+  };
 
   const navigate = useNavigate();
 
@@ -43,7 +53,7 @@ const Map = ({ gigs }) => {
               <Marker
                 key={index}
                 position={position}
-                icon={customIcon}
+                icon={customIcon(gig)}
                 eventHandlers={{
                   click: () => navigate(`/gigs/${gig.id}`),
                 }}

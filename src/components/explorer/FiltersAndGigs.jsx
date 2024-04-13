@@ -22,6 +22,7 @@ export const FilterWrapper = styled.div`
   width: 100vw;
   height: ${(props) => (props.$expand ? "100%" : "30vh")};
   bottom: 0;
+
   @media (min-width: 1024px) {
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
     bottom: 20px;
@@ -29,8 +30,7 @@ export const FilterWrapper = styled.div`
     min-width: 300px;
     max-width: 400px;
     height: calc(100vh - 20px - 20px);
-    border-bottom-right-radius: 1.5rem;
-    border-bottom-left-radius: 1.5rem;
+    border-radius: 1.5rem;
 
     #overlay-expand-button {
       display: none;
@@ -51,11 +51,7 @@ export default function FiltersAndGigs({
 
   const renderer = () => {
     if (showSingleGig) {
-      return (
-        <div className="p-3">
-          {isLoading ? <LoadingSpinner /> : <SingleGigDetails gig={gig} />}
-        </div>
-      );
+      return isLoading ? <LoadingSpinner /> : <SingleGigDetails gig={gig} />;
     }
 
     return (
