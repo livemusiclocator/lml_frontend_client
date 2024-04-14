@@ -1,8 +1,7 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import { Icon } from "leaflet";
 import { getPosition } from "../getLocation";
-import GigDetailsTile from "./GigDetailsTile";
 import { useNavigate } from "react-router-dom";
 
 import "leaflet/dist/leaflet.css";
@@ -11,8 +10,6 @@ import { gigIsSaved } from "../savedGigs";
 const Map = ({ gigs }) => {
   const mapRef = useRef();
   const defaultPosition = getPosition();
-  const [userPosition, setUserPosition] = useState(null);
-  const [selectedGig, setSelectedGig] = useState(null);
 
   const customIcon = (gig) => {
     if (gigIsSaved(gig)) {
@@ -34,9 +31,9 @@ const Map = ({ gigs }) => {
     <>
       <MapContainer
         ref={mapRef}
-        center={userPosition || defaultPosition}
+        center={defaultPosition}
         zoom={13}
-        style={{ height: "100vh", width: "100%" }}
+        style={{ height: "100dvh", width: "100%" }}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -64,12 +61,6 @@ const Map = ({ gigs }) => {
           }
         })}
       </MapContainer>
-      {selectedGig && (
-        <GigDetailsTile
-          gig={selectedGig}
-          onClose={() => setSelectedGig(null)}
-        />
-      )}
     </>
   );
 };

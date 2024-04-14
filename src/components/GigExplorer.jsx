@@ -17,6 +17,7 @@ export default function GigExplorer() {
               setDate={setDate}
               gigs={gigs}
               setGigs={setGigs}
+              listSize="normal"
             />
           }
         />
@@ -28,10 +29,22 @@ export default function GigExplorer() {
               setDate={setDate}
               gigs={gigs}
               setGigs={setGigs}
-              expandList={true}
+              listSize="maximised"
             />
           }
-        ></Route>
+        />
+        <Route
+          path="/map"
+          element={
+            <Explorer
+              date={date}
+              setDate={setDate}
+              gigs={gigs}
+              setGigs={setGigs}
+              listSize="minimised"
+            />
+          }
+        />
         <Route
           path="/gigs/:id"
           element={
@@ -40,7 +53,7 @@ export default function GigExplorer() {
               setDate={setDate}
               gigs={gigs}
               setGigs={setGigs}
-              expandList={true}
+              listSize="maximised"
               showSingleGig={true}
             />
           }

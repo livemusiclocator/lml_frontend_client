@@ -8,7 +8,7 @@ const StarWrapper = styled.span`
 
 export default function GigsList({ gigs }) {
   return (
-    <div className="h-100 overflow-scroll ">
+    <div className="h-100 overflow-auto">
       <div className="list-group list-group-flush">
         {gigs.map((gig) => (
           <Link

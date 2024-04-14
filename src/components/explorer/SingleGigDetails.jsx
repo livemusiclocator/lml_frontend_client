@@ -1,4 +1,4 @@
-import { Link, useNavigationType } from "react-router-dom";
+import { Link, useNavigate, useNavigationType } from "react-router-dom";
 import { gigIsSaved, saveGig, unsaveGig } from "../../savedGigs";
 import { useState } from "react";
 import styled from "styled-components";
