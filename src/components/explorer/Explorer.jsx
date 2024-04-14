@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import FiltersAndGigs from "./FiltersAndGigs";
 import LoadingOverlay from "../loading/LoadingOverlay";
 import { getLocation } from "../../getLocation";
+
+import "./styles.scss"
 import Map from "../Map";
 
 const loadData = async (date) => {

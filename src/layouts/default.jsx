@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { NavLink, Link } from "react-router-dom";
-import LogoIcon from "./assets/svg/lml_logo_outline.svg?react";
+import { useState } from 'react';
+import { Bars3Icon } from '@heroicons/react/24/solid'
+import { NavLink, Link, Form, useSearchParams, Outlet } from "react-router-dom";
+import LogoIcon from "../assets/svg/lml_logo_outline.svg?react";
 
 const Logo = () => (
   <div className="flex-shrink">
-    <Link to="/map" className="flex justify-center items-center text-slate-50">
+    <Link to="/" className="flex justify-center items-center text-slate-50">
       <LogoIcon className="flex-shrink w-10" width="96" />
       <span className="mx-4 text-xl hidden md:block">Live Music Locator</span>
     </Link>
@@ -13,21 +14,7 @@ const Logo = () => (
 const HamburgerMenu = ({ toggleMenu }) => (
   <div className="lg:hidden">
     <button onClick={toggleMenu} className="text-gray-500 focus:outline-none">
-      <svg
-        className="h-6 w-6"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        width="24"
-        height="24"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-          d="M4 6 h 16 M 4 12 h 16 m -16 6 h 16"
-        />
-      </svg>
+      <Bars3Icon className="h6 w-6"/>
     </button>
   </div>
 );
@@ -70,16 +57,14 @@ const DesktopMenu = () => (
   </div>
 );
 
-const SearchForm = ({ searchQuery, setSearchQuery, handleSearch }) => (
-  <div className="flex-grow">
-    <form onSubmit={handleSearch} className="flex flex-row max-w-lg mx-auto">
-      <label
-        htmlFor="default-search"
-        className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
-      >
-        Search
-      </label>
-      <div className="relative flex-grow">
+// todo; delete or keep this - be good to have backup of the styling as it was hard to get it right!
+
+const SearchForm = () => {
+ return( <div className="flex-grow">
+    <Form method="get" action="/" className="flex flex-row max-w-lg mx-auto">
+
+    <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+    <div className="relative flex-grow">
         {/* may want to keep this in but commented for now
         <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
             <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20" width="24" height="24">
@@ -89,12 +74,26 @@ const SearchForm = ({ searchQuery, setSearchQuery, handleSearch }) => (
           */}
         <input
           type="search"
-          value={searchQuery}
           id="default-search"
-          onChange={(e) => setSearchQuery(e.target.value)}
           className=" min-w-24 block w-full py-2 pl-4 pr-2 text-slate-900 rounded-sm bg-slate-50 text-md focus-visible:outline focus-visible:outline-red-600"
           placeholder="Search gigs..."
         />
+        <input type="search"
+          name="q"
+          id="default-search"
+               className=" min-w-24 block w-full py-2 pl-4 pr-2 text-slate-900 rounded-sm bg-slate-50 text-md focus-visible:outline focus-visible:outline-red-600" placeholder="Search gigs..." />
+
+
+      <button type="submit" className="text-white h-10 px-2 absolute end-0 bottom-0 bg-red-600 hover:bg-red-500 rounded-r-sm text-lg  accent-red-600 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-inset focus-visible:ring-white focus-visible:ring-offset-red-600 focus-visible:outline-none">
+
+          <svg className="p-1 w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20" width="24" height="24">
+                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+            </svg>
+      </button>
+
+
+    </div>
+    </Form>
 
         <button
           type="submit"
@@ -118,57 +117,43 @@ const SearchForm = ({ searchQuery, setSearchQuery, handleSearch }) => (
             />
           </svg>
         </button>
-      </div>
-    </form>
   </div>
 );
+}
 
 const NavBar = () => {
-  const [searchQuery, setSearchQuery] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    console.log(searchQuery);
-  };
-
   return (
-    <div className="bg-neutral-800 sticky top-0">
+    <header className="w-full bg-gray-800 text-white py-4 px-6 sticky top-0 z-50">
       <div className="max-w-8xl mx-auto">
         <div className="flex justify-between items-center py-2 px-2 space-x-1">
           <HamburgerMenu toggleMenu={() => setIsMenuOpen(!isMenuOpen)} />
           <Logo />
-          <SearchForm
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            handleSearch={handleSearch}
-          />
-          <DesktopMenu />
+          <DesktopMenu/>
         </div>
       </div>
       <MobileMenu isMenuOpen={isMenuOpen} />
-    </div>
-  );
-};
-const SearchPage = () => {
-  useEffect(() => {
-    // just for temporary coexistance for now - not something we actually want to live - replace with static imports
-    import("./new_app.css");
-  }, []);
-
-  return (
-    <div className="min-h-screen bg-gray-100">
-      <NavBar />
-      {/* Other content */}
-      <div className="py-6">
-        <div className="max-w-6xl mx-auto px-4">
-          <h1 className="text-2xl font-semibold text-gray-900">Events</h1>
-
-          {/* Render search results or default content here */}
-        </div>
-      </div>
-    </div>
+    </header>
   );
 };
 
-export default SearchPage;
+
+const DefaultLayout = () => {
+  const [params] = useSearchParams()
+  const showHeader = params.get("showHeader")
+  // todo : bootstrap->tailwindcss so can delete the hack "revert-tailwind" and friends
+return (<div className="flex flex-col h-screen">
+          {showHeader && <NavBar /> }
+          <div className="relative">
+            <div className="gig-explorer revert-tailwind" data-bs-theme="light">
+          <Outlet/>
+          </div>
+          </div>
+
+        </div>)
+}
+
+
+
+export default DefaultLayout;
