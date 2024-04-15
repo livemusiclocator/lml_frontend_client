@@ -1,0 +1,12 @@
+lbmf.lml-development.live,
+melbourne.lml-development.live,
+sydney.lml-development.live,
+adelaide.lml-development.live,
+brisbane.lml-development.live,
+perth.lml-development.live {
+	log
+	root * /var/www
+	encode zstd gzip
+	tls internal
+	reverse_proxy localhost:5173
+}
