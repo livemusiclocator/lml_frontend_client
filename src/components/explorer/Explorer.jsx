@@ -16,7 +16,7 @@ export default function Explorer({
   setDate,
   gigs,
   setGigs,
-  listSize,
+  listMaximised,
   showSingleGig,
 }) {
   const [loading, setLoading] = useState(true);
@@ -37,7 +37,7 @@ export default function Explorer({
         date={date}
         setDate={setDate}
         gigs={gigs}
-        listSize={listSize}
+        listMaximised={listMaximised}
         showSingleGig={showSingleGig}
         isLoading={loading}
       />

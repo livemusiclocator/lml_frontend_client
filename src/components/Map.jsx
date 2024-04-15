@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import { Icon } from "leaflet";
-import { getPosition } from "../getLocation";
+import { getMapCenter } from "../getLocation";
 import { useNavigate } from "react-router-dom";
 
 import "leaflet/dist/leaflet.css";
@@ -9,7 +9,7 @@ import { gigIsSaved } from "../savedGigs";
 
 const Map = ({ gigs }) => {
   const mapRef = useRef();
-  const defaultPosition = getPosition();
+  const defaultPosition = getMapCenter();
 
   const customIcon = (gig) => {
     if (gigIsSaved(gig)) {

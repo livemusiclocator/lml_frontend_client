@@ -9,20 +9,14 @@ export const FilterWrapper = styled.div`
   width: 100vw;
   bottom: 0;
   ${(props) => {
-    switch (props.$listSize) {
-      case "normal":
+    switch (props.$listMaximised) {
+      case false:
         return `
           border-top-right-radius: 1.5rem;
           border-top-left-radius: 1.5rem;
-          height: 40vh
+          height: 95px
         `;
-      case "minimised":
-        return `
-          border-top-right-radius: 1.5rem;
-          border-top-left-radius: 1.5rem;
-          height: 90px
-        `;
-      case "maximised":
+      case true:
         return `
           height: 100dvh
         `;
@@ -37,25 +31,6 @@ export const FilterWrapper = styled.div`
     max-width: 400px;
     border-radius: 1.5rem;
 
-    #overlay-expand-button {
-      display: none;
-    }
-
-    ${(props) => {
-      switch (props.$listSize) {
-        case "normal":
-          return `
-            height: calc(100vh - 20px - 20px);
-          `;
-        case "minimised":
-          return `
-            height: 70px
-          `;
-        case "maximised":
-          return `
-            height: calc(100vh - 20px - 20px);
-          `;
-      }
-    }};
+    ${(props) => props.$listMaximised && `height: calc(100vh - 20px - 20px);`};
   }
 `;

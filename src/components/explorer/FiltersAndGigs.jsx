@@ -11,7 +11,7 @@ export default function FiltersAndGigs({
   gigs,
   isLoading,
   showSingleGig,
-  listSize,
+  listMaximised,
 }) {
   const { id } = useParams();
   const gig = gigs.find((gig) => gig.id === id);
@@ -19,7 +19,7 @@ export default function FiltersAndGigs({
 
   const renderer = () => {
     if (showSingleGig) {
-      if (!gig) navigate("/");
+      if (!gig) navigate("/map");
       return isLoading ? <LoadingSpinner /> : <SingleGigDetails gig={gig} />;
     }
 
@@ -35,34 +35,20 @@ export default function FiltersAndGigs({
 
   return (
     <>
-      <Link
-        to={listSize === "minimised" ? "/" : "/map"}
-        className="btn btn-light shadow"
-        style={{
-          position: "absolute",
-          zIndex: 1000,
-          top: "0.5rem",
-          right: "0.5rem",
-        }}
-      >
-        {listSize === "minimised" ? (
-          <i className="bi bi-fullscreen-exit"></i>
-        ) : (
-          <i className="bi bi-fullscreen"></i>
-        )}
-      </Link>
-      <FilterWrapper $listSize={listSize}>
+      <FilterWrapper $listMaximised={listMaximised}>
         <Link
-          to={listSize === "maximised" ? "/" : "/list"}
+          to={listMaximised ? "/map" : "/"}
           id="overlay-expand-button"
           className="w-100 text-center rounded-0 btn btn-sm btn-light border-0 bg-white text-muted"
           style={{
             marginBottom: "-10px",
-            transform: listSize === "maximised" ? "rotate(180deg)" : "",
-            transition: "transform 0.2s ease-in-out",
           }}
         >
-          <i className="bi bi-caret-up-fill"></i>
+          {listMaximised ? (
+            <i className="bi bi-pin-map-fill"></i>
+          ) : (
+            <i className="bi bi-caret-up-fill"></i>
+          )}
         </Link>
         {renderer()}
       </FilterWrapper>
