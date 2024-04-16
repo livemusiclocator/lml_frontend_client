@@ -4,7 +4,7 @@ set -euo pipefail
 
 export sha=$(cat .git/refs/heads/main)
 npm run build
-pushd ../livemusiclocator.github.io
+pushd ../${subdomain:-}livemusiclocator.github.io
 git pull
 rm -rf index.html
 rm -rf 404.html
