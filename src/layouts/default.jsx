@@ -4,19 +4,17 @@ import { NavLink, Link, Form, useSearchParams, Outlet } from "react-router-dom";
 import LogoIcon from "../assets/svg/lml_logo_outline.svg?react";
 
 const Logo = () => (
-  <div className="flex-shrink">
-    <Link to="/" className="flex justify-center items-center text-slate-50">
+  <div className="flex-1 pl-2">
+    <Link to="/" className="flex justify-start items-center text-slate-50 space-x-2 font-sans">
       <LogoIcon className="flex-shrink w-10" width="96" />
-      <span className="mx-4 text-xl hidden md:block">Live Music Locator</span>
+      <span className="text-xl">Live Music Locator</span>
     </Link>
   </div>
 );
 const HamburgerMenu = ({ toggleMenu }) => (
-  <div className="lg:hidden">
-    <button onClick={toggleMenu} className="text-gray-500 focus:outline-none">
-      <Bars3Icon className="h6 w-6"/>
+    <button onClick={toggleMenu} className="text-gray-500 focus:outline-none lg:hidden">
+      <Bars3Icon className="h-6"/>
     </button>
-  </div>
 );
 
 const NavItem = ({ to, children }) => {
@@ -125,11 +123,11 @@ const NavBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <header className="w-full bg-gray-800 text-white py-4 px-6 sticky top-0 z-50">
+    <header className="w-full bg-gray-800 text-white p-2 sticky top-0 z-50">
       <div className="max-w-8xl mx-auto">
-        <div className="flex justify-between items-center py-2 px-2 space-x-1">
-          <HamburgerMenu toggleMenu={() => setIsMenuOpen(!isMenuOpen)} />
+        <div className="flex justify-start items-center  space-x-1">
           <Logo />
+          <HamburgerMenu toggleMenu={() => setIsMenuOpen(!isMenuOpen)} />
           <DesktopMenu/>
         </div>
       </div>
