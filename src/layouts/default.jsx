@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Bars3Icon } from '@heroicons/react/24/solid'
-import { NavLink, Link, Form, useSearchParams, Outlet } from "react-router-dom";
+import { NavLink, Link, Form, Outlet } from "react-router-dom";
 import LogoIcon from "../assets/svg/lml_logo_outline.svg?react";
 
 const Logo = () => (
@@ -36,10 +36,10 @@ const NavItem = ({ to, children }) => {
 const MobileMenu = ({ isMenuOpen }) => (
   <div
     className={`lg:hidden ${
-      isMenuOpen ? "block" : "hidden"
-    } absolute left-0 shadow-md `}
+      isMenuOpen ? "absolute right-0" : "hidden"
+    } shadow-md `}
   >
-    <ul className="space-y-6 bg-zinc-950 px-6 pt-4 pb-8 flex items-end flex-col">
+    <ul className="space-y-6 bg-gray-800 px-6 pt-4 pb-8 flex items-end flex-col">
       <NavItem to="/map">Home</NavItem>
       <NavItem to="/about">About</NavItem>
     </ul>
@@ -123,9 +123,9 @@ const NavBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <header className="w-full bg-gray-800 text-white p-2 sticky top-0 z-50">
-      <div className="max-w-8xl mx-auto">
-        <div className="flex justify-start items-center  space-x-1">
+    <header className="w-full bg-gray-800 text-white px-2 sticky top-0 z-50">
+      <div className="max-w-8xl mx-auto py-2">
+        <div className="flex justify-start items-center space-x-1">
           <Logo />
           <HamburgerMenu toggleMenu={() => setIsMenuOpen(!isMenuOpen)} />
           <DesktopMenu/>
@@ -138,15 +138,11 @@ const NavBar = () => {
 
 
 const DefaultLayout = () => {
-  const [params] = useSearchParams()
-  const showHeader = params.get("showHeader")
-  // todo : bootstrap->tailwindcss so can delete the hack "revert-tailwind" and friends
 return (<div className="flex flex-col h-screen">
-          {showHeader && <NavBar /> }
-          <div className="relative">
-            <div className="gig-explorer revert-tailwind" data-bs-theme="light">
+          <NavBar />
+          <div className="relative z-40 flex-1">
+
           <Outlet/>
-          </div>
           </div>
 
         </div>)

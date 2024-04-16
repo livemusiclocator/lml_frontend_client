@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const FilterWrapper = styled.div`
   position: absolute;
-  z-index: 1000;
+  z-index: 20;
   background-color: white;
   overflow: hidden;
   transition: height 0.15s ease-in, border-radius 0.15s ease-in;
@@ -18,7 +18,7 @@ export const FilterWrapper = styled.div`
         `;
       case true:
         return `
-          height: 100dvh
+          height: 100%
         `;
     }
   }};
@@ -31,6 +31,6 @@ export const FilterWrapper = styled.div`
     max-width: 400px;
     border-radius: 1.5rem;
 
-    ${(props) => props.$listMaximised && `height: calc(100vh - 20px - 20px);`};
+    ${(props) => props.$listMaximised && `height: calc(100% - 20px - 20px);`};
   }
 `;

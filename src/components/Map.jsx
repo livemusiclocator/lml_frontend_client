@@ -33,7 +33,7 @@ const Map = ({ gigs }) => {
         ref={mapRef}
         center={defaultPosition}
         zoom={13}
-        style={{ height: "100dvh", width: "100%" }}
+        style={{ height: "100%", width: "100%", zIndex: 0 }}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

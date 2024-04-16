@@ -10,8 +10,11 @@ export default {
     extend: {
       fontFamily: {
         'sans': ['"Montserrat"', ...defaultTheme.fontFamily.sans],
+      },
+      animation: {
+        'spinner-grow': 'spinner-grow 1s linear infinite'
       }
-    },
+    }
   },
   plugins: [],
 }

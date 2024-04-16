@@ -30,10 +30,8 @@ export default function Explorer({
       setLoading(false);
     });
   }, [date, setGigs]);
-
   return (
     <>
-      {loading && <LoadingOverlay />}
       <Map gigs={gigs} />
       <FiltersAndGigs
         date={date}
@@ -43,6 +41,7 @@ export default function Explorer({
         showSingleGig={showSingleGig}
         isLoading={loading}
       />
+      {loading && <LoadingOverlay />}
     </>
   );
 }

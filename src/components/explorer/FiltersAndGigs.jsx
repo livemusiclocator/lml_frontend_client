@@ -25,17 +25,25 @@ export default function FiltersAndGigs({
 
     return (
       <>
+         <div className="gig-explorer revert-tailwind"
+        data-bs-theme="light">
         <div className="p-3 w-100 border-bottom">
           <GigFilter date={date} setDate={setDate} />
         </div>
-        {isLoading ? <LoadingSpinner /> : <GigsList gigs={gigs} />}
+        </div>
+        {isLoading ? <LoadingSpinner /> : <div className="gig-explorer revert-tailwind"
+        data-bs-theme="light"> <GigsList gigs={gigs} /> </div>}
       </>
     );
   };
 
   return (
     <>
-      <FilterWrapper $listMaximised={listMaximised}>
+      <FilterWrapper
+        $listMaximised={listMaximised}
+      >
+      <div className="gig-explorer revert-tailwind"
+        data-bs-theme="light">
         <Link
           to={listMaximised ? "/map" : "/"}
           id="overlay-expand-button"
@@ -50,8 +58,10 @@ export default function FiltersAndGigs({
             <i className="bi bi-caret-up-fill"></i>
           )}
         </Link>
+      </div>
         {renderer()}
       </FilterWrapper>
+
     </>
   );
 }

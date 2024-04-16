@@ -1,17 +1,16 @@
 import styled from "styled-components";
 
+const LoadingSpinnerCircle = () => {
+return(      <div className="w-8 h-8 bg-current rounded-full animate-spinner-grow" role="status">
+        <span className="sr-only">Loading...</span>
+             </div>);
+}
 export const LoadingSpinner = () => {
   return (
-    <div className="d-flex justify-content-center mt-3">
-      <div className="spinner-grow text-primary me-3" role="status">
-        <span className="visually-hidden">Loading...</span>
-      </div>
-      <div className="spinner-grow text-primary me-3" role="status">
-        <span className="visually-hidden">Loading...</span>
-      </div>
-      <div className="spinner-grow text-primary" role="status">
-        <span className="visually-hidden">Loading...</span>
-      </div>
+    <div className="flex justify-center mt-4">
+      <LoadingSpinnerCircle/>
+      <LoadingSpinnerCircle/>
+      <LoadingSpinnerCircle/>
     </div>
   );
 };
@@ -23,7 +22,6 @@ const LoadingOverlayWrapper = styled.div`
   width: 100vw;
   height: 100vh;
   background-color: rgba(255, 255, 255, 0.5);
-  z-index: 900;
   display: flex;
   justify-content: center;
   padding-top: 30vh;
