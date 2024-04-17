@@ -1,12 +1,18 @@
 import GigExplorer from "./components/GigExplorer";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import Layout from "./layouts/default"
+import Layout from "./layouts/default";
 // does this just happen automatically?
-import "./index.css"
+import "./index.css";
+import { ThemeProvider } from "styled-components";
+import { getTheme } from "./getLocation";
 
 function App() {
-  return <GigExplorer LayoutComponent={Layout}/>
+  return (
+    <ThemeProvider theme={getTheme()}>
+      <GigExplorer LayoutComponent={Layout} />
+    </ThemeProvider>
+  );
 }
 
 export default App;

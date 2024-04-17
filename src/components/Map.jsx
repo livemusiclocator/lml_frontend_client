@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import { Icon } from "leaflet";
-import { getMapCenter } from "../getLocation";
+import { getMapCenter, getTheme } from "../getLocation";
 import { useNavigate } from "react-router-dom";
 
 import "leaflet/dist/leaflet.css";
@@ -10,17 +10,18 @@ import { gigIsSaved } from "../savedGigs";
 const Map = ({ gigs }) => {
   const mapRef = useRef();
   const defaultPosition = getMapCenter();
+  const { defaultMapPin, savedMapPin } = getTheme();
 
   const customIcon = (gig) => {
     if (gigIsSaved(gig)) {
       return new Icon({
-        iconUrl: "/alt-marker-2-saved.png",
+        iconUrl: savedMapPin,
         iconSize: [40, 40],
       });
     }
 
     return new Icon({
-      iconUrl: "/alt-marker-2.png",
+      iconUrl: defaultMapPin,
       iconSize: [45, 45],
     });
   };

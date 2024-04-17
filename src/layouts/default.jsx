@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Bars3Icon } from "@heroicons/react/24/solid";
 import { NavLink, Link, Form, Outlet } from "react-router-dom";
-import LogoIcon from "../assets/svg/lml_logo_outline.svg?react";
+import { getTheme } from "../getLocation";
 
 const Logo = () => (
   <div className="flex-1 pl-2">
@@ -9,8 +9,8 @@ const Logo = () => (
       to="/"
       className="flex justify-start items-center text-slate-50 space-x-2 font-sans"
     >
-      <LogoIcon className="flex-shrink w-10" width="96" />
-      <span className="text-xl">Live Music Locator</span>
+      <img src={getTheme().brandmark} className="flex-shrink w-10" />
+      <span className="text-xl">{getTheme().title}</span>
     </Link>
   </div>
 );

@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 domains=(
+    "gigs.lml-development.live"
     "lbmf.lml-development.live" 
     "melbourne.lml-development.live"
     "sydney.lml-development.live"
