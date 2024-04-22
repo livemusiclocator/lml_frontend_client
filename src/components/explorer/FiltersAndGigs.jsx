@@ -16,12 +16,17 @@ export default function FiltersAndGigs({
   const { id } = useParams();
   const gig = gigs.find((gig) => gig.id === id);
   const navigate = useNavigate();
+  if (showSingleGig) {
+    // todo: just fetching first gig?
+    if (!gig && !isLoading) navigate("/");
+    return (
+      <div className="flex z-20 absolute top-0 left-0 w-full bg-green-200">
+        <SingleGigDetails gig={gig} isLoading={isLoading} className="bg-white w-full" />
+      </div>
+    );
+  }
 
   const renderer = () => {
-    if (showSingleGig) {
-      if (!gig) navigate("/map");
-      return isLoading ? <LoadingSpinner /> : <SingleGigDetails gig={gig} />;
-    }
 
     return (
       <>
