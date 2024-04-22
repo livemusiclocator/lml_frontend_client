@@ -42,7 +42,7 @@ const NavItem = ({ to, children }) => {
 const MobileMenu = ({ isMenuOpen }) => (
   <div
     className={`lg:hidden ${
-      isMenuOpen ? "absolute right-0" : "hidden"
+      isMenuOpen ? "absolute left-0" : "hidden"
     } shadow-md `}
   >
     <ul className="space-y-6 bg-gray-800 px-6 pt-4 pb-8 flex items-end flex-col">
@@ -153,9 +153,9 @@ const NavBar = () => {
     <header className="w-full bg-gray-800 text-white px-2 sticky top-0 z-50">
       <div className="max-w-8xl mx-auto py-2">
         <div className="flex justify-start items-center space-x-1">
-          <Logo />
           <HamburgerMenu toggleMenu={() => setIsMenuOpen(!isMenuOpen)} />
           <DesktopMenu />
+          <Logo />
         </div>
       </div>
       <MobileMenu isMenuOpen={isMenuOpen} />
