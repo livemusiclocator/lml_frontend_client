@@ -20,13 +20,12 @@ import {
 
 const Aside = tw.aside`
 mx-4
-p-6
+p-4
 flex
 flex-wrap
 gap-4
-justify-center
+justify-start
 
- *:grow
 *:shrink
  `;
 
