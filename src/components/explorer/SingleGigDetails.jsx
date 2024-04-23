@@ -36,7 +36,7 @@ const EventDetailItem = tw.li`
 const GigHeroImageBanner = () => {
   // probably a case for some actual css here .
   return (
-    <div className="relative h-[50vw] min-h-24 min-w-48 max-h-[40svh] overflow-hidden">
+    <div className="relative max-h-[40svh] overflow-hidden aspect-[2/1] w-full">
       <div className="absolute left-0 top-0 w-full h-full">
         <picture>
           <img
@@ -158,10 +158,10 @@ export default function SingleGigDetails({ gig, className, isLoading }) {
   }
 
   return (
-    <article className={`min-w-40 ${className || ""} pb-4 space-y-4`}>
+    <article className={`min-w-sm ${className || ""} pb-4 space-y-4`}>
       {!showImagePlaceholder && <NavMaybe gig={gig} />}
       {showImagePlaceholder && <GigHeroImageBanner />}
-      <GigHeader gig={gig} className="max-w-2xl grow shrink-0" />
+      <GigHeader gig={gig} className="grow shrink-0" />
       {/* todo: light contrasting colour here or just stick with a grey perhaps? */}
       <Aside className="bg-gray-200">
         <div className="flex gap-x-2">

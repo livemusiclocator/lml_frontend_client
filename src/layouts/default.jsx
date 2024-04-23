@@ -154,8 +154,8 @@ const NavBar = () => {
       <div className="max-w-8xl mx-auto py-2">
         <div className="flex justify-start items-center space-x-1">
           <HamburgerMenu toggleMenu={() => setIsMenuOpen(!isMenuOpen)} />
-          <DesktopMenu />
           <Logo />
+          <DesktopMenu />
         </div>
       </div>
       <MobileMenu isMenuOpen={isMenuOpen} />

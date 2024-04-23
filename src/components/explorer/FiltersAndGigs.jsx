@@ -20,8 +20,12 @@ export default function FiltersAndGigs({
     // todo: just fetching first gig?
     if (!gig && !isLoading) navigate("/");
     return (
-      <div className="flex z-20 absolute top-0 left-0 w-full bg-green-200">
-        <SingleGigDetails gig={gig} isLoading={isLoading} className="bg-white w-full" />
+      <div className="flex z-20 absolute top-0 left-0 w-full">
+        <SingleGigDetails
+          gig={gig}
+          isLoading={isLoading}
+          className="bg-white w-full"
+        />
       </div>
     );
   }
