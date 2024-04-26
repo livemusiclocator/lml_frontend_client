@@ -4,7 +4,7 @@ import { LoadingSpinner } from "../loading/LoadingOverlay";
 import { useState } from "react";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
-
+import Markdown from "react-markdown";
 import {
   ChevronLeftIcon,
   StarIcon as StarIconSolid,
@@ -13,10 +13,7 @@ import {
   TicketIcon,
   ArrowTopRightOnSquareIcon as ExternalLinkIcon,
 } from "@heroicons/react/24/solid";
-import {
-  StarIcon as StarIconOutline,
-  ClockIcon,
-} from "@heroicons/react/24/outline";
+import { StarIcon as StarIconOutline } from "@heroicons/react/24/outline";
 
 const Aside = tw.aside`
 mx-4
@@ -29,9 +26,6 @@ justify-start
 *:shrink
  `;
 
-const EventDetailItem = tw.li`
-  flex items-center space-x-2 font-semibold text-lg
-`;
 const GigHeroImageBanner = () => {
   // probably a case for some actual css here .
   return (
@@ -110,7 +104,7 @@ const GigHeader = ({ gig, className }) => {
         <p className="font-semibold">
           <DatetimeDisplay value={gig.date} type="briefDate" />
         </p>
-        <h4 className="text-4xl font-bold">{gig.name}</h4>
+        <h2 className="text-4xl font-bold">{gig.name}</h2>
       </hgroup>
     </header>
   );
@@ -157,7 +151,7 @@ export default function SingleGigDetails({ gig, className, isLoading }) {
   }
 
   return (
-    <article className={`min-w-sm ${className || ""} pb-4 space-y-4`}>
+    <article className={`min-w-sm max-w-xl ${className || ""} pb-4 space-y-4`}>
       {!showImagePlaceholder && <NavMaybe gig={gig} />}
       {showImagePlaceholder && <GigHeroImageBanner />}
       <GigHeader gig={gig} className="grow shrink-0" />
@@ -201,13 +195,73 @@ export default function SingleGigDetails({ gig, className, isLoading }) {
             <li className="font-semibold text-lg">Ticket Information</li>
             <li aria-label="Ticket link">
               <ExternalLink href={gig.ticketing_url}>
-                Get tickets
+                Gig information
                 <ExternalLinkIcon className="size-4 self-center mx-1" />
               </ExternalLink>
             </li>
           </ul>
         </div>
       </Aside>
+      <section className="px-4 prose">
+        {/*
+         * todo: use prose-invert when we have darkmode working
+         * using prose tailwind plugin here to style the content blocks
+         * Starting off by being restrictive of what elements to show.
+         * total set is :
+         * a, blockquote, br, code, em, h1, h2, h3, h4, h5, h6, hr, img, li, ol, p, pre, strong, and ul
+         *
+         * Also remap heading levels to fit in with our use of h2 for gig name.
+         * */}
+        <Markdown
+          unwrapDisallowed={true}
+          skipHtml={true}
+          allowedElements={[
+            "a",
+            "blockquote",
+            "br",
+            "em",
+            "h1",
+            "h2",
+            "h3",
+            "h4",
+            "h5",
+            "h6",
+            "hr",
+            "li",
+            "ol",
+            "p",
+            "strong",
+            "ul",
+          ]}
+          components={{
+            h1: "h3",
+            h2: "h4",
+            h3: "h5",
+            h4: "h6",
+            h5: "h6",
+            h6: "h6",
+          }}
+        >
+          {gig.description}
+        </Markdown>
+      </section>
+      <section className="flex gap-1 flex-wrap">
+        {(gig.tags || []).map((t) => (
+          <span
+            key={t}
+            className="bg-gray-100 text-gray-800 text-sm font-medium p-2 m-2 dark:bg-gray-700 dark:text-gray-300"
+          >
+            {t}
+          </span>
+        ))}
+      </section>
+      <section className="p-4">
+        <button className="flex content-center transition items-center justify-center text-center px-8 py-4 text-xl font-medium rounded-md shadow-sm text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-200 mx-auto px-8">
+          <div className="flex items-center justify-start space-x-1.5">
+            <span>Get Tickets</span>
+          </div>
+        </button>
+      </section>
     </article>
   );
 }

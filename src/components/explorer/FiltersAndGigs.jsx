@@ -31,46 +31,46 @@ export default function FiltersAndGigs({
   }
 
   const renderer = () => {
-
     return (
       <>
-         <div className="gig-explorer revert-tailwind"
-        data-bs-theme="light">
-        <div className="p-3 w-100 border-bottom">
-          <GigFilter date={date} setDate={setDate} />
+        <div className="gig-explorer revert-tailwind" data-bs-theme="light">
+          <div className="p-3 w-100 border-bottom">
+            <GigFilter date={date} setDate={setDate} />
+          </div>
         </div>
-        </div>
-        {isLoading ? <LoadingSpinner /> : <div className="gig-explorer revert-tailwind"
-        data-bs-theme="light"> <GigsList gigs={gigs} /> </div>}
+        {isLoading ? (
+          <LoadingSpinner />
+        ) : (
+          <div className="gig-explorer revert-tailwind" data-bs-theme="light">
+            {" "}
+            <GigsList gigs={gigs} />{" "}
+          </div>
+        )}
       </>
     );
   };
 
   return (
     <>
-      <FilterWrapper
-        $listMaximised={listMaximised}
-      >
-      <div className="gig-explorer revert-tailwind"
-        data-bs-theme="light">
-        <Link
-          to={listMaximised ? "/map" : "/"}
-          id="overlay-expand-button"
-          className="w-100 text-center rounded-0 btn btn-sm btn-light border-0 bg-white text-muted"
-          style={{
-            marginBottom: "-10px",
-          }}
-        >
-          {listMaximised ? (
-            <i className="bi bi-pin-map-fill"></i>
-          ) : (
-            <i className="bi bi-caret-up-fill"></i>
-          )}
-        </Link>
-      </div>
+      <FilterWrapper $listMaximised={listMaximised}>
+        <div className="gig-explorer revert-tailwind" data-bs-theme="light">
+          <Link
+            to={listMaximised ? "/map" : "/"}
+            id="overlay-expand-button"
+            className="w-100 text-center rounded-0 btn btn-sm btn-light border-0 bg-white text-muted"
+            style={{
+              marginBottom: "-10px",
+            }}
+          >
+            {listMaximised ? (
+              <i className="bi bi-pin-map-fill"></i>
+            ) : (
+              <i className="bi bi-caret-up-fill"></i>
+            )}
+          </Link>
+        </div>
         {renderer()}
       </FilterWrapper>
-
     </>
   );
 }
