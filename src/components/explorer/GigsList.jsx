@@ -12,7 +12,7 @@ export default function GigsList({ gigs }) {
       <div className="list-group list-group-flush">
         {gigs.map((gig) => (
           <Link
-            to={`/gigs/${gig.id}`}
+            to={`gigs/${gig.id}`}
             key={gig.id}
             className="list-group-item p-3"
           >

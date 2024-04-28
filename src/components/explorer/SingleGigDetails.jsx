@@ -92,18 +92,6 @@ const NavMaybe = ({ gig }) => {
   );
 };
 const GigHeader = ({ gig, className }) => {
-  const [gigSaved, setGigSaved] = useState(gigIsSaved(gig));
-  const navType = useNavigationType();
-  const to = navType === "POP" ? "/" : -1;
-  const toggleGigSaved = () => {
-    if (gigSaved) {
-      unsaveGig(gig);
-      setGigSaved(false);
-    } else {
-      saveGig(gig);
-      setGigSaved(true);
-    }
-  };
   return (
     <header className={`flex flex-col ${className || ""}`}>
       <hgroup className="break-words text-pretty px-4">
@@ -151,7 +139,6 @@ const DatetimeDisplay = ({ value, start, end, type = "date" }) => {
 export default function SingleGigDetails({ className }) {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
-  console.log(id);
   const { data: gig, isLoading } = useGig(id);
   const showImagePlaceholder = searchParams.get("showImagePlaceholder");
   if (isLoading || !gig) {
