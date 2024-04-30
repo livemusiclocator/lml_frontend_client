@@ -8,7 +8,7 @@ import Map from "../Map";
 
 const loadData = async (date) => {
   const response = await fetch(
-    `https://lml.live/gigs/query?location=${getLocation()}&date_from=${date}&date_to=${date}`
+    `https://api.lml.live/gigs/query?location=${getLocation()}&date_from=${date}&date_to=${date}`
   );
   return response.json();
 };

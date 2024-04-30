@@ -1,6 +1,6 @@
 # Sandbox frontend
 
-This is an example client to the https://lml.live/gigs/query api endpoint.
+This is an example client to the https://api.lml.live/gigs/query api endpoint.
 
 Gigs occuring on a selected date are displayed in a list or on a map.
 
