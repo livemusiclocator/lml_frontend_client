@@ -1,5 +1,11 @@
-import { Link, useNavigationType, useSearchParams } from "react-router-dom";
+import {
+  Link,
+  useNavigationType,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { gigIsSaved, saveGig, unsaveGig } from "../../savedGigs";
+import { useGig } from "../../hooks/api";
 import { LoadingSpinner } from "../loading/LoadingOverlay";
 import { useState } from "react";
 import styled from "styled-components";
@@ -142,8 +148,11 @@ const DatetimeDisplay = ({ value, start, end, type = "date" }) => {
       : formatter.format(new Date(value));
   return <time dateTime={value}>{display}</time>;
 };
-export default function SingleGigDetails({ gig, className, isLoading }) {
+export default function SingleGigDetails({ className }) {
+  const { id } = useParams();
   const [searchParams] = useSearchParams();
+  console.log(id);
+  const { data: gig, isLoading } = useGig(id);
   const showImagePlaceholder = searchParams.get("showImagePlaceholder");
   if (isLoading || !gig) {
     // todo: make skeleton load page type thing here to stop the page from jumping about

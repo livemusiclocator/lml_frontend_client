@@ -1,5 +1,15 @@
 import DateSlider from "../DateSlider";
 
-export default function GigFilter({ date, setDate }) {
-  return <DateSlider date={date} onChange={setDate} />;
+import { useGigFilters } from "../../hooks/api";
+
+export default function GigFilter() {
+  const [{ dateParsed }, setGigFilters] = useGigFilters();
+  return (
+    <DateSlider
+      date={dateParsed}
+      onChange={(newValue) => {
+        setGigFilters({ date: newValue });
+      }}
+    />
+  );
 }

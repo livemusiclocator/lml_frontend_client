@@ -4,28 +4,20 @@ import GigsList from "./GigsList";
 import { LoadingSpinner } from "../loading/LoadingOverlay";
 import SingleGigDetails from "./SingleGigDetails";
 import { FilterWrapper } from "./FilterOverlay";
+import { useGigList } from "../../hooks/api";
 
 export default function FiltersAndGigs({
-  date,
-  setDate,
-  gigs,
-  isLoading,
   showSingleGig,
   listMaximised,
+  isLoading,
+  gigs,
 }) {
-  const { id } = useParams();
-  const gig = gigs.find((gig) => gig.id === id);
-  const navigate = useNavigate();
   if (showSingleGig) {
     // todo: just fetching first gig?
-    if (!gig && !isLoading) navigate("/");
+    //if (!gig && !isLoading) navigate("/");
     return (
       <div className="flex z-20 absolute top-0 left-0 w-full">
-        <SingleGigDetails
-          gig={gig}
-          isLoading={isLoading}
-          className="bg-white w-full"
-        />
+        <SingleGigDetails className="bg-white w-full" />
       </div>
     );
   }
@@ -35,7 +27,7 @@ export default function FiltersAndGigs({
       <>
         <div className="gig-explorer revert-tailwind" data-bs-theme="light">
           <div className="p-3 w-100 border-bottom">
-            <GigFilter date={date} setDate={setDate} />
+            <GigFilter />
           </div>
         </div>
         {isLoading ? (

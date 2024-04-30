@@ -3,45 +3,22 @@ import FiltersAndGigs from "./FiltersAndGigs";
 import LoadingOverlay from "../loading/LoadingOverlay";
 import { getLocation } from "../../getLocation";
 
-import "./styles.scss"
+import "./styles.scss";
 import Map from "../Map";
+import { useGigList } from "../../hooks/api";
 
-const loadData = async (date) => {
-  const response = await fetch(
-    `https://api.lml.live/gigs/query?location=${getLocation()}&date_from=${date}&date_to=${date}`
-  );
-  return response.json();
-};
-
-export default function Explorer({
-  date,
-  setDate,
-  gigs,
-  setGigs,
-  listMaximised,
-  showSingleGig,
-}) {
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    setLoading(true);
-    loadData(date).then((data) => {
-      setGigs(data);
-      setLoading(false);
-    });
-  }, [date, setGigs]);
+export default function Explorer({ listMaximised, showSingleGig }) {
+  const { data: gigs, isLoading } = useGigList();
   return (
     <>
-      <Map gigs={gigs} />
+      <Map gigs={gigs || []} />
       <FiltersAndGigs
-        date={date}
-        setDate={setDate}
-        gigs={gigs}
+        gigs={gigs || []}
         listMaximised={listMaximised}
         showSingleGig={showSingleGig}
-        isLoading={loading}
+        isLoading={isLoading}
       />
-      {loading && <LoadingOverlay />}
+      {isLoading && <LoadingOverlay />}
     </>
   );
 }
