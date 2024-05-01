@@ -17,13 +17,15 @@ export default function GigsList({ gigs }) {
             className="list-group-item p-3"
           >
             <div className="d-flex justify-content-between mb-2">
-              <div className="text-nowrap">
-                {new Date(gig.start_time).toLocaleTimeString("en-US", {
-                  hour: "numeric",
-                  minute: "numeric",
-                  hour12: true,
-                })}
-              </div>
+              {gig.start_time && (
+                <div className="text-nowrap">
+                  {new Date(gig.start_time).toLocaleTimeString("en-US", {
+                    hour: "numeric",
+                    minute: "numeric",
+                    hour12: true,
+                  })}
+                </div>
+              )}
               {gigIsSaved(gig) && <StarWrapper>★</StarWrapper>}
             </div>
             <h4>{gig.name}</h4>

@@ -30,6 +30,7 @@ export default function Explorer() {
             className={`p-3 w-100 border border-bottom flex ${listMaximised ? "justify-between" : "justify-center"} w-full`}
           >
             <div>
+              {/** todo: fix this to do a -1 on a page where it can so search is maintained */}
               {showBackButton && (
                 <Link to=".">
                   <ChevronLeftIcon className="size-6" />

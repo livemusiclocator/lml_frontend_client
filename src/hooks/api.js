@@ -32,9 +32,18 @@ export const useGigFilters = () => {
   ];
 };
 
+//todo: not this
+const dateComparison = (
+  { date: date1, start_time: start1 },
+  { date: date2, start_time: start2 },
+) => {
+  return (start1 || date1 || "").localeCompare(start2 || date2 || "");
+};
 const loadData = async (url) => {
   const response = await fetch(url);
-  return response.json();
+  const result = await response.json();
+  result.sort(dateComparison);
+  return result;
 };
 
 export const useGigList = () => {
