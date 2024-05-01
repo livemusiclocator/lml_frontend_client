@@ -1,25 +1,31 @@
 import { FilterWrapper } from "./FilterOverlay";
-import { Outlet, Link, useMatches } from "react-router-dom";
+import { Outlet, Link, useMatches, useLocation } from "react-router-dom";
 import { ChevronLeftIcon } from "@heroicons/react/24/solid";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./styles.scss";
 import Map from "../Map";
 
 export default function Explorer() {
   const [listMaximised, setListMaximised] = useState(true);
+  let location = useLocation();
   const matches = useMatches();
   // todo: better way to do this with react router v6?
   let showBackButton =
     listMaximised &&
     matches.filter((match) => Boolean(match.handle?.showBackButton))[0];
-
+  useEffect(() => {
+    // reset the list maximised if we changed location
+    setListMaximised(true);
+  }, [location]);
   return (
     <>
       <Map />
+      {/** todo: clear up the mess I've made here */}
       {/**  overlay to the map - for small screens, just use whole width for big screens (not primary usecase) max out at 2xl, but try and keep to a proportion of the screen so you get a lot of map as well */}
-      <div className="flex flex-col justify-end z-20 absolute top-0 left-0 h-full w-full max-w-2xl p-2 *:bg-white *:overflow-scroll">
+      <div
+        className={`flex flex-col justify-end z-20 absolute bottom-0 left-0 w-full max-w-2xl p-2 *:bg-white *:overflow-scroll ${listMaximised ? "h-full" : "h-content"}`}
+      >
         <FilterWrapper $listMaximised={listMaximised}>
-          {/** todo: clear up the mess I've made here */}
           <nav
             className={`p-3 w-100 border border-bottom flex ${listMaximised ? "justify-between" : "justify-center"} w-full`}
           >

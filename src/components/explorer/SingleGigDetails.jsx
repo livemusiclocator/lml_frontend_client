@@ -137,7 +137,7 @@ export default function SingleGigDetails({ className }) {
   }
 
   return (
-    <article className={`min-w-sm max-w-xl ${className || ""} pb-4 h-full`}>
+    <article className={`min-w-sm max-w-2xl ${className || ""} pb-4 h-full`}>
       {showImagePlaceholder && <GigHeroImageBanner />}
       <GigHeader gig={gig} className="grow shrink-0" />
       {/* todo: light contrasting colour here or just stick with a grey perhaps? */}
