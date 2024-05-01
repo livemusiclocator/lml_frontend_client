@@ -16,8 +16,8 @@ export default function Explorer() {
   return (
     <>
       <Map />
-      {/**  overlay to the map - max out at 2xl, but try and keep to a proportion of the screen so you get a lot of map as well */}
-      <div className="flex flex-col justify-end z-20 absolute top-0 left-0 w-2/5 h-full min-w-80 max-w-2xl p-2 *:bg-white *:overflow-scroll">
+      {/**  overlay to the map - for small screens, just use whole width for big screens (not primary usecase) max out at 2xl, but try and keep to a proportion of the screen so you get a lot of map as well */}
+      <div className="flex flex-col justify-end z-20 absolute top-0 left-0 h-full w-full max-w-2xl p-2 *:bg-white *:overflow-scroll">
         <FilterWrapper $listMaximised={listMaximised}>
           {/** todo: clear up the mess I've made here */}
           <nav
