@@ -1,16 +1,21 @@
 import styled from "styled-components";
 
 const LoadingSpinnerCircle = () => {
-return(      <div className="w-8 h-8 bg-current rounded-full animate-spinner-grow" role="status">
-        <span className="sr-only">Loading...</span>
-             </div>);
-}
+  return (
+    <div
+      className="w-8 h-8 bg-current rounded-full animate-spinner-grow text-slate-200 opacity-0 scale-0"
+      role="status"
+    >
+      <span className="sr-only">Loading...</span>
+    </div>
+  );
+};
 export const LoadingSpinner = () => {
   return (
-    <div className="flex justify-center mt-4">
-      <LoadingSpinnerCircle/>
-      <LoadingSpinnerCircle/>
-      <LoadingSpinnerCircle/>
+    <div className="flex justify-center mt-4 gap-2 delay-500 animate-delayed-entrance">
+      <LoadingSpinnerCircle />
+      <LoadingSpinnerCircle />
+      <LoadingSpinnerCircle />
     </div>
   );
 };

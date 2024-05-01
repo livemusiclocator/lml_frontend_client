@@ -3,11 +3,12 @@ import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import { Icon } from "leaflet";
 import { getMapCenter, getTheme } from "../getLocation";
 import { useNavigate } from "react-router-dom";
-
+import { useGigList } from "../hooks/api";
 import "leaflet/dist/leaflet.css";
 import { gigIsSaved } from "../savedGigs";
 
-const Map = ({ gigs }) => {
+const Map = () => {
+  const { data: gigs = [] } = useGigList();
   const mapRef = useRef();
   const defaultPosition = getMapCenter();
   const { defaultMapPin, savedMapPin } = getTheme();
@@ -27,7 +28,6 @@ const Map = ({ gigs }) => {
   };
 
   const navigate = useNavigate();
-
   return (
     <>
       <MapContainer

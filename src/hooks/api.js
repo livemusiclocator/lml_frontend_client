@@ -56,7 +56,6 @@ export const useGigWIP = (id) => {
   const { data: gigList, isLoading, isValidating } = useGigList();
   return useSWR(`https://lml.live/gigs/all/${id}`, async (key) => {
     // favour the response we already got from the gig list
-    console.log({ gigList, isLoading, isValidating, key });
     let result = null;
     if (!isLoading && !isValidating) {
       result = gigList.find((g) => g.id === id);

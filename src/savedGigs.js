@@ -11,7 +11,7 @@ export const unsaveGig = (gig) => {
 
   const savedGigs = JSON.parse(localStorage.getItem("savedGigs")) || [];
   const updatedSavedGigs = savedGigs.filter(
-    (savedGig) => savedGig.id !== gig.id
+    (savedGig) => savedGig.id !== gig.id,
   );
   localStorage.setItem("savedGigs", JSON.stringify(updatedSavedGigs));
 };

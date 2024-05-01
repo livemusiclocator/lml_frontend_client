@@ -1,18 +1,12 @@
-import {
-  Link,
-  useNavigationType,
-  useParams,
-  useSearchParams,
-} from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { gigIsSaved, saveGig, unsaveGig } from "../../savedGigs";
 import { useGig } from "../../hooks/api";
 import { LoadingSpinner } from "../loading/LoadingOverlay";
+
 import { useState } from "react";
-import styled from "styled-components";
 import tw from "tailwind-styled-components";
 import Markdown from "react-markdown";
 import {
-  ChevronLeftIcon,
   StarIcon as StarIconSolid,
   CalendarIcon,
   MapPinIcon,
@@ -59,11 +53,9 @@ const GigHeroImageBanner = () => {
   );
 };
 
-const NavMaybe = ({ gig }) => {
+const SaveGigButton = ({ gig }) => {
   const [gigSaved, setGigSaved] = useState(gigIsSaved(gig));
 
-  const navType = useNavigationType();
-  const to = navType === "POP" ? "/" : -1;
   const toggleGigSaved = () => {
     if (gigSaved) {
       unsaveGig(gig);
@@ -73,33 +65,31 @@ const NavMaybe = ({ gig }) => {
       setGigSaved(true);
     }
   };
+  const buttonTitle = gigSaved ? "Remove from favourites" : "Add to favourites";
   return (
-    <nav className="flex justify-between p-2">
-      <Link to={to}>
-        <ChevronLeftIcon className="size-6" />
-      </Link>
-      <button onClick={toggleGigSaved} className="text-yellow-200">
-        <span className="sr-only">
-          {gigSaved ? "Remove from favourites" : "Add to favourites"}
-        </span>
-        {gigSaved ? (
-          <StarIconSolid className="size-6" />
-        ) : (
-          <StarIconOutline className="size-6" />
-        )}
-      </button>
-    </nav>
+    <button
+      onClick={toggleGigSaved}
+      className="text-yellow-300"
+      title={buttonTitle}
+    >
+      {gigSaved ? (
+        <StarIconSolid className="size-6" />
+      ) : (
+        <StarIconOutline className="size-6" />
+      )}
+    </button>
   );
 };
 const GigHeader = ({ gig, className }) => {
   return (
-    <header className={`flex flex-col ${className || ""}`}>
-      <hgroup className="break-words text-pretty px-4">
+    <header className={`flex items-start flex-row ${className || ""} px-4`}>
+      <hgroup className="break-words text-pretty">
         <p className="font-semibold">
           <DatetimeDisplay value={gig.date} type="briefDate" />
         </p>
         <h2 className="text-4xl font-bold">{gig.name}</h2>
       </hgroup>
+      <SaveGigButton />
     </header>
   );
 };
@@ -147,8 +137,7 @@ export default function SingleGigDetails({ className }) {
   }
 
   return (
-    <article className={`min-w-sm max-w-xl ${className || ""} pb-4 space-y-4`}>
-      {!showImagePlaceholder && <NavMaybe gig={gig} />}
+    <article className={`min-w-sm max-w-xl ${className || ""} pb-4 h-full`}>
       {showImagePlaceholder && <GigHeroImageBanner />}
       <GigHeader gig={gig} className="grow shrink-0" />
       {/* todo: light contrasting colour here or just stick with a grey perhaps? */}
@@ -189,7 +178,7 @@ export default function SingleGigDetails({ className }) {
 
           <ul>
             <li className="font-semibold text-lg">Ticket Information</li>
-            <li aria-label="Ticket link">
+            <li aria-label="Gig information link">
               <ExternalLink href={gig.ticketing_url}>
                 Gig information
                 <ExternalLinkIcon className="size-4 self-center mx-1" />
@@ -251,12 +240,16 @@ export default function SingleGigDetails({ className }) {
           </span>
         ))}
       </section>
+
       <section className="p-4">
-        <button className="flex content-center transition items-center justify-center text-center px-8 py-4 text-xl font-medium rounded-md shadow-sm text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-200 mx-auto px-8">
+        <a
+          href={gig.ticketing_url}
+          className="flex content-center transition items-center justify-center text-center px-8 py-4 text-xl font-medium rounded-md shadow-sm text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-200 mx-auto px-8"
+        >
           <div className="flex items-center justify-start space-x-1.5">
             <span>Get Tickets</span>
           </div>
-        </button>
+        </a>
       </section>
     </article>
   );

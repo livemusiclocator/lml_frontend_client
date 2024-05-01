@@ -11,6 +11,7 @@ export default {
       },
       animation: {
         "spinner-grow": "spinner-grow 1s linear infinite",
+        "delayed-entrance": "delayed-entrance 0.5s linear",
       },
     },
   },

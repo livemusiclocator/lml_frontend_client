@@ -1,17 +1,25 @@
-
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* Ported from bootstrap - we could use one of the built in anims too */
 @keyframes spinner-grow {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(0);
     opacity: 0;
   }
   50% {
     transform: scale(1);
+    opacity: 1;
+  }
+}
+/* when we dont want to show a thing immediately - like a loading spinner (so hopefully if it loads fast we never see it) */
+@keyframes delayed-entrance {
+  0% {
+    opacity: 0;
+  }
+  100% {
     opacity: 1;
   }
 }
