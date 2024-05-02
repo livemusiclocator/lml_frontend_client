@@ -178,12 +178,14 @@ export default function SingleGigDetails({ className }) {
 
           <ul>
             <li className="font-semibold text-lg">Ticket Information</li>
-            <li aria-label="Gig information link">
-              <ExternalLink href={gig.ticketing_url}>
-                Gig information
-                <ExternalLinkIcon className="size-4 self-center mx-1" />
-              </ExternalLink>
-            </li>
+            {gig.ticketing_url && (
+              <li aria-label="Gig information link">
+                <ExternalLink href={gig.ticketing_url}>
+                  Gig information
+                  <ExternalLinkIcon className="size-4 self-center mx-1" />
+                </ExternalLink>
+              </li>
+            )}
           </ul>
         </div>
       </Aside>
@@ -241,16 +243,18 @@ export default function SingleGigDetails({ className }) {
         ))}
       </section>
 
-      <section className="p-4">
-        <a
-          href={gig.ticketing_url}
-          className="flex content-center transition items-center justify-center text-center px-8 py-4 text-xl font-medium rounded-md shadow-sm text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-200 mx-auto px-8"
-        >
-          <div className="flex items-center justify-start space-x-1.5">
-            <span>Get Tickets</span>
-          </div>
-        </a>
-      </section>
+      {gig.ticketing_url && (
+        <section className="p-4">
+          <a
+            href={gig.ticketing_url}
+            className="flex content-center transition items-center justify-center text-center px-8 py-4 text-xl font-medium rounded-md shadow-sm text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-200 mx-auto px-8"
+          >
+            <div className="flex items-center justify-start space-x-1.5">
+              <span>Get Tickets</span>
+            </div>
+          </a>
+        </section>
+      )}
     </article>
   );
 }

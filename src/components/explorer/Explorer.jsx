@@ -1,5 +1,11 @@
 import { FilterWrapper } from "./FilterOverlay";
-import { Outlet, Link, useMatches, useLocation } from "react-router-dom";
+import {
+  Outlet,
+  Link,
+  useMatches,
+  useLocation,
+  useNavigationType,
+} from "react-router-dom";
 import { ChevronLeftIcon } from "@heroicons/react/24/solid";
 import { useState, useEffect } from "react";
 import "./styles.scss";
@@ -10,9 +16,13 @@ export default function Explorer() {
   let location = useLocation();
   const matches = useMatches();
   // todo: better way to do this with react router v6?
-  let showBackButton =
+  const navigationType = useNavigationType();
+
+  const showBackButton =
     listMaximised &&
     matches.filter((match) => Boolean(match.handle?.showBackButton))[0];
+  const backButtonLocation = navigationType === "PUSH" ? -1 : ".";
+
   useEffect(() => {
     // reset the list maximised if we changed location
     setListMaximised(true);
@@ -32,7 +42,7 @@ export default function Explorer() {
             <div>
               {/** todo: fix this to do a -1 on a page where it can so search is maintained */}
               {showBackButton && (
-                <Link to=".">
+                <Link to={backButtonLocation}>
                   <ChevronLeftIcon className="size-6" />
                 </Link>
               )}
