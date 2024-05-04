@@ -33,11 +33,14 @@ export default function Explorer() {
       {/** todo: clear up the mess I've made here */}
       {/**  overlay to the map - for small screens, just use whole width for big screens (not primary usecase) max out at 2xl, but try and keep to a proportion of the screen so you get a lot of map as well */}
       <div
-        className={`flex flex-col justify-end z-20 absolute bottom-0 left-0 w-full max-w-2xl p-2 *:bg-white *:overflow-scroll ${listMaximised ? "h-full" : "h-content"}`}
+        className={`flex flex-col justify-end z-20 absolute bottom-0 left-0 w-full max-w-2xl p-2 *:bg-white ${listMaximised ? "h-full" : "h-content"}`}
       >
-        <FilterWrapper $listMaximised={listMaximised}>
+        <FilterWrapper
+          className="flex flex-col py-2 overflow-hidden bg-white"
+          $listMaximised={listMaximised}
+        >
           <nav
-            className={`p-3 w-100 border border-bottom flex ${listMaximised ? "justify-between" : "justify-center"} w-full`}
+            className={`p-3 w-100 border-b flex ${listMaximised ? "justify-between" : "justify-center"} w-full`}
           >
             <div>
               {/** todo: fix this to do a -1 on a page where it can so search is maintained */}

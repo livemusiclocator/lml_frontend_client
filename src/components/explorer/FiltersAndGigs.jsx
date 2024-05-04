@@ -12,13 +12,7 @@ export default function FiltersAndGigs() {
           <GigFilter />
         </div>
       </div>
-      {isLoading ? (
-        <LoadingSpinner />
-      ) : (
-        <div className="gig-explorer revert-tailwind" data-bs-theme="light">
-          <GigsList gigs={gigs} />
-        </div>
-      )}
+      {isLoading ? <LoadingSpinner /> : <GigsList gigs={gigs} />}
     </>
   );
 }

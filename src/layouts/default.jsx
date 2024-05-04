@@ -80,7 +80,7 @@ const NavBar = () => {
 
 const DefaultLayout = () => {
   return (
-    <div className="flex flex-col max-h-screen relative">
+    <div className="flex flex-col h-screen relative">
       <NavBar />
       <Outlet />
     </div>

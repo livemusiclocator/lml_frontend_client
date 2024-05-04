@@ -1,8 +1,6 @@
 import styled from "styled-components";
 
 export const FilterWrapper = styled.div`
-  background-color: white;
-  overflow: hidden;
   transition:
     flex-basis 0.15s ease-in,
     border-radius 0.15s ease-in;
