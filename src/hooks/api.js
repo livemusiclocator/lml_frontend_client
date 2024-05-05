@@ -4,6 +4,10 @@ import { getLocation } from "../getLocation";
 import { useSearchParams } from "react-router-dom";
 // tODO: Tidy up all of the uses of date and strings here
 const getQuerySafeDate = (date) => {
+  // assume a string is already ok. this may backfire.
+  if (typeof date === "string") {
+    return date;
+  }
   //const dateStr = date.toISOString();
   // todo: make backend read our timezone formatted string somehow. for now do this hack
   const year = date.toLocaleString("default", { year: "numeric" });
@@ -21,9 +25,29 @@ const addDays = (from, days) => {
 
 export const useGigFilters = () => {
   let [params, setSearchParams] = useSearchParams();
-  const setGigFilters = ({ date }) => {
-    setSearchParams({ date: getQuerySafeDate(date) });
+  const setGigFilters = ({ date, to, from }) => {
+    if (date) {
+      setSearchParams({ date: getQuerySafeDate(date) });
+    } else if (to && from) {
+      setSearchParams({
+        to: getQuerySafeDate(to),
+        from: getQuerySafeDate(from),
+      });
+    }
   };
+  // TODO: using to and from and date ... probably want to simplify
+  const fromDate =
+    params.get("from") || params.get("date") || getQuerySafeDate(new Date());
+  const toDate = params.get("to") || addDays(fromDate, 1);
+  if (params.get("to") && params.get("from")) {
+    return [
+      {
+        to: toDate,
+        from: fromDate,
+        location: getLocation(),
+      },
+    ];
+  }
   const date = params.get("date") || getQuerySafeDate(new Date());
 
   return [
@@ -47,10 +71,13 @@ const loadData = async (url) => {
 };
 
 export const useGigList = () => {
-  const [{ date, location }] = useGigFilters();
+  const [{ date, to, from, location }] = useGigFilters();
+  const apiFromDate = date ? date : from;
+  const apiToDate = date ? addDays(date, 7) : to;
+
   // TEMP: add a longer window to date
   return useSWR(
-    `https://api.lml.live/gigs/query?location=${location}&date_from=${date}&date_to=${addDays(date, 7)}`,
+    `https://api.lml.live/gigs/query?location=${location}&date_from=${apiFromDate}&date_to=${apiToDate}`,
     loadData,
   );
 };

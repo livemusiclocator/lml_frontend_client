@@ -9,7 +9,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import SingleGigDetails from "./components/explorer/SingleGigDetails";
 import FiltersAndGigs from "./components/explorer/FiltersAndGigs";
 import Explorer from "./components/explorer/Explorer";
-
+import GigList from "./components/GigList";
 ReactGA.initialize("G-8TKSCK99CN");
 
 // https://reactrouter.com/en/main/upgrading/v6-data
@@ -22,7 +22,7 @@ const router = createBrowserRouter([
         // work in progress
         path: "alt",
         children: [
-          { index: true, element: <FiltersAndGigs /> },
+          { index: true, element: <GigList /> },
           {
             path: "gigs/:id",
             element: <SingleGigDetails />,
