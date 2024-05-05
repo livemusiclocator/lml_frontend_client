@@ -1,10 +1,6 @@
 import { Link } from "react-router-dom";
-import { gigIsSaved } from "../../savedGigs";
+import SaveGigButton from "../SaveGigButton";
 import styled from "styled-components";
-
-const StarWrapper = styled.span`
-  color: gold;
-`;
 
 export default function GigsList({ gigs }) {
   return (
@@ -26,7 +22,7 @@ export default function GigsList({ gigs }) {
                   })}
                 </div>
               )}
-              {gigIsSaved(gig) && <StarWrapper>★</StarWrapper>}
+              <SaveGigButton />
             </div>
             <h4>{gig.name}</h4>
             <div className="mb-1">{gig.venue.name} </div>

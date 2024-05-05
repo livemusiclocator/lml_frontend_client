@@ -1,8 +1,8 @@
 import { useParams, useSearchParams } from "react-router-dom";
-import { gigIsSaved, saveGig, unsaveGig } from "../../savedGigs";
+import SaveGigButton from "../SaveGigButton";
 import { useGig } from "../../hooks/api";
 import { LoadingSpinner } from "../loading/LoadingOverlay";
-
+import DateTimeDisplay from "../DateTimeDisplay";
 import { useState } from "react";
 import tw from "tailwind-styled-components";
 import Markdown from "react-markdown";
@@ -53,39 +53,12 @@ const GigHeroImageBanner = () => {
   );
 };
 
-const SaveGigButton = ({ gig }) => {
-  const [gigSaved, setGigSaved] = useState(gigIsSaved(gig));
-
-  const toggleGigSaved = () => {
-    if (gigSaved) {
-      unsaveGig(gig);
-      setGigSaved(false);
-    } else {
-      saveGig(gig);
-      setGigSaved(true);
-    }
-  };
-  const buttonTitle = gigSaved ? "Remove from favourites" : "Add to favourites";
-  return (
-    <button
-      onClick={toggleGigSaved}
-      className="text-yellow-300"
-      title={buttonTitle}
-    >
-      {gigSaved ? (
-        <StarIconSolid className="size-6" />
-      ) : (
-        <StarIconOutline className="size-6" />
-      )}
-    </button>
-  );
-};
 const GigHeader = ({ gig, className }) => {
   return (
     <header className={`flex items-start flex-row ${className || ""} px-4`}>
       <hgroup className="break-words text-pretty">
         <p className="font-semibold">
-          <DatetimeDisplay value={gig.date} type="briefDate" />
+          <DateTimeDisplay value={gig.date} type="briefDate" />
         </p>
         <h2 className="text-4xl font-bold">{gig.name}</h2>
       </hgroup>
@@ -96,36 +69,6 @@ const GigHeader = ({ gig, className }) => {
 
 const ExternalLink = tw.a`text-blue-600 hover:underline visited:text-purple-600 inline-flex items-baseline`;
 
-// todo: Make a nice current-time aware version of this perhaps?
-//
-const DatetimeDisplay = ({ value, start, end, type = "date" }) => {
-  // just a bit of mistakeproofin. probably a bit silly
-  value = value || start;
-  // does undefined use the browser default ?
-  const formatters = {
-    date: new Intl.DateTimeFormat(undefined, {
-      dateStyle: "full",
-    }),
-    briefDate: new Intl.DateTimeFormat(undefined, {
-      month: "long",
-      day: "numeric",
-    }),
-    time: new Intl.DateTimeFormat(undefined, {
-      hour: "numeric",
-      minute: "numeric",
-    }),
-  };
-
-  if (!value) {
-    return null;
-  }
-  const formatter = formatters[type];
-  const display =
-    end && start
-      ? formatter.formatRange(new Date(start), new Date(end))
-      : formatter.format(new Date(value));
-  return <time dateTime={value}>{display}</time>;
-};
 export default function SingleGigDetails({ className }) {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
@@ -146,10 +89,10 @@ export default function SingleGigDetails({ className }) {
           <CalendarIcon className="size-6 shrink-0" />
           <ul className="font-semibold text-lg">
             <li aria-label="Date">
-              <DatetimeDisplay value={gig.date} />
+              <DateTimeDisplay value={gig.date} />
             </li>
             <li aria-label="Time">
-              <DatetimeDisplay
+              <DateTimeDisplay
                 start={gig.start_time}
                 end={gig.finish_time}
                 type="time"
@@ -236,7 +179,7 @@ export default function SingleGigDetails({ className }) {
         {(gig.tags || []).map((t) => (
           <span
             key={t}
-            className="bg-gray-100 text-gray-800 text-sm font-medium p-2 m-2 dark:bg-gray-700 dark:text-gray-300"
+            className="bg-gray-200 text-gray-800 text-sm font-medium p-2 m-2 dark:bg-gray-800 dark:text-gray-200"
           >
             {t}
           </span>
