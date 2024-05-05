@@ -28,7 +28,7 @@ export default function Explorer() {
     setListMaximised(true);
   }, [location]);
   return (
-    <>
+    <main className="relative z-40 flex-1">
       <Map />
       {/** todo: clear up the mess I've made here */}
       {/**  overlay to the map - for small screens, just use whole width for big screens (not primary usecase) max out at 2xl, but try and keep to a proportion of the screen so you get a lot of map as well */}
@@ -68,6 +68,6 @@ export default function Explorer() {
           <Outlet context={{ listMaximised }} />
         </FilterWrapper>
       </div>
-    </>
+    </main>
   );
 }

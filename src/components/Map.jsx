@@ -34,7 +34,14 @@ const Map = () => {
         ref={mapRef}
         center={defaultPosition}
         zoom={13}
-        style={{ height: "100%", width: "100%", zIndex: 0 }}
+        style={{
+          height: "100%",
+          width: "100%",
+          zIndex: 0,
+          top: 0,
+          left: 0,
+          position: "absolute",
+        }}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

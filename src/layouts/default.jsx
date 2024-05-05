@@ -80,11 +80,9 @@ const NavBar = () => {
 
 const DefaultLayout = () => {
   return (
-    <div className="flex flex-col" style={{ height: "100dvh" }}>
+    <div className="flex flex-col max-h-screen relative">
       <NavBar />
-      <div className="relative z-40 flex-1">
-        <Outlet />
-      </div>
+      <Outlet />
     </div>
   );
 };
