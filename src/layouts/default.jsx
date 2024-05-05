@@ -17,18 +17,18 @@ const Logo = () => (
 const HamburgerMenu = ({ toggleMenu }) => (
   <button
     onClick={toggleMenu}
-    className="text-gray-500 focus:outline-none lg:hidden"
+    className="text-gray-200 focus:outline-none lg:hidden"
   >
     <Bars3Icon className="h-6" />
   </button>
 );
 
 const NavItem = ({ to, children }) => {
-  const baseStyles = "py-4 px-2 text-zinc-100";
+  const baseStyles = "py-4 px-2 text-gray-200";
   const setActiveLinkStyles = ({ isActive }) => {
     return isActive
       ? `${baseStyles} font-semibold`
-      : `${baseStyles} font-normal transition duration-200 hover:text-zinc-300`;
+      : `${baseStyles} font-normal transition duration-200 hover:text-gray-300`;
   };
   return (
     <li>
