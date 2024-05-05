@@ -46,7 +46,7 @@ const MobileMenu = ({ isMenuOpen }) => (
     } shadow-md `}
   >
     <ul className="space-y-6 bg-gray-800 px-6 pt-4 pb-8 flex items-end flex-col">
-      <NavItem to="/map">Home</NavItem>
+      <NavItem to="/">Home</NavItem>
       <NavItem to="/about">About</NavItem>
     </ul>
   </div>
@@ -55,7 +55,7 @@ const MobileMenu = ({ isMenuOpen }) => (
 const DesktopMenu = () => (
   <div className="hidden lg:block">
     <ul className="px-2 pt-2 pb-3 flex flex-row sm:px-3">
-      <NavItem to="/map">Home</NavItem>
+      <NavItem to="/">Home</NavItem>
       <NavItem to="/about">About</NavItem>
     </ul>
   </div>
