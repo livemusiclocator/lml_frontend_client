@@ -55,7 +55,7 @@ const GigHeroImageBanner = () => {
 
 const GigHeader = ({ gig, className }) => {
   return (
-    <header className={`flex items-start flex-row ${className || ""} px-4`}>
+    <header className={`flex items-start flex-row ${className || ""} p-4`}>
       <hgroup className="break-words text-pretty">
         <p className="font-semibold">
           <DateTimeDisplay value={gig.date} type="briefDate" />
