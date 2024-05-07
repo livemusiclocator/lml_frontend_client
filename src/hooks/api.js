@@ -1,6 +1,6 @@
 import useSWR from "swr";
 import { getLocation } from "../getLocation";
-
+import dayjs from "dayjs";
 import { useSearchParams } from "react-router-dom";
 // tODO: Tidy up all of the uses of date and strings here
 const getQuerySafeDate = (date) => {
@@ -8,50 +8,28 @@ const getQuerySafeDate = (date) => {
   if (typeof date === "string") {
     return date;
   }
+  return date?.format("YYYY-MM-DD");
   //const dateStr = date.toISOString();
   // todo: make backend read our timezone formatted string somehow. for now do this hack
-  const year = date.toLocaleString("default", { year: "numeric" });
-  var month = date.toLocaleString("default", { month: "2-digit" });
-  var day = date.toLocaleString("default", { day: "2-digit" });
-  return [year, month, day].join("-");
-};
-
-// date library needed perhaps?
-const addDays = (from, days) => {
-  var date = new Date(from.valueOf());
-  date.setDate(date.getDate() + days);
-  return getQuerySafeDate(date);
 };
 
 export const useGigFilters = () => {
   let [params, setSearchParams] = useSearchParams();
-  const setGigFilters = ({ date, to, from }) => {
+  const setGigFilters = ({ date }) => {
     if (date) {
       setSearchParams({ date: getQuerySafeDate(date) });
-    } else if (to && from) {
-      setSearchParams({
-        to: getQuerySafeDate(to),
-        from: getQuerySafeDate(from),
-      });
     }
   };
-  // TODO: using to and from and date ... probably want to simplify
-  const fromDate =
-    params.get("from") || params.get("date") || getQuerySafeDate(new Date());
-  const toDate = params.get("to") || addDays(fromDate, 1);
-  if (params.get("to") && params.get("from")) {
-    return [
-      {
-        to: toDate,
-        from: fromDate,
-        location: getLocation(),
-      },
-    ];
-  }
-  const date = params.get("date") || getQuerySafeDate(new Date());
+  const date = params.get("date") || getQuerySafeDate(dayjs());
 
   return [
-    { date, dateParsed: new Date(date), location: getLocation() },
+    {
+      date,
+      from: date,
+      to: date,
+      dateParsed: dayjs(date),
+      location: getLocation(),
+    },
     setGigFilters,
   ];
 };
@@ -73,11 +51,10 @@ const loadData = async (url) => {
 export const useGigList = () => {
   const [{ date, to, from, location }] = useGigFilters();
   const apiFromDate = date ? date : from;
-  const apiToDate = date ? addDays(date, 7) : to;
 
   // TEMP: add a longer window to date
   return useSWR(
-    `https://api.lml.live/gigs/query?location=${location}&date_from=${apiFromDate}&date_to=${apiToDate}`,
+    `https://api.lml.live/gigs/query?location=${location}&date_from=${apiFromDate}&date_to=${apiFromDate}`,
     loadData,
   );
 };

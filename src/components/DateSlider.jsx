@@ -1,35 +1,39 @@
 import styled from "styled-components";
-
+import dayjs from "dayjs";
 const DateSliderWrapper = styled.div`
   display: flex;
   justify-content: center;
 `;
 
-export default function DateSlider({ date, onChange }) {
+export default function DateSlider({ date, onChange, className = "" }) {
   const handlePreviousDay = () => {
-    const newDate = new Date(date.setDate(date.getDate() - 1));
+    const newDate = date?.subtract(1, "day");
     onChange(newDate);
   };
 
   const handleNextDay = () => {
-    const newDate = new Date(date.setDate(date.getDate() + 1));
+    const newDate = date?.add(1, "day");
     onChange(newDate);
   };
 
   const handleDateChange = (e) => {
-    onChange(e.target.valueAsDate);
+    if (e.target.valueAsDate) {
+      onChange(dayjs(e.target.valueAsDate));
+    } else {
+      onChange(null);
+    }
   };
-
   return (
-    <DateSliderWrapper>
-      <button onClick={handlePreviousDay} className="btn btn-outline-dark">
+    <DateSliderWrapper className={className}>
+      {/**  tailwind and bootstrap csses here! todo- move to just tw */}
+      <button onClick={handlePreviousDay} className="btn btn-outline-dark ">
         ◀
       </button>
       <input
-        className="form-control mx-2"
+        className="form-control mx-2 border border-1 border-gray-400"
         type="date"
         onChange={handleDateChange}
-        value={date.toISOString().split("T")[0]}
+        value={date.format("YYYY-MM-DD")}
       />
       <button onClick={handleNextDay} className="btn btn-outline-dark">
         ▶
