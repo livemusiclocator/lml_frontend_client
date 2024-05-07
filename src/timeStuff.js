@@ -5,12 +5,15 @@ import weekOfYear from "dayjs/plugin/weekOfYear"; // For week of year support
 import isBetween from "dayjs/plugin/isBetween"; //
 import localizedFormat from "dayjs/plugin/localizedFormat"; //
 import localeData from "dayjs/plugin/localeData";
+import isoWeek from "dayjs/plugin/isoWeek";
+
 dayjs.extend(isBetween);
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(weekOfYear);
 dayjs.extend(localeData);
 dayjs.extend(localizedFormat);
+dayjs.extend(isoWeek);
 
 export function generateTimePeriods() {
   const now = dayjs().tz("Australia/Melbourne").startOf("day"); // HARDCODING TIMEZONE here
@@ -35,7 +38,7 @@ export function generateTimePeriods() {
 
   // Object 3: This Week (remaining days if not Saturday or Sunday)
   if (now.day() !== 6 && now.day() !== 0) {
-    const endOfWeek = now.endOf("week");
+    const endOfWeek = now.endOf("isoWeek");
     periods.push({
       caption: "This week",
       dateFrom: now.add(2, "days").startOf("day"),
@@ -45,8 +48,8 @@ export function generateTimePeriods() {
   }
 
   // Object 4: Next Week
-  const nextWeekStart = now.add(1, "week").startOf("week");
-  const nextWeekEnd = nextWeekStart.endOf("week");
+  const nextWeekStart = now.add(1, "week").startOf("isoWeek");
+  const nextWeekEnd = nextWeekStart.endOf("isoWeek");
   periods.push({
     caption: "Next Week",
     dateFrom: nextWeekStart,
@@ -60,6 +63,7 @@ export function generateTimePeriods() {
     dateTo,
     params: {
       date: dateFrom.format("YYYY-MM-DD"),
+      upTo: dateTo.format("YYYY-MM-DD"),
     },
   }));
 }

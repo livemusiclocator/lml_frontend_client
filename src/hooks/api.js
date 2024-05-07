@@ -29,6 +29,7 @@ export const useGigFilters = () => {
       to: date,
       dateParsed: dayjs(date),
       location: getLocation(),
+      magic: params.get("magic"),
     },
     setGigFilters,
   ];
@@ -74,7 +75,6 @@ export const useGigWIP = (id) => {
       result = gigList.find((g) => g.id === id);
     }
     result = result || (await loadData(key));
-    console.log(result);
     return result;
   });
 };
