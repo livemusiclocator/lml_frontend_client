@@ -1,5 +1,10 @@
 import React, { useRef, useEffect, useLayoutEffect } from "react";
-import { Link, useLocation, createSearchParams } from "react-router-dom";
+import {
+  Link,
+  useLocation,
+  createSearchParams,
+  useNavigate,
+} from "react-router-dom";
 import tw from "tailwind-styled-components";
 import { MapPinIcon, ClockIcon } from "@heroicons/react/24/solid";
 import DateTimeDisplay from "./DateTimeDisplay";
@@ -64,7 +69,7 @@ const GigHeader = ({ gig, showDate = true }) => {
             <DateTimeDisplay value={gig.start_time} type="time" />
           </p>
         )}
-        <Link to={`gigs/${gig.id}`}>
+        <Link to={`gigs/${gig.id}`} onClick={(e) => e.preventDefault()}>
           <h3 className="text-xl font-bold">{gig.name}</h3>
         </Link>
       </hgroup>
@@ -74,8 +79,15 @@ const GigHeader = ({ gig, showDate = true }) => {
 };
 
 const GigRow = ({ gig }) => {
+  const navigate = useNavigate();
   return (
-    <article className="flex flex-col snap-start p-4">
+    <article
+      className="flex flex-col snap-start  p-4 cursor-pointer"
+      onClick={(e) => {
+        e.preventDefault();
+        navigate(`gigs/${gig.id}`);
+      }}
+    >
       <GigHeader gig={gig} showDate={false} />
       <Aside>
         <div className="flex gap-x-1 pb-2 items-start text-sm">
@@ -140,6 +152,7 @@ const Content = () => {
   const byDate = Object.groupBy(gigs, ({ date }) => date);
 
   useLayoutEffect(() => {
+    // todo: If we made date part of the path, we might not need to reset the scroll each time we switch views...
     scroller.current.scrollTop = 0;
   }, [search]);
 
@@ -164,7 +177,7 @@ const Content = () => {
 
 const GigList = () => {
   return (
-    <main className="flex-1 overflow-hidden flex flex-col w-full items-stretch ">
+    <main className="flex-1 overflow-hidden flex flex-col w-full items-stretch max-w-3xl mx-auto">
       <TopNav />
       <Content />
     </main>

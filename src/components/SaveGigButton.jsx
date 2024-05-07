@@ -6,7 +6,7 @@ const SaveGigButton = ({ gig }) => {
   const [gigSaved, setGigSaved] = useState(gigIsSaved(gig));
 
   const toggleGigSaved = (e) => {
-    e.preventDefault();
+    e.stopPropagation();
     if (gigSaved) {
       unsaveGig(gig);
       setGigSaved(false);
@@ -14,6 +14,7 @@ const SaveGigButton = ({ gig }) => {
       saveGig(gig);
       setGigSaved(true);
     }
+    return false;
   };
   const buttonTitle = gigSaved ? "Remove from favourites" : "Add to favourites";
   return (

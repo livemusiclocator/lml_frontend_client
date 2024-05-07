@@ -81,7 +81,7 @@ export default function SingleGigDetails({ className }) {
 
   return (
     <article
-      className={`overflow-scroll min-w-sm max-w-2xl ${className || ""} pb-4 h-full`}
+      className={`overflow-scroll min-w-sm max-w-2xl mx-auto ${className || ""} pb-4 h-full`}
     >
       {showImagePlaceholder && <GigHeroImageBanner />}
       <GigHeader gig={gig} className="grow shrink-0" />
