@@ -5,6 +5,7 @@ import DefaultLayout from "./layouts/default";
 import "./index.css";
 import { ThemeProvider } from "styled-components";
 import { getTheme } from "./getLocation";
+import { preloadData } from "./hooks/api";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import SingleGigDetails from "./components/explorer/SingleGigDetails";
 import FiltersAndGigs from "./components/explorer/FiltersAndGigs";
@@ -12,7 +13,7 @@ import Explorer from "./components/explorer/Explorer";
 import GigList from "./components/GigList";
 ReactGA.initialize("G-8TKSCK99CN");
 
-// https://reactrouter.com/en/main/upgrading/v6-data
+//preloadData();
 
 const router = createBrowserRouter([
   {

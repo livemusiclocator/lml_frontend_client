@@ -1,4 +1,4 @@
-import useSWR from "swr";
+import useSWR, { preload } from "swr";
 import { getLocation } from "../getLocation";
 import dayjs from "dayjs";
 import { useSearchParams } from "react-router-dom";
@@ -47,25 +47,35 @@ const loadData = async (url) => {
   const response = await fetch(url);
   return await response.json();
 };
-
-export const useGigList = () => {
-  const [{ date, to, from, location }] = useGigFilters();
-  const apiFromDate = date ? date : from;
-
-  // TEMP: add a longer window to date
-  return useSWR(
-    `https://api.lml.live/gigs/query?location=${location}&date_from=${apiFromDate}&date_to=${apiFromDate}`,
-    async (url) => {
-      const result = await loadData(url);
-      result.sort(dateComparison);
-      return result;
-    },
-  );
+const gigByDayEndpoint = ({ date, location }) => {
+  return `https://api.lml.live/gigs/query?location=${location}&date_from=${date}&date_to=${date}`;
 };
 
+const loadAndSort = async (url) => {
+  const result = await loadData(url);
+  result.sort(dateComparison);
+  return result;
+};
+export const useGigList = () => {
+  const [{ date, upTo, from, location }] = useGigFilters();
+  const apiFromDate = date ? date : from;
+
+  return useSWR(gigByDayEndpoint({ location, date: apiFromDate }), loadAndSort);
+};
 // temp while we get a specific single-gig loading with fallback going (see useGigWIP)
 export const useGig = (id) => {
   return useSWR(`https://api.lml.live/gigs/${id}`, (key) => {
     return loadData(key);
   });
+};
+
+export const preloadData = () => {
+  // load the default 'today' page before anyone asks for it as it is likely to be asked for shortly.
+  preload(
+    gigByDayEndpoint({
+      date: dayjs().format("YYYY-MM-DD"),
+      location: getLocation(),
+    }),
+    loadAndSort,
+  );
 };
