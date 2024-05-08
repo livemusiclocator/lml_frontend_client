@@ -13,7 +13,7 @@ import Explorer from "./components/explorer/Explorer";
 import GigList from "./components/GigList";
 ReactGA.initialize("G-8TKSCK99CN");
 
-//preloadData();
+preloadData();
 
 const router = createBrowserRouter([
   {
