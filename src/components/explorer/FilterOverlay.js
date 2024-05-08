@@ -1,4 +1,3 @@
-import styled from "styled-components";
 import tw from "tailwind-styled-components";
 
 export const FilterWrapper = tw.div`

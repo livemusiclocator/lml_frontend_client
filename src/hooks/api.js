@@ -57,7 +57,7 @@ const loadAndSort = async (url) => {
   return result;
 };
 export const useGigList = () => {
-  const [{ date, upTo, from, location }] = useGigFilters();
+  const [{ date, from, location }] = useGigFilters();
   const apiFromDate = date ? date : from;
 
   return useSWR(gigByDayEndpoint({ location, date: apiFromDate }), loadAndSort);

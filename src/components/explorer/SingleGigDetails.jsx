@@ -3,17 +3,14 @@ import SaveGigButton from "../SaveGigButton";
 import { useGig } from "../../hooks/api";
 import { LoadingSpinner } from "../loading/LoadingOverlay";
 import DateTimeDisplay from "../DateTimeDisplay";
-import { useState } from "react";
 import tw from "tailwind-styled-components";
 import Markdown from "react-markdown";
 import {
-  StarIcon as StarIconSolid,
   CalendarIcon,
   MapPinIcon,
   TicketIcon,
   ArrowTopRightOnSquareIcon as ExternalLinkIcon,
 } from "@heroicons/react/24/solid";
-import { StarIcon as StarIconOutline } from "@heroicons/react/24/outline";
 
 const Aside = tw.aside`
 mx-4

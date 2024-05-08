@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import SaveGigButton from "../SaveGigButton";
 import DateTimeDisplay from "../DateTimeDisplay";
-import styled from "styled-components";
 
 export default function GigsList({ gigs }) {
   return (
