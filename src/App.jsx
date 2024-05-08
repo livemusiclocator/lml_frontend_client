@@ -20,6 +20,10 @@ const router = createBrowserRouter([
     element: <DefaultLayout />,
     children: [
       {
+        path: "about",
+        element: <p>Coming soon</p>,
+      },
+      {
         // work in progress
         path: "alt",
         children: [
