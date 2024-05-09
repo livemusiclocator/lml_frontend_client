@@ -2,68 +2,89 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone"; // For timezone support
 import weekOfYear from "dayjs/plugin/weekOfYear"; // For week of year support
-import isBetween from "dayjs/plugin/isBetween"; //
+import isBetween from "dayjs/plugin/isBetween";
 import localizedFormat from "dayjs/plugin/localizedFormat"; //
 import localeData from "dayjs/plugin/localeData";
+import minMax from "dayjs/plugin/minMax";
 import isoWeek from "dayjs/plugin/isoWeek";
-
+// todo: We dont need some of these... not sure which. Should remove them so the bundle size does not get massive
 dayjs.extend(isBetween);
 dayjs.extend(utc);
+dayjs.extend(minMax);
 dayjs.extend(timezone);
 dayjs.extend(weekOfYear);
 dayjs.extend(localeData);
 dayjs.extend(localizedFormat);
 dayjs.extend(isoWeek);
 
-export function generateTimePeriods() {
-  const now = dayjs().tz("Australia/Melbourne").startOf("day"); // HARDCODING TIMEZONE here
-  const periods = [];
+function generateDateRange(startDate, endDate) {
+  const start = dayjs(startDate);
+  const end = dayjs(endDate);
+  const diffDays = end.diff(start, "day");
 
-  // Object 1: Today
+  const result = Array.from({ length: diffDays + 1 }, (_, i) =>
+    start.add(i, "day"),
+  );
+  return result;
+}
+
+export const todaysDate = () => {
+  // HARDCODING TIMEZONE here
+  //
+  const now = dayjs().tz("Australia/Melbourne");
+  return now.startOf("day");
+};
+
+export function generateTimePeriods() {
+  const periods = [];
+  const today = todaysDate();
+  const tomorrow = today.add(1, "day");
+  const endOfWeek = today.endOf("isoWeek");
+  // "the weekend starts here" ... or here...
+  const startOfWeekend = dayjs().isoWeekday(5);
+  const startOfCurrentWeekend = startOfWeekend; //dayjs.max(today, startOfWeekend);
+  // todo: Gigs that have a start time of midnight Sunday night should count as weekend - can we just use the start date and assume it's legit?
+  const endOfWeekend = dayjs().isoWeekday(7);
+
+  const nextWeekStart = today.add(1, "week").startOf("isoWeek");
+  const nextWeekEnd = nextWeekStart.endOf("isoWeek");
+
   periods.push({
     caption: "Today",
-    dateFrom: now,
-    dateTo: now.endOf("day"),
-    key: `today-${now.format("YYYY-MM-DD")}`,
+    dates: [today],
+    key: "today",
   });
 
-  // Object 2: Tomorrow
-  const tomorrow = now.add(1, "day");
   periods.push({
     caption: "Tomorrow",
-    dateFrom: tomorrow.startOf("day"),
-    dateTo: tomorrow.endOf("day"),
-    key: `tomorrow-${tomorrow.format("YYYY-MM-DD")}`,
+    dates: [tomorrow],
+    key: "tomorrow",
   });
 
-  // Object 3: This Week (remaining days if not Saturday or Sunday)
-  if (now.day() !== 6 && now.day() !== 0) {
-    const endOfWeek = now.endOf("isoWeek");
-    periods.push({
-      caption: "This week",
-      dateFrom: now.add(2, "days").startOf("day"),
-      dateTo: endOfWeek,
-      key: `this-week-${now.format("YYYY-MM-DD")}`,
-    });
-  }
+  periods.push({
+    caption: "This weekend",
+    dates: generateDateRange(startOfCurrentWeekend, endOfWeekend),
+    key: "this-weekend",
+  });
+  periods.push({
+    caption: "This week",
+    dates: generateDateRange(today, endOfWeek),
+    key: "this-week",
+  });
 
-  // Object 4: Next Week
-  const nextWeekStart = now.add(1, "week").startOf("isoWeek");
-  const nextWeekEnd = nextWeekStart.endOf("isoWeek");
   periods.push({
     caption: "Next Week",
-    dateFrom: nextWeekStart,
-    dateTo: nextWeekEnd,
-    key: `next-week-${nextWeekStart.format("YYYY-MM-DD")}`,
+    dates: generateDateRange(nextWeekStart, nextWeekEnd),
+    key: "next-week",
   });
 
-  return periods.map(({ dateFrom, dateTo, ...rest }) => ({
-    ...rest,
-    dateFrom,
-    dateTo,
-    params: {
-      date: dateFrom.format("YYYY-MM-DD"),
-      upTo: dateTo.format("YYYY-MM-DD"),
-    },
-  }));
+  return periods.reduce((map, period) => {
+    map[period.key] = period;
+    return map;
+  }, {});
+}
+
+export function daysForTimePeriod(key) {
+  const timePeriods = generateTimePeriods();
+  return timePeriods[key]?.dates;
 }

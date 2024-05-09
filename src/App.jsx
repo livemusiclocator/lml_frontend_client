@@ -5,15 +5,11 @@ import DefaultLayout from "./layouts/default";
 import "./index.css";
 import { ThemeProvider } from "styled-components";
 import { getTheme } from "./getLocation";
-import { preloadData } from "./hooks/api";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import SingleGigDetails from "./components/explorer/SingleGigDetails";
-import FiltersAndGigs from "./components/explorer/FiltersAndGigs";
 import Explorer from "./components/explorer/Explorer";
 import GigList from "./components/GigList";
 ReactGA.initialize("G-8TKSCK99CN");
-
-preloadData();
 
 const router = createBrowserRouter([
   {
@@ -37,7 +33,7 @@ const router = createBrowserRouter([
       {
         element: <Explorer />,
         children: [
-          { index: true, element: <FiltersAndGigs /> },
+          { index: true, element: <GigList /> },
           {
             path: "gigs/:id",
             element: <SingleGigDetails />,

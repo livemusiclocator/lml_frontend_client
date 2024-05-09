@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useLayoutEffect } from "react";
+import React, { useRef, useLayoutEffect } from "react";
 import {
   Link,
   useLocation,
@@ -14,25 +14,16 @@ import { generateTimePeriods } from "../timeStuff";
 import GigFilter from "./explorer/GigFilter";
 
 const TopNav = () => {
-  const [currentParams] = useGigFilters();
-
+  const [{ dateRange }] = useGigFilters();
   const timePeriods = generateTimePeriods();
-  const dateFilters = timePeriods.map(
-    ({ params, key, caption, dateFrom, dateTo }) => ({
-      key,
-      link: {
-        search: createSearchParams({ ...params, magic: "yes" }).toString(),
-      },
-      display: caption,
-
-      selected: currentParams.dateParsed.isBetween(
-        dateFrom,
-        dateTo,
-        "day",
-        "[]",
-      ),
-    }),
-  );
+  const dateFilters = Object.values(timePeriods).map(({ key, caption }) => ({
+    key,
+    link: {
+      search: createSearchParams({ dateRange: key }).toString(),
+    },
+    display: caption,
+    selected: dateRange === key,
+  }));
 
   return (
     <nav className="flex flex-wrap flex-row gap-x-2 gap-y-4 p-4  text-nowrap border-b border-gray-300">
@@ -141,14 +132,7 @@ const GigRow = ({ gig }) => {
 const Content = () => {
   const { data: gigs = [] } = useGigList();
   const scroller = useRef();
-  const { hash, search } = useLocation();
-
-  useEffect(() => {
-    if (hash) {
-      // do something
-    }
-  }, [hash]);
-
+  const { search } = useLocation();
   const byDate = Object.groupBy(gigs, ({ date }) => date);
 
   useLayoutEffect(() => {
@@ -159,11 +143,11 @@ const Content = () => {
   return (
     <div
       ref={scroller}
-      className="snap-y snap-proximity flex flex-col overflow-y-auto divide-y divide-gray-200 px-2 w-full"
+      className="flex flex-col overflow-y-auto divide-y divide-gray-200 px-2 w-full"
     >
       {Object.entries(byDate).map(([d, currentGigs]) => (
         <React.Fragment key={d}>
-          <h2 className="font-semibold p-4a snap-start">
+          <h2 className="font-semibold p-4a">
             <DateTimeDisplay value={d} />
           </h2>
           {currentGigs.map((gig) => (
