@@ -107,12 +107,14 @@ export default function SingleGigDetails({ className }) {
               {gig.venue.name}
             </li>
             <li aria-label="Venue address">{gig.venue.address}</li>
-            <li aria-label="Directions link">
-              <ExternalLink href="about:blank">
-                Get directions
-                <ExternalLinkIcon className="size-4 self-center mx-1" />
-              </ExternalLink>
-            </li>
+            {gig.venue.location_url && (
+              <li aria-label="Directions link">
+                <ExternalLink href={gig.venue.location_url}>
+                  Get directions
+                  <ExternalLinkIcon className="size-4 self-center mx-1" />
+                </ExternalLink>
+              </li>
+            )}
           </ul>
         </div>
         <div className="flex gap-x-2">
