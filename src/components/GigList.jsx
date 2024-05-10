@@ -26,21 +26,23 @@ const TopNav = () => {
   }));
 
   return (
-    <nav className="flex flex-wrap flex-row gap-x-2 gap-y-4 p-4  text-nowrap border-b border-gray-300">
-      {dateFilters.map(({ key, display, link, selected }) => (
-        <Link
-          key={key}
-          to={link}
-          className={`text-xs p-2 ${
-            selected
-              ? "bg-gray-800 text-white"
-              : "bg-gray-300 text-gray-800 border"
-          }`}
-        >
-          {display}
-        </Link>
-      ))}
-      <GigFilter className="ml-auto" />
+    <nav className="p-4 gap-y-4 flex flex-wrap flex-row border-b border-gray-300 justify-center">
+      <div className="flex flex-row gap-x-2 w-full justify-center">
+        {dateFilters.map(({ key, display, link, selected }) => (
+          <Link
+            key={key}
+            to={link}
+            className={`text-nowrap align-middle text-center text-xs p-2 ${
+              selected
+                ? "bg-gray-800 text-white"
+                : "bg-gray-300 text-gray-800 border"
+            }`}
+          >
+            {display}
+          </Link>
+        ))}
+      </div>
+      <GigFilter />
     </nav>
   );
 };

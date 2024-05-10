@@ -62,7 +62,7 @@ export function generateTimePeriods() {
   });
 
   periods.push({
-    caption: "This weekend",
+    caption: "Weekend",
     dates: generateDateRange(startOfCurrentWeekend, endOfWeekend),
     key: "this-weekend",
   });
@@ -73,7 +73,7 @@ export function generateTimePeriods() {
   });
 
   periods.push({
-    caption: "Next Week",
+    caption: "Next week",
     dates: generateDateRange(nextWeekStart, nextWeekEnd),
     key: "next-week",
   });
