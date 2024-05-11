@@ -1,4 +1,5 @@
 import React, { useRef, useLayoutEffect } from "react";
+import { groupBy } from "lodash-es";
 import {
   Link,
   useLocation,
@@ -135,7 +136,7 @@ const Content = () => {
   const { data: gigs = [] } = useGigList();
   const scroller = useRef();
   const { search } = useLocation();
-  const byDate = Object.groupBy(gigs, ({ date }) => date);
+  const byDate = groupBy(gigs, ({ date }) => date);
 
   useLayoutEffect(() => {
     // todo: If we made date part of the path, we might not need to reset the scroll each time we switch views...
