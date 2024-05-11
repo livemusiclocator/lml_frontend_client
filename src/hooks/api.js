@@ -7,42 +7,6 @@ import dayjs from "dayjs";
 import { useSearchParams } from "react-router-dom";
 import { daysForTimePeriod, todaysDate } from "../timeStuff";
 
-// todo: Tidy up all of the uses of date and strings here
-// todo: separate out 'api' and 'client routing' concerns !
-
-const getQuerySafeDate = (date) => {
-  // assume a string is already ok. this may backfire.
-  if (typeof date === "string") {
-    return date;
-  }
-  return date?.format("YYYY-MM-DD");
-};
-
-export const useGigFilters = () => {
-  let [params, setSearchParams] = useSearchParams();
-  // todo: cannot set a dateRange this way.
-  const setGigFilters = ({ date }) => {
-    if (date) {
-      setSearchParams({ date: getQuerySafeDate(date) });
-    }
-  };
-  const date = dayjs(params.get("date"));
-  const dateRange = params.get("dateRange");
-
-  const dates = daysForTimePeriod(dateRange) || [
-    date.isValid() ? date : todaysDate(),
-  ];
-
-  return [
-    {
-      dates,
-      dateRange,
-      location: getLocation(),
-    },
-    setGigFilters,
-  ];
-};
-
 //todo: not this
 const dateComparison = (
   { date: date1, start_time: start1 },
@@ -64,7 +28,8 @@ const loadAndSort = async ({ date, location }) => {
   result.sort(dateComparison);
   return result;
 };
-export const useGigList = () => {
+
+export const useGigDateParams = () => {
   let [params] = useSearchParams();
   const dateRange = params.get("dateRange");
 
@@ -75,8 +40,12 @@ export const useGigList = () => {
       daysForTimePeriod(dateRange) || [date.isValid() ? date : todaysDate()]
     );
   }, [params]);
+  return { dateRange, dates };
+};
 
+export const useGigList = () => {
   const location = getLocation();
+  const { dateRange, dates } = useGigDateParams();
   const pagedDates = dates.map((d) => d.format("YYYY-MM-DD"));
   // note: isValidating and the other returns from useSWR and friends useful?
   const { data: pages, isLoading } = useSWRInfinite(

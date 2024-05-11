@@ -10,12 +10,12 @@ import tw from "tailwind-styled-components";
 import { MapPinIcon, ClockIcon } from "@heroicons/react/24/solid";
 import DateTimeDisplay from "./DateTimeDisplay";
 import SaveGigButton from "./SaveGigButton";
-import { useGigList, useGigFilters } from "../hooks/api";
+import { useGigList, useGigDateParams } from "../hooks/api";
 import { generateTimePeriods } from "../timeStuff";
 import GigFilter from "./explorer/GigFilter";
 
 const TopNav = () => {
-  const [{ dateRange }] = useGigFilters();
+  const { dateRange } = useGigDateParams();
   const timePeriods = generateTimePeriods();
   const dateFilters = Object.values(timePeriods).map(({ key, caption }) => ({
     key,
