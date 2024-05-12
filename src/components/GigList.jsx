@@ -117,15 +117,6 @@ const GigRow = ({ gig }) => {
           ))}
         </div>
       )}
-      {gig.gigInfoTags && (
-        <div className="flex flex-wrap gap-2 mt-2">
-          {gig.gigInfoTags.map((tag, index) => (
-            <span key={index} className="text-white italic px-1 py-1 text-sm">
-              {tag}
-            </span>
-          ))}
-        </div>
-      )}
     </article>
   );
 };

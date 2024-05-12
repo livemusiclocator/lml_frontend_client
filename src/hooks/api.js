@@ -31,8 +31,9 @@ const transformGigResponse = ({ tags, ...gig }) => {
   const allTags = groupBy(parseTags(tags), "category");
   return {
     ...gig,
-    genres: allTags["genre"] || [],
-    infoTags: allTags["information"] || [],
+    genres: allTags["genre"],
+
+    infoTags: allTags["information"],
   };
 };
 

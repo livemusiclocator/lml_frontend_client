@@ -53,7 +53,9 @@ const GigHeroImageBanner = () => {
 
 const GigHeader = ({ gig, className }) => {
   return (
-    <header className={`flex items-start flex-row ${className || ""} p-4`}>
+    <header
+      className={`flex items-start justify-between flex-row ${className || ""} p-4`}
+    >
       <hgroup className="break-words text-pretty">
         <p className="font-semibold">
           <DateTimeDisplay value={gig.date} type="briefDate" />
@@ -132,7 +134,7 @@ export default function SingleGigDetails({ className }) {
             </ul>
           </div>
         )}
-        {gig.infoTags.length > 0 && (
+        {(gig.infoTags || []).length > 0 && (
           <div className="flex gap-x-2">
             <InformationCircleIcon className="size-6 shrink-0" />
 
