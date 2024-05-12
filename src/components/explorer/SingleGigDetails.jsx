@@ -117,21 +117,20 @@ export default function SingleGigDetails({ className }) {
             )}
           </ul>
         </div>
-        <div className="flex gap-x-2">
-          <TicketIcon className="size-6 shrink-0" />
+        { gig.prices.length > 0 && (
+          <div className="flex gap-x-2">
+            <TicketIcon className="size-6 shrink-0" />
 
-          <ul>
-            <li className="font-semibold text-lg">Ticket Information</li>
-            {gig.ticketing_url && (
-              <li aria-label="Gig information link">
-                <ExternalLink href={gig.ticketing_url}>
-                  Gig information
-                  <ExternalLinkIcon className="size-4 self-center mx-1" />
-                </ExternalLink>
-              </li>
-            )}
-          </ul>
-        </div>
+            <ul>
+              <li className="font-semibold text-lg">Ticket Information</li>
+              {
+                  gig.prices.map(
+                    (price) => (<li key={price.id} aria-label="Ticket Price">{price.amount} {price.description}</li>)
+                  )
+                }
+            </ul>
+          </div>
+        )}
       </Aside>
       <section className="px-4 prose">
         {/*
