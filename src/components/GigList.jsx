@@ -104,25 +104,23 @@ const GigRow = ({ gig }) => {
           </div>
         )}
       </Aside>
+
       {gig.genres && (
-        <div className="flex flex-wrap gap-2 mt-2">
-          {gig.genres.map((genre, index) => (
+        <div className="flex gap-2 flex-wrap p-4">
+          {gig.genres.map(({ id, value }) => (
             <span
-              key={index}
-              className="bg-red-600 text-white px-3 py-1 text-sm"
+              key={id}
+              className="bg-lmlpink text-white text-xs font-medium p-2"
             >
-              {genre}
+              {value}
             </span>
           ))}
         </div>
       )}
-      {gig.tags && (
+      {gig.gigInfoTags && (
         <div className="flex flex-wrap gap-2 mt-2">
-          {gig.tags.map((tag, index) => (
-            <span
-              key={index}
-              className="text-grey-800 italic px-1 py-1 text-sm"
-            >
+          {gig.gigInfoTags.map((tag, index) => (
+            <span key={index} className="text-white italic px-1 py-1 text-sm">
               {tag}
             </span>
           ))}

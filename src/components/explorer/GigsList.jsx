@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import SaveGigButton from "../SaveGigButton";
 import DateTimeDisplay from "../DateTimeDisplay";
-
 export default function GigsList({ gigs }) {
   return (
     <div className="h-full overflow-auto pb-6 divide-y divide-gray-200">

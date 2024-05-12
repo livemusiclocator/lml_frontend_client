@@ -1,19 +1,12 @@
 import { useMemo } from "react";
 import useSWR from "swr";
 import useSWRInfinite from "swr/infinite";
-
+import { sortBy, groupBy } from "lodash-es";
 import { getLocation } from "../getLocation";
 import dayjs from "dayjs";
 import { useSearchParams } from "react-router-dom";
 import { daysForTimePeriod, todaysDate } from "../timeStuff";
 
-//todo: not this
-const dateComparison = (
-  { date: date1, start_time: start1 },
-  { date: date2, start_time: start2 },
-) => {
-  return (start1 || date1 || "").localeCompare(start2 || date2 || "");
-};
 const loadData = async (url) => {
   const response = await fetch(url);
   return await response.json();
@@ -22,11 +15,33 @@ const gigByDayEndpoint = ({ date, location }) => {
   return `https://api.lml.live/gigs/query?location=${location}&date_from=${date}&date_to=${date}`;
 };
 
+function parseTags(rawValues) {
+  return rawValues.map((str) => {
+    const parts = str.split(/:\s*/);
+
+    if (parts.length === 2) {
+      return { category: parts[0].trim(), value: parts[1].trim(), id: str };
+    } else {
+      return { category: "general", value: str.trim(), id: str };
+    }
+  });
+}
+
+const transformGigResponse = ({ tags, ...gig }) => {
+  const allTags = groupBy(parseTags(tags), "category");
+  return {
+    ...gig,
+    genres: allTags["genre"] || [],
+    infoTags: allTags["information"] || [],
+  };
+};
+
 const loadAndSort = async ({ date, location }) => {
+  console.log({ date });
   const url = gigByDayEndpoint({ date, location });
-  const result = await loadData(url);
-  result.sort(dateComparison);
-  return result;
+  const result = (await loadData(url)).map(transformGigResponse);
+
+  return sortBy(result, "start_time");
 };
 
 export const useGigDateParams = () => {
@@ -61,7 +76,7 @@ export const useGigList = () => {
   return { data: pages?.flat(), isLoading };
 };
 export const useGig = (id) => {
-  return useSWR(`https://api.lml.live/gigs/${id}`, (key) => {
-    return loadData(key);
+  return useSWR(`https://api.lml.live/gigs/${id}`, async (key) => {
+    return transformGigResponse(await loadData(key));
   });
 };

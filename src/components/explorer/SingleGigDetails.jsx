@@ -9,6 +9,7 @@ import {
   CalendarIcon,
   MapPinIcon,
   TicketIcon,
+  InformationCircleIcon,
   ArrowTopRightOnSquareIcon as ExternalLinkIcon,
 } from "@heroicons/react/24/solid";
 
@@ -117,17 +118,31 @@ export default function SingleGigDetails({ className }) {
             )}
           </ul>
         </div>
-        { gig.prices.length > 0 && (
+        {gig.prices.length > 0 && (
           <div className="flex gap-x-2">
             <TicketIcon className="size-6 shrink-0" />
 
             <ul>
               <li className="font-semibold text-lg">Ticket Information</li>
-              {
-                  gig.prices.map(
-                    (price) => (<li key={price.id} aria-label="Ticket Price">{price.amount} {price.description}</li>)
-                  )
-                }
+              {gig.prices.map((price) => (
+                <li key={price.id} aria-label="Ticket Price">
+                  {price.amount} {price.description}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {gig.infoTags.length > 0 && (
+          <div className="flex gap-x-2">
+            <InformationCircleIcon className="size-6 shrink-0" />
+
+            <ul>
+              <li className="font-semibold text-lg">Event Information</li>
+              {gig.infoTags.map(({ id, value }) => (
+                <li key={id} aria-label="Event information">
+                  {value}
+                </li>
+              ))}
             </ul>
           </div>
         )}
@@ -175,13 +190,13 @@ export default function SingleGigDetails({ className }) {
           {gig.description}
         </Markdown>
       </section>
-      <section className="flex gap-1 flex-wrap">
-        {(gig.tags || []).map((t) => (
+      <section className="flex gap-2 flex-wrap p-4">
+        {(gig.genres || []).map(({ value, id }) => (
           <span
-            key={t}
-            className="bg-gray-200 text-gray-800 text-sm font-medium p-2 m-2 dark:bg-gray-800 dark:text-gray-200"
+            key={id}
+            className="bg-lmlpink text-white text-xs font-medium p-2"
           >
-            {t}
+            {value}
           </span>
         ))}
       </section>
