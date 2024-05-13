@@ -1,11 +1,16 @@
 import tw from "tailwind-styled-components";
 
 export const FilterWrapper = tw.div`
+  z-20 absolute bottom-0 left-0 w-full max-w-2xl p-0 h-full
   flex flex-col py-2 overflow-hidden group bg-white
-  lg:rounded-3xl
-  lg:shadow-xl
+  md:rounded-3xl
+  md:shadow-xl
   ease-in-out
   duration-150
-  transition-[flex-basis]
-   ${(props) => (props.$listMaximised ? `basis-full` : `is-minimised border rounded-t-3xl basis-32`)}
+  transition-[height]
+  m-0 md:m-2
+   ${(props) =>
+     props.$listMaximised
+       ? `h-full md:h-[55rem] `
+       : `is-minimised border rounded-t-3xl h-40`}
 `;
