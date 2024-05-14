@@ -9,6 +9,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import SingleGigDetails from "./components/explorer/SingleGigDetails";
 import Explorer from "./components/explorer/Explorer";
 import GigList from "./components/GigList";
+import PlaygroundGigFilter from "./playground/GigFilter";
 ReactGA.initialize("G-8TKSCK99CN");
 
 const router = createBrowserRouter([
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
           {
             path: "gigs/:id",
             element: <SingleGigDetails />,
+          },
+          {
+            path: "filters",
+            element: <PlaygroundGigFilter />,
           },
         ],
       },
