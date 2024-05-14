@@ -5,13 +5,6 @@ import { LoadingSpinner } from "../loading/LoadingOverlay";
 import DateTimeDisplay from "../DateTimeDisplay";
 import tw from "tailwind-styled-components";
 import Markdown from "react-markdown";
-import {
-  CalendarIcon,
-  MapPinIcon,
-  TicketIcon,
-  InformationCircleIcon,
-  ArrowTopRightOnSquareIcon as ExternalLinkIcon,
-} from "@heroicons/react/24/solid";
 
 import DateTime from "./details/DateTime";
 import Genres from "./details/Genres";
@@ -19,6 +12,7 @@ import Venue from "./details/Venue";
 import Prices from "./details/Prices";
 import InfoTags from "./details/InfoTags";
 import Tickets from "./details/Tickets";
+import Sets from "./details/Sets";
 
 const Aside = tw.aside`
 mx-4
@@ -96,6 +90,7 @@ export default function SingleGigDetails({ className }) {
       <Aside className="bg-gray-200">
         <DateTime gig={gig} />
         <Venue venue={gig.venue} />
+        <Sets sets={gig.sets || []} />
         <Prices prices={gig.prices || []} />
         <InfoTags infoTags={gig.infoTags || []}/>
       </Aside>
