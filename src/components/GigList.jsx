@@ -67,7 +67,7 @@ const GigHeader = ({ gig, showDate = true }) => {
           <h3 className="text-xl font-bold">{gig.name}</h3>
         </Link>
       </hgroup>
-      <SaveGigButton />
+      <SaveGigButton gig={gig} />
     </header>
   );
 };

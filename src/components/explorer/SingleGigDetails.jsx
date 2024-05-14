@@ -62,7 +62,7 @@ const GigHeader = ({ gig, className }) => {
         </p>
         <h2 className="text-4xl font-bold">{gig.name}</h2>
       </hgroup>
-      <SaveGigButton />
+      <SaveGigButton gig={gig} />
     </header>
   );
 };

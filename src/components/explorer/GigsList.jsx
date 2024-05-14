@@ -12,7 +12,7 @@ export default function GigsList({ gigs }) {
                 <DateTimeDisplay value={gig.start_time} type="time" />
               </div>
             )}
-            <SaveGigButton />
+            <SaveGigButton gig={gig} />
           </div>
           <h4 className="text-xl font-medium leading-8 text-gray-900">
             {gig.name}
