@@ -121,11 +121,13 @@ const GigRow = ({ gig }) => {
   );
 };
 
+const NoGigsMessage = () => {
+  return <p className="italic">No gigs found</p>;
+};
 const Content = () => {
-  const { data: gigs = [] } = useGigList();
+  const { data: pages = [] } = useGigList();
   const scroller = useRef();
   const { search } = useLocation();
-  const byDate = groupBy(gigs, ({ date }) => date);
 
   useLayoutEffect(() => {
     // todo: If we made date part of the path, we might not need to reset the scroll each time we switch views...
@@ -137,12 +139,13 @@ const Content = () => {
       ref={scroller}
       className="flex flex-col overflow-y-auto divide-y divide-gray-200 px-2 w-full"
     >
-      {Object.entries(byDate).map(([d, currentGigs]) => (
-        <React.Fragment key={d}>
+      {pages.map(({ filters: { date }, gigs }) => (
+        <React.Fragment key={date}>
           <h2 className="font-semibold p-4a">
-            <DateTimeDisplay value={d} />
+            <DateTimeDisplay value={date} />
           </h2>
-          {currentGigs.map((gig) => (
+          {gigs.length == 0 && <NoGigsMessage />}
+          {gigs.map((gig) => (
             <GigRow key={gig.id} gig={gig} />
           ))}
         </React.Fragment>

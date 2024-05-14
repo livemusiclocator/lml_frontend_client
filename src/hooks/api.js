@@ -38,11 +38,10 @@ const transformGigResponse = ({ tags, ...gig }) => {
 };
 
 const loadAndSort = async ({ date, location }) => {
-  console.log({ date });
   const url = gigByDayEndpoint({ date, location });
   const result = (await loadData(url)).map(transformGigResponse);
 
-  return sortBy(result, "start_time");
+  return { gigs: sortBy(result, "start_time"), filters: { date, location } };
 };
 
 export const useGigDateParams = () => {
