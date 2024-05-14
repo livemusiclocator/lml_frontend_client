@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "tailwind-styled-components";
-
+import DateTimeDisplay from "../components/DateTimeDisplay";
 const FilterContainer = styled.div`
   w-full
   p-4
@@ -137,7 +137,7 @@ const GigsFilter = () => {
           )}
           {customDateTime && (
             <SelectedTag onClick={() => setCustomDateTime("")}>
-              {new Date(customDateTime).toLocaleString()}{" "}
+              <DateTimeDisplay value={customDateTime} type="numericDate" />
               <span aria-hidden="true" className="ml-2">
                 ×
               </span>
@@ -180,7 +180,7 @@ const GigsFilter = () => {
                     </FilterTag>
                   ))}
                   {category === "When" && (
-                    <div className="mt-2">
+                    <div className="mt-2 flex gap-2 flex-row items-baseline">
                       <label
                         className="text-sm font-medium"
                         htmlFor="customDateTime"
@@ -188,7 +188,7 @@ const GigsFilter = () => {
                         Custom Date:
                       </label>
                       <DateTimeInput
-                        type="datetime-local"
+                        type="date"
                         id="customDateTime"
                         name="customDateTime"
                         value={customDateTime}

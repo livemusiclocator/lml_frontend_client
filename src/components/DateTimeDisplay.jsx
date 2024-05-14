@@ -12,6 +12,11 @@ const DateTimeDisplay = ({ value, start, end, type = "date" }) => {
       month: "long",
       day: "numeric",
     }),
+    numericDate: new Intl.DateTimeFormat(undefined, {
+      month: "numeric",
+      year: "numeric",
+      day: "numeric",
+    }),
     time: new Intl.DateTimeFormat(undefined, {
       hour: "numeric",
       minute: "numeric",
