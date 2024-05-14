@@ -13,6 +13,13 @@ import {
   ArrowTopRightOnSquareIcon as ExternalLinkIcon,
 } from "@heroicons/react/24/solid";
 
+import DateTime from "./details/DateTime";
+import Genres from "./details/Genres";
+import Venue from "./details/Venue";
+import Prices from "./details/Prices";
+import InfoTags from "./details/InfoTags";
+import Tickets from "./details/Tickets";
+
 const Aside = tw.aside`
 mx-4
 p-4
@@ -87,67 +94,10 @@ export default function SingleGigDetails({ className }) {
       <GigHeader gig={gig} className="grow shrink-0" />
       {/* todo: light contrasting colour here or just stick with a grey perhaps? */}
       <Aside className="bg-gray-200">
-        <div className="flex gap-x-2">
-          <CalendarIcon className="size-6 shrink-0" />
-          <ul className="font-semibold text-lg">
-            <li aria-label="Date">
-              <DateTimeDisplay value={gig.date} />
-            </li>
-            <li aria-label="Time">
-              <DateTimeDisplay
-                start={gig.start_time}
-                end={gig.finish_time}
-                type="time"
-              />
-            </li>
-          </ul>
-        </div>
-
-        <div className="flex gap-x-2">
-          <MapPinIcon className="size-6 shrink-0" />
-          <ul>
-            <li aria-label="Venue" className="font-semibold text-lg">
-              {gig.venue.name}
-            </li>
-            <li aria-label="Venue address">{gig.venue.address}</li>
-            {gig.venue.location_url && (
-              <li aria-label="Directions link">
-                <ExternalLink href={gig.venue.location_url}>
-                  Get directions
-                  <ExternalLinkIcon className="size-4 self-center mx-1" />
-                </ExternalLink>
-              </li>
-            )}
-          </ul>
-        </div>
-        {gig.prices.length > 0 && (
-          <div className="flex gap-x-2">
-            <TicketIcon className="size-6 shrink-0" />
-
-            <ul>
-              <li className="font-semibold text-lg">Ticket Information</li>
-              {gig.prices.map((price) => (
-                <li key={price.id} aria-label="Ticket Price">
-                  {price.amount} {price.description}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-        {(gig.infoTags || []).length > 0 && (
-          <div className="flex gap-x-2">
-            <InformationCircleIcon className="size-6 shrink-0" />
-
-            <ul>
-              <li className="font-semibold text-lg">Event Information</li>
-              {gig.infoTags.map(({ id, value }) => (
-                <li key={id} aria-label="Event information">
-                  {value}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+        <DateTime gig={gig} />
+        <Venue venue={gig.venue} />
+        <Prices prices={gig.prices || []} />
+        <InfoTags infoTags={gig.infoTags || []}/>
       </Aside>
       <section className="px-4 prose">
         {/*
@@ -192,29 +142,8 @@ export default function SingleGigDetails({ className }) {
           {gig.description}
         </Markdown>
       </section>
-      <section className="flex gap-2 flex-wrap p-4">
-        {(gig.genres || []).map(({ value, id }) => (
-          <span
-            key={id}
-            className="bg-lmlpink text-white text-xs font-medium p-2"
-          >
-            {value}
-          </span>
-        ))}
-      </section>
-
-      {gig.ticketing_url && (
-        <section className="p-4">
-          <a
-            href={gig.ticketing_url}
-            className="flex content-center transition items-center justify-center text-center px-8 py-4 text-xl font-medium rounded-md shadow-sm text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-200 mx-auto px-8"
-          >
-            <div className="flex items-center justify-start space-x-1.5">
-              <span>Get Tickets</span>
-            </div>
-          </a>
-        </section>
-      )}
+      <Genres genres={gig.genres} />
+      <Tickets url={gig.ticketing_url} />
     </article>
   );
 }
