@@ -33,7 +33,7 @@ const Map = () => {
       <MapContainer
         ref={mapRef}
         center={defaultPosition}
-        zoom={13}
+        zoom={15}
         style={{
           height: "100%",
           width: "100%",

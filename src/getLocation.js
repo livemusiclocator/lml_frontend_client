@@ -10,7 +10,7 @@ const locations = {
     theme: lmlTheme,
   },
   melbourne: {
-    mapCenter: [-37.840935, 144.946457],
+    mapCenter: [-37.798375850534065, 144.97863448586907],
     theme: lmlTheme,
   },
   perth: {
@@ -22,7 +22,7 @@ const locations = {
     theme: lmlTheme,
   },
   lbmf: {
-    mapCenter: [-37.798515, 144.9760145],
+    mapCenter: [-37.798375850534065, 144.97863448586907],
     theme: lbmfTheme,
   },
 };
