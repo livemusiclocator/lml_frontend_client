@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import useSWR from "swr";
 import useSWRInfinite from "swr/infinite";
 import { sortBy, groupBy } from "lodash-es";
@@ -40,7 +40,7 @@ const transformGigResponse = ({ tags, ...gig }) => {
 const loadAndSort = async ({ date, location }) => {
   const url = gigByDayEndpoint({ date, location });
   const result = (await loadData(url)).map(transformGigResponse);
-
+  //console.log("GIGS FETCHED ", { date, location });
   return { gigs: sortBy(result, "start_time"), filters: { date, location } };
 };
 
@@ -60,20 +60,35 @@ export const useGigDateParams = () => {
 
 export const useGigList = () => {
   const location = getLocation();
-  const { dateRange, dates } = useGigDateParams();
+  const { dates } = useGigDateParams();
   const pagedDates = dates.map((d) => d.format("YYYY-MM-DD"));
-  // note: isValidating and the other returns from useSWR and friends useful?
-  const { data: pages, isLoading } = useSWRInfinite(
+  const {
+    data: pages,
+    isLoading,
+    isValidating,
+    size,
+    setSize,
+  } = useSWRInfinite(
     (index) => {
       if (index >= pagedDates.length) {
         return null;
       }
-      return { location, date: pagedDates[index], dateRange };
+      return { location, date: pagedDates[index] };
     },
     loadAndSort,
-    { initialSize: 7 },
+    { initialSize: 1, revalidateFirstPage: false },
   );
-  return { data: pages?.flat(), isLoading };
+
+  const allPagesLoaded = pages?.length >= dates.length;
+  const gigCount = pages?.map((page) => page?.gigs).flat().length;
+  useEffect(() => {
+    if (pages?.length >= size && size < dates.length && !isLoading) {
+      setSize(size + 1);
+    }
+    //loadMore();
+  }, [dates, size, isLoading, setSize, pages]);
+
+  return { data: pages, isLoading, isValidating, allPagesLoaded, gigCount };
 };
 export const useGig = (id) => {
   return useSWR(`https://api.lml.live/gigs/${id}`, async (key) => {

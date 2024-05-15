@@ -1,11 +1,5 @@
-import React, { useRef, useLayoutEffect } from "react";
-import { groupBy } from "lodash-es";
-import {
-  Link,
-  useLocation,
-  createSearchParams,
-  useNavigate,
-} from "react-router-dom";
+import React, { useRef } from "react";
+import { Link, createSearchParams, useNavigate } from "react-router-dom";
 import tw from "tailwind-styled-components";
 import { MapPinIcon, ClockIcon } from "@heroicons/react/24/solid";
 import DateTimeDisplay from "./DateTimeDisplay";
@@ -13,6 +7,7 @@ import SaveGigButton from "./SaveGigButton";
 import { useGigList, useGigDateParams } from "../hooks/api";
 import { generateTimePeriods } from "../timeStuff";
 import GigFilter from "./explorer/GigFilter";
+import { LoadingSpinner } from "./loading/LoadingOverlay";
 
 const TopNav = () => {
   const { dateRange } = useGigDateParams();
@@ -125,31 +120,34 @@ const NoGigsMessage = () => {
   return <p className="italic">No gigs found</p>;
 };
 const Content = () => {
-  const { data: pages = [] } = useGigList();
-  const scroller = useRef();
-  const { search } = useLocation();
+  const {
+    data: pages = [],
+    isLoading,
+    allPagesLoaded,
+    gigCount,
+  } = useGigList();
 
-  useLayoutEffect(() => {
-    // todo: If we made date part of the path, we might not need to reset the scroll each time we switch views...
-    scroller.current.scrollTop = 0;
-  }, [search]);
+  const scroller = useRef();
+
+  const pagesWithGigs = pages.filter((page) => page?.gigs?.length > 0);
 
   return (
     <div
       ref={scroller}
       className="flex flex-col overflow-y-auto divide-y divide-gray-200 px-2 w-full"
     >
-      {pages.map(({ filters: { date }, gigs }) => (
+      {pagesWithGigs.map(({ filters: { date }, gigs }) => (
         <React.Fragment key={date}>
           <h2 className="font-semibold p-4a">
             <DateTimeDisplay value={date} />
           </h2>
-          {gigs.length == 0 && <NoGigsMessage />}
           {gigs.map((gig) => (
             <GigRow key={gig.id} gig={gig} />
           ))}
         </React.Fragment>
       ))}
+      {isLoading && <LoadingSpinner />}
+      {allPagesLoaded && gigCount == 0 && <NoGigsMessage />}
     </div>
   );
 };
