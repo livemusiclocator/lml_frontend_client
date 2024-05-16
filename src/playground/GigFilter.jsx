@@ -1,7 +1,16 @@
-import { useReducer, useState, useEffect, useRef } from "react";
+import { useReducer, useState, useEffect } from "react";
 import styled from "tailwind-styled-components";
 import DateTimeDisplay from "../components/DateTimeDisplay";
+import dayjs from "dayjs";
 import { useGigFilterOptions, useActiveGigFilters } from "../hooks/api";
+
+/**
+ * WARNING
+ *
+ * This is a giant hot mess presently - it's partially generated and partly hacked to make it work
+ * The UI is really nothing special  - and I am sure it is rendering 100 times more often than is polite.
+ *
+ * */
 const FilterContainer = styled.div`
   w-full
   p-4
@@ -40,33 +49,6 @@ const SelectedTag = styled(FilterTag)`
 const FilterForm = styled.div`
   w-full
   mt-2
-`;
-
-const TagButton = styled.button`
-  inline-flex
-  items-center
-  px-2
-  py-1
-  border
-  border-transparent
-  text-sm
-  font-medium
-  rounded-full
-  shadow-sm
-  text-white
-  bg-indigo-600
-  hover:bg-indigo-700
-  focus:outline-none
-  focus:ring-2
-  focus:ring-offset-2
-  focus:ring-indigo-500
-`;
-
-const ItemList = styled.ul`
-  w-full
-  mt-4
-  list-disc
-  list-inside
 `;
 
 const DateTimeInput = styled.input`
@@ -132,24 +114,7 @@ function filterReducer(state, action) {
       return state;
   }
 }
-function useTraceUpdate(props) {
-  const prev = useRef(props);
-  useEffect(() => {
-    console.log(prev.current);
-    const changedProps = Object.entries(props).reduce((ps, [k, v]) => {
-      if (prev.current[k] !== v) {
-        ps[k] = [prev.current[k], v];
-      }
-      return ps;
-    }, {});
-    if (Object.keys(changedProps).length > 0) {
-      console.log("Changed props:", changedProps);
-    }
-    prev.current = props;
-  });
-}
-const GigsFilter = (props) => {
-  useTraceUpdate(props);
+const GigsFilter = () => {
   const { dateRanges, tags = [] } = useGigFilterOptions();
 
   const [activeFilters, setActiveFilters] = useActiveGigFilters();
@@ -163,15 +128,12 @@ const GigsFilter = (props) => {
     dateRange: selectedDateRange,
   } = currentFilterState;
 
-  useTraceUpdate({ currentFilterState, activeFilters });
-  console.log("render", { currentFilterState, activeFilters });
+  console.log(customDate);
   useEffect(() => {
-    console.log("SET ACTIVE 1 ", { activeFilters, currentFilterState });
     setActiveFilters(currentFilterState);
-  }, [currentFilterState]);
+  }, [currentFilterState, setActiveFilters]);
 
   const [showFilters, setShowFilters] = useState(false);
-
   const selectTag = ({ category, value }) => {
     updateFilterState({ type: "selectTag", payload: { category, value } });
   };
@@ -180,7 +142,6 @@ const GigsFilter = (props) => {
     updateFilterState({ type: "deselectTag", payload: { category, value } });
   };
   const setDateRange = (dateRange) => {
-    console.log({ dateRange });
     updateFilterState({ type: "setDateRange", payload: dateRange });
   };
 
@@ -198,7 +159,7 @@ const GigsFilter = (props) => {
             <SelectedTag>{dateRanges[selectedDateRange].caption}</SelectedTag>
           )}
           {customDate && (
-            <SelectedTag onClick={() => console.log("TODO")}>
+            <SelectedTag>
               <DateTimeDisplay value={customDate} type="numericDate" />
               <span
                 aria-hidden="true"
@@ -250,8 +211,8 @@ const GigsFilter = (props) => {
                       : ""
                   }
                   name="customDate"
-                  value={customDate || ""}
-                  onChange={(e) => setCustomDate(e.target.value)}
+                  value={customDate?.format("YYYY-MM-DD") || ""}
+                  onChange={(e) => setCustomDate(dayjs(e.target.value))}
                 />
               </div>
             </div>

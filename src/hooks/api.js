@@ -1,4 +1,4 @@
-import { useMemo, useEffect } from "react";
+import { useEffect } from "react";
 import useSWR from "swr";
 import useSWRInfinite from "swr/infinite";
 import { sortBy, groupBy, intersectionBy } from "lodash-es";
@@ -7,6 +7,13 @@ import dayjs from "dayjs";
 import { useSearchParams } from "react-router-dom";
 import { datesForDateRange, DATE_RANGES } from "../timeStuff";
 
+/**
+ * WARNING
+ *
+ * This file is the first of two epicentres of awful (the other being the new gig filters - but that is not yet live whereas this is)
+ * The code in here is messy and untested... it seems to work but that is all it has going for it presently.
+ * Hopefully some of this will be resovled.
+ * */
 const loadData = async (url) => {
   const response = await fetch(url);
   return await response.json();
@@ -16,7 +23,6 @@ const gigByDayEndpoint = ({ date, location }) => {
 };
 
 function parseTags(rawValues) {
-  console.log({ rawValues });
   return rawValues?.map((str) => {
     const parts = str.split(/:\s*/);
 
@@ -59,7 +65,7 @@ const loadAndSort = async ({ date, location }) => {
 export const useActiveGigFilters = () => {
   let [params, setSearchParams] = useSearchParams();
   let customDate = dayjs(params.get("date"));
-  const setActiveGigFilters = ({ customDate, dateRange, tags }) => {
+  const setActiveGigFilters = ({ customDate, dateRange, tags = [] }) => {
     const datePart = customDate
       ? { date: dayjs(customDate).format("YYYY-MM-DD") }
       : { dateRange };
@@ -70,7 +76,7 @@ export const useActiveGigFilters = () => {
   };
 
   let dateFilters;
-  console.log(customDate);
+
   if (customDate.isValid()) {
     dateFilters = {
       customDate,
@@ -106,22 +112,10 @@ const filterPageByTags = ({ gigs, ...page }, tags) => {
   return { ...page, gigs: gigs.filter((gig) => matchesTags(gig.tags, tags)) };
 };
 const filterByTags = (gigPages, tags) => {
-  console.log(tags);
   if (tags?.length > 0) {
     return gigPages?.map((page) => filterPageByTags(page, tags));
   }
   return gigPages;
-};
-export const useGigDateParams = () => {
-  let [params] = useSearchParams();
-  const dateRange = params.get("dateRange");
-  // todo: do we still need this?
-  const dates = useMemo(() => {
-    const date = dayjs(params.get("date"));
-    const dateRange = params.get("dateRange");
-    return date.isValid() ? [date] : datesForDateRange(dateRange);
-  }, [params]);
-  return { dateRange, dates };
 };
 
 export const useGigList = () => {

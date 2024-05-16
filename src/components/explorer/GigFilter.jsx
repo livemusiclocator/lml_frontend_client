@@ -1,21 +1,16 @@
 import DateSlider from "../DateSlider";
-import { useNavigate, createSearchParams } from "react-router-dom";
-import { useGigDateParams } from "../../hooks/api";
+import { useActiveGigFilters } from "../../hooks/api";
 
 export default function GigFilter({ className }) {
-  const { dates } = useGigDateParams();
+  const [{ customDate = "" }, setActiveGigFilters] = useActiveGigFilters();
 
-  const navigate = useNavigate();
   return (
     <DateSlider
       className={className}
-      date={dates[0]}
+      date={customDate}
       onChange={(newValue) => {
-        navigate({
-          search: createSearchParams({
-            date: newValue?.format("YYYY-MM-DD"),
-          }).toString(),
-        });
+        console.log("hello", customDate);
+        setActiveGigFilters({ customDate: newValue });
       }}
     />
   );

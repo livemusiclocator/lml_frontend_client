@@ -4,15 +4,19 @@ import tw from "tailwind-styled-components";
 import { MapPinIcon, ClockIcon } from "@heroicons/react/24/solid";
 import DateTimeDisplay from "./DateTimeDisplay";
 import SaveGigButton from "./SaveGigButton";
-import { useGigList, useGigDateParams } from "../hooks/api";
-import { generateTimePeriods } from "../timeStuff";
-import GigFilter from "../playground/GigFilter";
+import {
+  useGigList,
+  useActiveGigFilters,
+  useGigFilterOptions,
+} from "../hooks/api";
+import PlaygroundGigFilter from "../playground/GigFilter";
+import GigFilterForDatesActually from "./explorer/GigFilter";
 import { LoadingSpinner } from "./loading/LoadingOverlay";
 
-const TopNav = () => {
-  const { dateRange } = useGigDateParams();
-  const timePeriods = generateTimePeriods();
-  const dateFilters = Object.values(timePeriods).map(({ key, caption }) => ({
+export const OriginalGigFilter = () => {
+  const { dateRanges } = useGigFilterOptions();
+  const [{ dateRange }] = useActiveGigFilters();
+  const dateFilters = Object.values(dateRanges).map(({ key, caption }) => ({
     key,
     link: {
       search: createSearchParams({ dateRange: key }).toString(),
@@ -38,7 +42,7 @@ const TopNav = () => {
           </Link>
         ))}
       </div>
-      <GigFilter />
+      <GigFilterForDatesActually />
     </nav>
   );
 };
@@ -152,7 +156,8 @@ const Content = () => {
   );
 };
 
-const GigList = () => {
+const GigList = ({ newGigFilter }) => {
+  const GigFilter = newGigFilter ? PlaygroundGigFilter : OriginalGigFilter;
   return (
     <main className="flex-1 overflow-hidden flex flex-col w-full items-stretch max-w-3xl mx-auto">
       <GigFilter />
