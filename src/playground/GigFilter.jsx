@@ -71,7 +71,6 @@ const DateTimeInput = styled.input`
 `;
 
 function filterReducer(state, action) {
-  console.log({ state, action });
   switch (action.type) {
     case "selectTag":
       return {
