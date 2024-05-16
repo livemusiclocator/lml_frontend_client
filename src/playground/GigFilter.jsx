@@ -118,20 +118,21 @@ const GigsFilter = () => {
   const { dateRanges, tags = [] } = useGigFilterOptions();
 
   const [activeFilters, setActiveFilters] = useActiveGigFilters();
-  const [currentFilterState, updateFilterState] = useReducer(
+  const [currentFilterState, updateFilterStateNope] = useReducer(
     filterReducer,
     activeFilters,
   );
+
   const {
     tags: selectedTags,
     customDate,
     dateRange: selectedDateRange,
-  } = currentFilterState;
+  } = activeFilters;
 
-  console.log(customDate);
-  useEffect(() => {
-    setActiveFilters(currentFilterState);
-  }, [currentFilterState, setActiveFilters]);
+  const updateFilterState = (action) => {
+    // shhhhhh
+    setActiveFilters(filterReducer(activeFilters, action));
+  };
 
   const [showFilters, setShowFilters] = useState(false);
   const selectTag = ({ category, value }) => {
