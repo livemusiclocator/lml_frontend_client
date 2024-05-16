@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useReducer, useState, useEffect, useRef } from "react";
 import styled from "tailwind-styled-components";
 import DateTimeDisplay from "../components/DateTimeDisplay";
+import { useGigFilterOptions, useActiveGigFilters } from "../hooks/api";
 const FilterContainer = styled.div`
   w-full
   p-4
@@ -87,128 +88,209 @@ const DateTimeInput = styled.input`
   focus:ring-indigo-500
 `;
 
-const GigsFilter = () => {
-  const [selectedTags, setSelectedTags] = useState([]);
-  const [selectedWhenTag, setSelectedWhenTag] = useState(null);
-  const [customDateTime, setCustomDateTime] = useState("");
+function filterReducer(state, action) {
+  console.log({ state, action });
+  switch (action.type) {
+    case "selectTag":
+      return {
+        ...state,
+        tags: [
+          ...state.tags.filter(
+            (tag) =>
+              tag.category !== action.payload.category ||
+              tag.value !== action.payload.value,
+          ),
+          action.payload,
+        ],
+      };
+
+    case "deselectTag":
+      return {
+        ...state,
+        tags: state.tags.filter(
+          (tag) =>
+            tag.category !== action.payload.category ||
+            tag.value !== action.payload.value,
+        ),
+      };
+
+    case "setCustomDate":
+      return {
+        ...state,
+        customDate: action.payload,
+        dateRange: null, // Clear dateRange
+      };
+
+    case "setDateRange":
+      return {
+        ...state,
+        dateRange: action.payload,
+        customDate: null, // Clear customDate
+      };
+
+    default:
+      return state;
+  }
+}
+function useTraceUpdate(props) {
+  const prev = useRef(props);
+  useEffect(() => {
+    console.log(prev.current);
+    const changedProps = Object.entries(props).reduce((ps, [k, v]) => {
+      if (prev.current[k] !== v) {
+        ps[k] = [prev.current[k], v];
+      }
+      return ps;
+    }, {});
+    if (Object.keys(changedProps).length > 0) {
+      console.log("Changed props:", changedProps);
+    }
+    prev.current = props;
+  });
+}
+const GigsFilter = (props) => {
+  useTraceUpdate(props);
+  const { dateRanges, tags = [] } = useGigFilterOptions();
+
+  const [activeFilters, setActiveFilters] = useActiveGigFilters();
+  const [currentFilterState, updateFilterState] = useReducer(
+    filterReducer,
+    activeFilters,
+  );
+  const {
+    tags: selectedTags,
+    customDate,
+    dateRange: selectedDateRange,
+  } = currentFilterState;
+
+  useTraceUpdate({ currentFilterState, activeFilters });
+  console.log("render", { currentFilterState, activeFilters });
+  useEffect(() => {
+    console.log("SET ACTIVE 1 ", { activeFilters, currentFilterState });
+    setActiveFilters(currentFilterState);
+  }, [currentFilterState]);
+
   const [showFilters, setShowFilters] = useState(false);
 
-  const tags = {
-    When: ["Today", "Tomorrow", "This Week", "This Weekend", "Next Week"],
-    Genre: ["Action", "Comedy", "Drama"],
-    Price: ["Free", "$0 - $10", "$10 - $20"],
-    Series: ["Series 1", "Series 2", "Series 3"],
+  const selectTag = ({ category, value }) => {
+    updateFilterState({ type: "selectTag", payload: { category, value } });
   };
 
-  const toggleTag = (tag) => {
-    setSelectedTags((prevSelectedTags) =>
-      prevSelectedTags.includes(tag)
-        ? prevSelectedTags.filter((t) => t !== tag)
-        : [...prevSelectedTags, tag],
-    );
+  const deselectTag = ({ category, value }) => {
+    updateFilterState({ type: "deselectTag", payload: { category, value } });
+  };
+  const setDateRange = (dateRange) => {
+    console.log({ dateRange });
+    updateFilterState({ type: "setDateRange", payload: dateRange });
   };
 
-  const toggleWhenTag = (tag) => {
-    setSelectedWhenTag(tag === selectedWhenTag ? null : tag);
-    if (tag !== "Custom Date") {
-      setCustomDateTime("");
-    }
-  };
-
-  const handleCustomDateTimeChange = (e) => {
-    setCustomDateTime(e.target.value);
-    setSelectedWhenTag("Custom Date");
+  const setCustomDate = (customDate) => {
+    updateFilterState({ type: "setCustomDate", payload: customDate });
   };
 
   const toggleShowFilters = () => setShowFilters(!showFilters);
 
   return (
-    <main className="max-w-3xl mx-auto w-full">
-      <FilterContainer>
-        <h2 className="text-lg font-medium">Filter by:</h2>
+    <FilterContainer>
+      {!showFilters && (
         <div>
-          {selectedWhenTag && selectedWhenTag !== "Custom Date" && (
-            <SelectedTag onClick={() => toggleWhenTag(selectedWhenTag)}>
-              {selectedWhenTag}{" "}
-              <span aria-hidden="true" className="ml-2">
+          {dateRanges[selectedDateRange] && (
+            <SelectedTag>{dateRanges[selectedDateRange].caption}</SelectedTag>
+          )}
+          {customDate && (
+            <SelectedTag onClick={() => console.log("TODO")}>
+              <DateTimeDisplay value={customDate} type="numericDate" />
+              <span
+                aria-hidden="true"
+                className="ml-2"
+                onClick={() => setCustomDate(null)}
+              >
                 ×
               </span>
             </SelectedTag>
           )}
-          {customDateTime && (
-            <SelectedTag onClick={() => setCustomDateTime("")}>
-              <DateTimeDisplay value={customDateTime} type="numericDate" />
-              <span aria-hidden="true" className="ml-2">
-                ×
-              </span>
-            </SelectedTag>
-          )}
-          {selectedTags.map((tag) => (
-            <SelectedTag key={tag} onClick={() => toggleTag(tag)}>
-              {tag}{" "}
+          {selectedTags.map(({ category, value }) => (
+            <SelectedTag
+              key={[category, value]}
+              onClick={() => deselectTag({ category, value })}
+            >
+              {value}
               <span aria-hidden="true" className="ml-2">
                 ×
               </span>
             </SelectedTag>
           ))}
         </div>
-        <TagButton onClick={toggleShowFilters}>
-          {showFilters ? "Hide Filters" : "Show Filters"}
-        </TagButton>
-        {showFilters && (
-          <FilterForm>
-            {Object.entries(tags).map(([category, tags]) => (
-              <div key={category} className="mt-2">
-                <h3 className="text-sm font-medium">{category}</h3>
-                <div className="mt-1">
-                  {tags.map((tag) => (
+      )}
+      {showFilters && (
+        <FilterForm>
+          <div className="mt-2">
+            <h3 className="text-sm font-medium">When</h3>
+            <div className="mt-1 flex flex-row items-baseline">
+              {Object.values(dateRanges).map(({ key, caption }) => (
+                <FilterTag
+                  key={key}
+                  onClick={() => setDateRange(key)}
+                  className={
+                    key === selectedDateRange
+                      ? "bg-indigo-200 text-indigo-700 hover:bg-indigo-300"
+                      : ""
+                  }
+                >
+                  {caption}
+                </FilterTag>
+              ))}
+              <div>
+                <DateTimeInput
+                  type="date"
+                  id="customDate"
+                  className={
+                    customDate
+                      ? "bg-indigo-200 text-indigo-700 hover:bg-indigo-300"
+                      : ""
+                  }
+                  name="customDate"
+                  value={customDate || ""}
+                  onChange={(e) => setCustomDate(e.target.value)}
+                />
+              </div>
+            </div>
+          </div>
+          {tags.map(({ category, caption, values }) => (
+            <div key={category} className="mt-2">
+              <h3 className="text-sm font-medium">{caption}</h3>
+              <div className="mt-1">
+                {values.map((value) => {
+                  const isSelected = !!selectedTags?.find(
+                    (tag) => tag.value === value && tag.category === category,
+                  );
+                  return (
                     <FilterTag
-                      key={tag}
+                      key={value}
                       onClick={() =>
-                        category === "When"
-                          ? toggleWhenTag(tag)
-                          : toggleTag(tag)
+                        isSelected
+                          ? deselectTag({ value, category })
+                          : selectTag({ value, category })
                       }
                       className={
-                        (category === "When" && tag === selectedWhenTag) ||
-                        (category !== "When" && selectedTags.includes(tag))
+                        isSelected
                           ? "bg-indigo-200 text-indigo-700 hover:bg-indigo-300"
                           : ""
                       }
                     >
-                      {tag}
+                      {value}
                     </FilterTag>
-                  ))}
-                  {category === "When" && (
-                    <div className="mt-2 flex gap-2 flex-row items-baseline">
-                      <label
-                        className="text-sm font-medium"
-                        htmlFor="customDateTime"
-                      >
-                        Custom Date:
-                      </label>
-                      <DateTimeInput
-                        type="date"
-                        id="customDateTime"
-                        name="customDateTime"
-                        value={customDateTime}
-                        onChange={handleCustomDateTimeChange}
-                      />
-                    </div>
-                  )}
-                </div>
+                  );
+                })}
               </div>
-            ))}
-          </FilterForm>
-        )}
-      </FilterContainer>
-      <ItemList>
-        {/* Example items, replace with your actual data */}
-        {["Item 1", "Item 2", "Item 3"].map((item) => (
-          <li key={item}>{item}</li>
-        ))}
-      </ItemList>
-    </main>
+            </div>
+          ))}
+        </FilterForm>
+      )}
+      <button onClick={toggleShowFilters}>
+        {showFilters ? "Hide Filters" : "Show Filters"}
+      </button>
+    </FilterContainer>
   );
 };
 

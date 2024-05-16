@@ -6,7 +6,7 @@ import DateTimeDisplay from "./DateTimeDisplay";
 import SaveGigButton from "./SaveGigButton";
 import { useGigList, useGigDateParams } from "../hooks/api";
 import { generateTimePeriods } from "../timeStuff";
-import GigFilter from "./explorer/GigFilter";
+import GigFilter from "../playground/GigFilter";
 import { LoadingSpinner } from "./loading/LoadingOverlay";
 
 const TopNav = () => {
@@ -155,7 +155,7 @@ const Content = () => {
 const GigList = () => {
   return (
     <main className="flex-1 overflow-hidden flex flex-col w-full items-stretch max-w-3xl mx-auto">
-      <TopNav />
+      <GigFilter />
       <Content />
     </main>
   );

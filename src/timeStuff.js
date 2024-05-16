@@ -35,6 +35,46 @@ export const todaysDate = () => {
   return now.startOf("day");
 };
 
+export const DATE_RANGES = {
+  today: {
+    caption: "Today",
+    key: "today",
+    datesFn: (today) => [today],
+  },
+  tomorrow: {
+    caption: "Tomorrow",
+    key: "tomorrow",
+    datesFn: (today) => [today.add(1, "day")],
+  },
+  weekend: {
+    caption: "Weekend",
+    key: "weekend",
+    datesFn: (today) => {
+      // todo: we could make this Saturday, Sunday if the current day is saturday etc.
+      // todo: Gigs that have a start time of midnight Sunday night should count as weekend - can we just use the start date and assume it's legit?
+      const startOfWeekend = today.isoWeekday(5);
+      const endOfWeekend = today.isoWeekday(7);
+      return generateDateRange(startOfWeekend, endOfWeekend);
+    },
+  },
+  thisWeek: {
+    caption: "This Week",
+    key: "thisWeek",
+    datesFn: (today) => {
+      return generateDateRange(today, today.endOf("isoWeek"));
+    },
+  },
+  nextWeek: {
+    caption: "Next week",
+    key: "nextWeek",
+    datesFn: (today) => {
+      const nextWeekStart = today.add(1, "week").startOf("isoWeek");
+      const nextWeekEnd = nextWeekStart.endOf("isoWeek");
+      return generateDateRange(nextWeekStart, nextWeekEnd);
+    },
+  },
+};
+
 export function generateTimePeriods() {
   const periods = [];
   const today = todaysDate();
@@ -43,7 +83,6 @@ export function generateTimePeriods() {
   // "the weekend starts here" ... or here...
   const startOfWeekend = dayjs().isoWeekday(5);
   const startOfCurrentWeekend = startOfWeekend; //dayjs.max(today, startOfWeekend);
-  // todo: Gigs that have a start time of midnight Sunday night should count as weekend - can we just use the start date and assume it's legit?
   const endOfWeekend = dayjs().isoWeekday(7);
 
   const nextWeekStart = today.add(1, "week").startOf("isoWeek");
@@ -84,7 +123,10 @@ export function generateTimePeriods() {
   }, {});
 }
 
-export function daysForTimePeriod(key) {
-  const timePeriods = generateTimePeriods();
-  return timePeriods[key]?.dates;
+export function datesForDateRange(key, customDate) {
+  if (customDate) {
+    return [customDate];
+  }
+  const dateRange = DATE_RANGES[key] || DATE_RANGES.today;
+  return dateRange.datesFn(todaysDate());
 }

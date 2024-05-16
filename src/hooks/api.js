@@ -1,11 +1,11 @@
 import { useMemo, useEffect } from "react";
 import useSWR from "swr";
 import useSWRInfinite from "swr/infinite";
-import { sortBy, groupBy } from "lodash-es";
+import { sortBy, groupBy, intersectionBy } from "lodash-es";
 import { getLocation } from "../getLocation";
 import dayjs from "dayjs";
 import { useSearchParams } from "react-router-dom";
-import { daysForTimePeriod, todaysDate } from "../timeStuff";
+import { datesForDateRange, DATE_RANGES } from "../timeStuff";
 
 const loadData = async (url) => {
   const response = await fetch(url);
@@ -16,21 +16,33 @@ const gigByDayEndpoint = ({ date, location }) => {
 };
 
 function parseTags(rawValues) {
-  return rawValues.map((str) => {
+  console.log({ rawValues });
+  return rawValues?.map((str) => {
     const parts = str.split(/:\s*/);
 
     if (parts.length === 2) {
-      return { category: parts[0].trim(), value: parts[1].trim(), id: str };
+      const category = parts[0].trim();
+      const value = parts[1].trim();
+      return {
+        category: parts[0].trim(),
+        value: parts[1].trim(),
+        id: [category, value].join(":"),
+      };
     } else {
-      return { category: "general", value: str.trim(), id: str };
+      return {
+        category: "general",
+        value: str.trim(),
+        id: ["general", str.trim()].join(":"),
+      };
     }
   });
 }
-
 const transformGigResponse = ({ tags, ...gig }) => {
-  const allTags = groupBy(parseTags(tags), "category");
+  const tagsParsed = parseTags(tags);
+  const allTags = groupBy(tagsParsed, "category");
   return {
     ...gig,
+    tags: tagsParsed,
     genres: allTags["genre"],
 
     infoTags: allTags["information"],
@@ -44,26 +56,82 @@ const loadAndSort = async ({ date, location }) => {
   return { gigs: sortBy(result, "start_time"), filters: { date, location } };
 };
 
+export const useActiveGigFilters = () => {
+  let [params, setSearchParams] = useSearchParams();
+  let customDate = dayjs(params.get("date"));
+  const setActiveGigFilters = ({ customDate, dateRange, tags }) => {
+    const datePart = customDate
+      ? { date: dayjs(customDate).format("YYYY-MM-DD") }
+      : { dateRange };
+    setSearchParams({
+      ...datePart,
+      tags: tags.map(({ value, category }) => [category, value].join(":")),
+    });
+  };
+
+  let dateFilters;
+  console.log(customDate);
+  if (customDate.isValid()) {
+    dateFilters = {
+      customDate,
+    };
+  } else {
+    dateFilters = {
+      dateRange: params.get("dateRange") || "today",
+    };
+  }
+
+  const tags = parseTags(params.getAll("tags"));
+  return [{ ...dateFilters, tags }, setActiveGigFilters];
+};
+
+export const useGigFilterOptions = () => {
+  return {
+    dateRanges: DATE_RANGES,
+    tags: [
+      {
+        category: "genre",
+        caption: "Genre",
+        order: 1,
+        values: ["Speed Metal", "Garage Rock"],
+      },
+    ],
+  };
+};
+
+const matchesTags = (tags, targetTags) => {
+  return intersectionBy(tags, targetTags, "id").length > 0;
+};
+const filterPageByTags = ({ gigs, ...page }, tags) => {
+  return { ...page, gigs: gigs.filter((gig) => matchesTags(gig.tags, tags)) };
+};
+const filterByTags = (gigPages, tags) => {
+  console.log(tags);
+  if (tags?.length > 0) {
+    return gigPages?.map((page) => filterPageByTags(page, tags));
+  }
+  return gigPages;
+};
 export const useGigDateParams = () => {
   let [params] = useSearchParams();
   const dateRange = params.get("dateRange");
-
+  // todo: do we still need this?
   const dates = useMemo(() => {
     const date = dayjs(params.get("date"));
     const dateRange = params.get("dateRange");
-    return (
-      daysForTimePeriod(dateRange) || [date.isValid() ? date : todaysDate()]
-    );
+    return date.isValid() ? [date] : datesForDateRange(dateRange);
   }, [params]);
   return { dateRange, dates };
 };
 
 export const useGigList = () => {
   const location = getLocation();
-  const { dates } = useGigDateParams();
+  const [{ dateRange, customDate, tags }] = useActiveGigFilters();
+
+  const dates = datesForDateRange(dateRange, customDate);
   const pagedDates = dates.map((d) => d.format("YYYY-MM-DD"));
   const {
-    data: pages,
+    data: pagesUnfiltered,
     isLoading,
     isValidating,
     size,
@@ -78,7 +146,7 @@ export const useGigList = () => {
     loadAndSort,
     { initialSize: 1, revalidateFirstPage: false },
   );
-
+  const pages = filterByTags(pagesUnfiltered, tags);
   const allPagesLoaded = pages?.length >= dates.length;
   const gigCount = pages?.map((page) => page?.gigs).flat().length;
   useEffect(() => {
@@ -88,8 +156,15 @@ export const useGigList = () => {
     //loadMore();
   }, [dates, size, isLoading, setSize, pages]);
 
-  return { data: pages, isLoading, isValidating, allPagesLoaded, gigCount };
+  return {
+    data: pages,
+    isLoading,
+    isValidating,
+    allPagesLoaded,
+    gigCount,
+  };
 };
+
 export const useGig = (id) => {
   return useSWR(`https://api.lml.live/gigs/${id}`, async (key) => {
     return transformGigResponse(await loadData(key));
