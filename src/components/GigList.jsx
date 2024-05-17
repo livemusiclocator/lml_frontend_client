@@ -4,33 +4,32 @@ import tw from "tailwind-styled-components";
 import { MapPinIcon, ClockIcon } from "@heroicons/react/24/solid";
 import DateTimeDisplay from "./DateTimeDisplay";
 import SaveGigButton from "./SaveGigButton";
-import {
-  useGigList,
-  useActiveGigFilters,
-  useGigFilterOptions,
-} from "../hooks/api";
+import { useGigList } from "../hooks/api";
+import { useGigFilterOptions } from "../hooks/filters";
 import PlaygroundGigFilter from "../playground/GigFilter";
 import GigFilterForDatesActually from "./explorer/GigFilter";
 import { LoadingSpinner } from "./loading/LoadingOverlay";
 
 export const OriginalGigFilter = () => {
   const { dateRanges } = useGigFilterOptions();
-  const [{ dateRange }] = useActiveGigFilters();
-  const dateFilters = Object.values(dateRanges).map(({ key, caption }) => ({
-    key,
-    link: {
-      search: createSearchParams({ dateRange: key }).toString(),
-    },
-    display: caption,
-    selected: dateRange === key,
-  }));
+  // temp until move to new ui
+  const dateFilters = Object.values(dateRanges)
+    .filter((x) => x.id != "customDate")
+    .map(({ id, caption, selected }) => ({
+      id,
+      link: {
+        search: createSearchParams({ dateRange: id }).toString(),
+      },
+      selected,
+      caption,
+    }));
 
   return (
     <nav className="p-4 gap-y-4 flex flex-wrap flex-row border-b border-gray-300 justify-center">
       <div className="flex flex-row gap-x-2 w-full justify-center">
-        {dateFilters.map(({ key, display, link, selected }) => (
+        {dateFilters.map(({ id, caption, link, selected }) => (
           <Link
-            key={key}
+            key={id}
             to={link}
             className={`text-nowrap align-middle text-center text-xs p-2 ${
               selected
@@ -38,7 +37,7 @@ export const OriginalGigFilter = () => {
                 : "bg-gray-300 text-gray-800 border"
             }`}
           >
-            {display}
+            {caption}
           </Link>
         ))}
       </div>

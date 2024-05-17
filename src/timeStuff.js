@@ -7,6 +7,8 @@ import localizedFormat from "dayjs/plugin/localizedFormat"; //
 import localeData from "dayjs/plugin/localeData";
 import minMax from "dayjs/plugin/minMax";
 import isoWeek from "dayjs/plugin/isoWeek";
+// browser locale is not obviously used by dayjs...
+import "dayjs/locale/en-au";
 // todo: We dont need some of these... not sure which. Should remove them so the bundle size does not get massive
 dayjs.extend(isBetween);
 dayjs.extend(utc);
@@ -16,6 +18,8 @@ dayjs.extend(weekOfYear);
 dayjs.extend(localeData);
 dayjs.extend(localizedFormat);
 dayjs.extend(isoWeek);
+
+dayjs.locale("en-au");
 
 function generateDateRange(startDate, endDate) {
   const start = dayjs(startDate);
@@ -38,17 +42,17 @@ export const todaysDate = () => {
 export const DATE_RANGES = {
   today: {
     caption: "Today",
-    key: "today",
+    id: "today",
     datesFn: (today) => [today],
   },
   tomorrow: {
     caption: "Tomorrow",
-    key: "tomorrow",
+    id: "tomorrow",
     datesFn: (today) => [today.add(1, "day")],
   },
   weekend: {
     caption: "Weekend",
-    key: "weekend",
+    id: "weekend",
     datesFn: (today) => {
       // todo: we could make this Saturday, Sunday if the current day is saturday etc.
       // todo: Gigs that have a start time of midnight Sunday night should count as weekend - can we just use the start date and assume it's legit?
@@ -59,18 +63,26 @@ export const DATE_RANGES = {
   },
   thisWeek: {
     caption: "This Week",
-    key: "thisWeek",
+    id: "thisWeek",
     datesFn: (today) => {
       return generateDateRange(today, today.endOf("isoWeek"));
     },
   },
   nextWeek: {
     caption: "Next week",
-    key: "nextWeek",
+    id: "nextWeek",
     datesFn: (today) => {
       const nextWeekStart = today.add(1, "week").startOf("isoWeek");
       const nextWeekEnd = nextWeekStart.endOf("isoWeek");
       return generateDateRange(nextWeekStart, nextWeekEnd);
+    },
+  },
+  customDate: {
+    caption: "Specific date",
+    ui: "datetime",
+    id: "customDate",
+    datesFn: (today, customDate) => {
+      return [customDate || today];
     },
   },
 };
@@ -91,42 +103,39 @@ export function generateTimePeriods() {
   periods.push({
     caption: "Today",
     dates: [today],
-    key: "today",
+    id: "today",
   });
 
   periods.push({
     caption: "Tomorrow",
     dates: [tomorrow],
-    key: "tomorrow",
+    id: "tomorrow",
   });
 
   periods.push({
     caption: "Weekend",
     dates: generateDateRange(startOfCurrentWeekend, endOfWeekend),
-    key: "this-weekend",
+    id: "this-weekend",
   });
   periods.push({
     caption: "This week",
     dates: generateDateRange(today, endOfWeek),
-    key: "this-week",
+    id: "this-week",
   });
 
   periods.push({
     caption: "Next week",
     dates: generateDateRange(nextWeekStart, nextWeekEnd),
-    key: "next-week",
+    id: "next-week",
   });
 
   return periods.reduce((map, period) => {
-    map[period.key] = period;
+    map[period.id] = period;
     return map;
   }, {});
 }
 
-export function datesForDateRange(key, customDate) {
-  if (customDate) {
-    return [customDate];
-  }
-  const dateRange = DATE_RANGES[key] || DATE_RANGES.today;
-  return dateRange.datesFn(todaysDate());
+export function datesForDateRange(id, customDate) {
+  const dateRange = DATE_RANGES[id] || DATE_RANGES.today;
+  return dateRange.datesFn(todaysDate(), customDate);
 }

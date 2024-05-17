@@ -68,8 +68,6 @@ const GigHeader = ({ gig, className }) => {
   );
 };
 
-const ExternalLink = tw.a`text-blue-600 hover:underline visited:text-purple-600 inline-flex items-baseline`;
-
 export default function SingleGigDetails({ className }) {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
@@ -92,7 +90,7 @@ export default function SingleGigDetails({ className }) {
         <Venue venue={gig.venue} />
         <Sets sets={gig.sets || []} />
         <Prices prices={gig.prices || []} />
-        <InfoTags infoTags={gig.infoTags || []}/>
+        <InfoTags infoTags={gig.infoTags || []} />
       </Aside>
       <section className="px-4 prose">
         {/*

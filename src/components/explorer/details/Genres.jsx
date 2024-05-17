@@ -11,4 +11,4 @@ export default function Genres({ genres }) {
       ))}
     </section>
   );
-};
+}

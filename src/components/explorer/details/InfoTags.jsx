@@ -18,5 +18,5 @@ export default function InfoTags({ infoTags }) {
         </ul>
       </div>
     );
-  };
-};
+  }
+}

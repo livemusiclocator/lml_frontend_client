@@ -12,5 +12,5 @@ export default function Tickets({ url }) {
         </a>
       </section>
     );
-  };
-};
+  }
+}
