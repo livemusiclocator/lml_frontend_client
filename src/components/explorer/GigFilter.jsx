@@ -9,7 +9,6 @@ export default function GigFilter({ className }) {
       className={className}
       date={customDate}
       onChange={(newValue) => {
-        console.log("hello", customDate);
         setActiveGigFilters({ customDate: newValue });
       }}
     />
