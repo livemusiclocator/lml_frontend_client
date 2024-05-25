@@ -8,6 +8,7 @@ import {
   pageFromApiResponse,
   gigFromApiResponse,
   filterPagesByTags,
+  allTagsForPages,
 } from "../model";
 import { datesForDateRange } from "../timeStuff";
 
@@ -25,7 +26,22 @@ const loadGigsPage = async ({ date, location }) => {
   return pageFromApiResponse(response, { date, location });
 };
 
-export const useGigList = () => {
+export const useAvailableTags = () => {
+  const {
+    data: pages,
+    isLoading,
+    isValidating,
+    allPagesLoaded,
+  } = useGigList({ applyFilters: false });
+
+  return {
+    data: allTagsForPages(pages),
+    isLoading,
+    isValidating,
+    allPagesLoaded,
+  };
+};
+export const useGigList = ({ applyFilters } = {}) => {
   const location = getLocation();
   const [{ dateRange, customDate, tags }] = useActiveGigFilters();
 
@@ -54,7 +70,9 @@ export const useGigList = () => {
     }
   }, [dates, size, isLoading, setSize, pagesUnfiltered]);
 
-  const pages = filterPagesByTags(pagesUnfiltered, tags);
+  const pages = applyFilters
+    ? filterPagesByTags(pagesUnfiltered, tags)
+    : pagesUnfiltered;
   const gigCount = pages?.flatMap((page) => page?.gigs).length;
 
   return {

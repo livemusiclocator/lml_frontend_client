@@ -128,7 +128,7 @@ const Content = () => {
     isLoading,
     allPagesLoaded,
     gigCount,
-  } = useGigList();
+  } = useGigList({ applyFilters: true });
 
   const scroller = useRef();
 

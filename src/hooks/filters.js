@@ -2,6 +2,7 @@ import { mapValues, filter, groupBy, values, flatMap } from "lodash-es";
 import dayjs from "dayjs";
 import { useSearchParams } from "react-router-dom";
 import { DATE_RANGES, todaysDate } from "../timeStuff";
+import { useAvailableTags } from "./api";
 const dateParamsToSearchParams = ({ customDate, dateRange }) => {
   if (customDate) {
     return {
@@ -57,16 +58,14 @@ const searchParamsToDateFilters = (params) => {
   };
 };
 
-const tempTags = () => {
-  return [
-    { id: "genre:Speed Metal", value: "Speed Metal", category: "genre" },
-    { id: "genre:Garage Rock", value: "Garage Rock", category: "genre" },
-  ];
-};
 const FILTER_TAG_CATEGORIES = [
   {
     id: "genre",
     caption: "Genre",
+  },
+  {
+    id: "information",
+    caption: "Other",
   },
 ];
 export const useGigFilterOptions = () => {
@@ -81,8 +80,11 @@ export const useGigFilterOptions = () => {
     dateRanges.customDate.caption = customDate.format("L");
     dateRanges.customDate.customDate = customDate;
   }
-  const allTags = groupBy(
-    tempTags().map((tag) => ({
+  // todo: this is a circular dep on api.js - not actually but in terms of the files
+  const { data: allTags } = useAvailableTags();
+
+  const allTagsByCategory = groupBy(
+    allTags.map((tag) => ({
       ...tag,
       caption: tag.value,
       selected: selectedTags.includes(tag.id),
@@ -91,8 +93,8 @@ export const useGigFilterOptions = () => {
   );
 
   const tagCategories = FILTER_TAG_CATEGORIES.map((category) => {
-    return { ...category, values: allTags[category.id] };
-  });
+    return { ...category, values: allTagsByCategory[category.id] || [] };
+  }).filter((category) => category.values.length > 0);
   return {
     dateRanges,
     tagCategories,

@@ -153,46 +153,55 @@ const GigFiltersForm = () => {
             }
           }}
         >
-          <h3 className="text-sm font-medium">When</h3>
-          <div className="flex flex-row items-baseline w-full flex-wrap justify-start gap-2">
-            {Object.values(dateRanges).map(({ id, caption, selected, ui }) => (
-              <BadgeControl
-                key={id}
-                groupName="dateRange"
-                inputType="radio"
-                value={id}
-                defaultChecked={selected}
-                onChange={onDateRangeSelected}
-                caption={caption}
-              >
-                {ui == "datetime" && (
-                  <DateInput
-                    type="date"
+          <div className="flex flex-col ">
+            <h3 className="text-sm font-medium">When</h3>
+            <div className="flex flex-row items-baseline flex-wrap justify-start gap-1">
+              {Object.values(dateRanges).map(
+                ({ id, caption, selected, ui }) => (
+                  <BadgeControl
                     key={id}
-                    ref={customDateInput}
-                    required={true}
-                    className="peer datetime"
-                    id="customDate"
-                    disabled={!selected}
-                    name="customDate"
-                    onFocus={(e) => {
-                      e.target.showPicker();
-                    }}
-                    defaultValue={
-                      (customDate || dayjs())?.format("YYYY-MM-DD") || ""
-                    }
-                  />
-                )}
-                {/**  todo: this better.  */}
-                <span className="px-4 text-nowrap peer-[.datetime]:hidden peer-[.datetime]:peer-disabled:inline">
-                  {caption}
-                </span>
-              </BadgeControl>
-            ))}
+                    groupName="dateRange"
+                    inputType="radio"
+                    value={id}
+                    defaultChecked={selected}
+                    onChange={onDateRangeSelected}
+                    caption={caption}
+                  >
+                    {ui == "datetime" && (
+                      <DateInput
+                        type="date"
+                        key={id}
+                        ref={customDateInput}
+                        required={true}
+                        className="peer datetime"
+                        id="customDate"
+                        disabled={!selected}
+                        name="customDate"
+                        onFocus={(e) => {
+                          e.target.showPicker();
+                        }}
+                        defaultValue={
+                          (customDate || dayjs())?.format("YYYY-MM-DD") || ""
+                        }
+                      />
+                    )}
+                    {/**  todo: this better.  */}
+                    <span className="px-4 text-nowrap peer-[.datetime]:hidden peer-[.datetime]:peer-disabled:inline">
+                      {caption}
+                    </span>
+                  </BadgeControl>
+                ),
+              )}
+            </div>
             {tagCategories.map(({ id, caption, values }) => (
-              <div key={id}>
-                <h3 className="text-sm font-medium">{caption}</h3>
-                <div className="mt-1 flex flex-row items-baseline w-full flex-wrap justify-start gap-2">
+              <>
+                <h3 key={id} className="text-sm font-medium">
+                  {caption}
+                </h3>
+                <div
+                  key={id}
+                  className="flex flex-row items-baseline  flex-wrap justify-start gap-1"
+                >
                   {values.map(({ value, id, selected }) => {
                     return (
                       <BadgeControl
@@ -207,7 +216,7 @@ const GigFiltersForm = () => {
                     );
                   })}
                 </div>
-              </div>
+              </>
             ))}
           </div>
         </Form>

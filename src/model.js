@@ -1,8 +1,7 @@
-import { sortBy, groupBy } from "lodash-es";
+import { sortBy, groupBy, uniqBy, flatMap } from "lodash-es";
 
 /* tagsy stuff */
 export const matchesTags = (tags, targetTags) => {
-  console.log(tags, targetTags);
   return tags.filter(({ id }) => targetTags.includes(id)).length > 0;
 };
 export const parseTags = (rawValues) => {
@@ -58,4 +57,9 @@ export const filterPagesByTags = (gigPages, tags) => {
     return gigPages?.map((page) => filterPageByTags(page, tags));
   }
   return gigPages;
+};
+
+export const allTagsForPages = (gigPages) => {
+  // yuck
+  return uniqBy(flatMap(flatMap(gigPages, "gigs"), "tags"), "id");
 };
