@@ -5,6 +5,8 @@ usage:
 	@echo "       Just Run the development server"
 	@echo "make dev"
 	@echo "       Install and Run the development server"
+	@echo "make ci"
+	@echo "       Runt the CI stuff tests / checks"
 	@echo "make caddy"
 	@echo "       Run the Caddy server"
 	@echo "make open"
@@ -19,6 +21,9 @@ dev:
 
 run:
 	npm run dev
+
+ci:
+	echo "to do"
 
 caddy:
 	./caddy_up.sh
