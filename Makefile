@@ -23,7 +23,7 @@ run:
 	npm run dev
 
 ci:
-	echo "to do"
+	npm test
 
 caddy:
 	./caddy_up.sh
