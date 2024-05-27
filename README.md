@@ -19,8 +19,14 @@ Get up and running locally:
 ```bash
 make dev # will run install and dev
 ```
+### A11y Testing
 
-### CI
+We have added `https://github.com/NickColley/jest-axe` to use for A11y testing.
+This isn't a guarantee but will probably help with the super obvious stuff we will likely miss.
+
+It should run with the `make ci` command.
+
+## CI
 TODO
 
 ## Deployment
