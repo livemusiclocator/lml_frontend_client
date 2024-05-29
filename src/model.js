@@ -4,6 +4,7 @@ import { sortBy, groupBy, uniqBy, flatMap } from "lodash-es";
 export const matchesTags = (tags, targetTags) => {
   return tags.filter(({ id }) => targetTags.includes(id)).length > 0;
 };
+
 export const parseTags = (rawValues) => {
   return rawValues?.map((str) => {
     const parts = str.split(/:\s*/);
@@ -34,7 +35,6 @@ export const gigFromApiResponse = ({ tags, ...gig }) => {
     ...gig,
     tags: tagsParsed,
     genres: allTags["genre"],
-
     infoTags: allTags["information"],
   };
 };
@@ -60,6 +60,23 @@ export const filterPagesByTags = (gigPages, tags) => {
 };
 
 export const allTagsForPages = (gigPages) => {
-  // yuck
-  return uniqBy(flatMap(flatMap(gigPages, "gigs"), "tags"), "id");
+  const tags = flatMap(flatMap(gigPages, "gigs"), "tags");
+  return tags.reduce(
+    (accum, val) => {
+      const dupeIndex = accum.findIndex(arrayItem => arrayItem.id === val.id);
+
+      if (dupeIndex === -1) {
+        // Not found, so initialize.
+        accum.push({
+          count: 1,
+          ...val
+        });
+      } else {
+        // Found, so increment counter.
+        accum[dupeIndex].count++;
+      }
+      return accum;
+    },
+    []
+  );
 };

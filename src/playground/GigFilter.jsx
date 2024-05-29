@@ -108,16 +108,25 @@ const GigFiltersSummary = ({ showFilterForm }) => {
   const filters = useActiveGigFilterOptions();
   return (
     <div>
-      {filters.map(({ id, caption }) => (
-        <Badge
-          className="text-xs"
-          $selected={true}
-          onClick={() => showFilterForm()}
-          key={id}
-        >
-          <span className="px-4 text-nowrap">{caption}</span>
-        </Badge>
-      ))}
+      {
+        filters.map(({ id, caption, count }) => {
+          let description = caption;
+          if (count) {
+            description = `${caption} (${count})`;
+          }
+          return (
+          <Badge
+            className="text-xs"
+            $selected={true}
+            onClick={() => showFilterForm()}
+            key={id}
+          >
+            <span className="px-4 text-nowrap">{description}</span>
+          </Badge>
+          );
+        }
+                   )
+      }
     </div>
   );
 };
@@ -199,10 +208,10 @@ const GigFiltersForm = () => {
                   {caption}
                 </h3>
                 <div
-                  key={id}
+                  key={`div-${id}`}
                   className="flex flex-row items-baseline  flex-wrap justify-start gap-1"
                 >
-                  {values.map(({ value, id, selected }) => {
+                  {values.map(({ value, id, selected, count }) => {
                     return (
                       <BadgeControl
                         key={id}
@@ -211,7 +220,7 @@ const GigFiltersForm = () => {
                         groupName="tags"
                         inputType="checkbox"
                       >
-                        <span className="px-4 text-nowrap">{value}</span>
+                        <span className="px-4 text-nowrap">{value} ({count})</span>
                       </BadgeControl>
                     );
                   })}
