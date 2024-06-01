@@ -17,7 +17,7 @@ To see what it can do run `make usage`.
 
 Get up and running locally:
 ```bash
-make dev # will run install and dev
+make dev # will run install and run
 ```
 ### A11y Testing
 

@@ -17,7 +17,7 @@ install:
 
 dev:
 	$(MAKE) install
-	$(MAKE) dev
+	$(MAKE) run
 
 run:
 	npm run dev
