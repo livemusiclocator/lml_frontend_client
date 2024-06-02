@@ -9,6 +9,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import SingleGigDetails from "./components/explorer/SingleGigDetails";
 import Explorer from "./components/explorer/Explorer";
 import GigList from "./components/GigList";
+import Upcoming from "./components/Upcoming";
 ReactGA.initialize("G-8TKSCK99CN");
 
 const router = createBrowserRouter([
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
       {
         path: "about",
         element: <p>Coming soon</p>,
+      },
+      {
+        path: "upcoming",
+        element: <Upcoming />,
       },
       {
         // work in progress

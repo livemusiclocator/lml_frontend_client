@@ -8,6 +8,7 @@ export default {
     extend: {
       colors: {
         lmlpink: "rgb(235,0,139)",
+        customBlue: "#1DA1F2",
       },
       fontFamily: {
         sans: ['"Montserrat"', ...defaultTheme.fontFamily.sans],

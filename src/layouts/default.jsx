@@ -57,6 +57,7 @@ const DesktopMenu = () => (
     <ul className="px-2 pt-2 pb-3 flex flex-row sm:px-3">
       <NavItem to="/">Home</NavItem>
       <NavItem to="/about">About</NavItem>
+      <NavItem to="/upcoming">Upcoming</NavItem>
     </ul>
   </div>
 );
