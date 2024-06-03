@@ -10,11 +10,17 @@ export default function Sets({ sets }) {
 
         <ul>
           <li className="font-semibold text-lg">Sets</li>
-          {sets.map((set) => (
-            <li key={set.id} aria-label="Artist Set">
-              {set.act.name} {set.start_time}
-            </li>
-          ))}
+          {
+            sets.map(
+              (set) => {
+                let description = set.act.name;
+                if (set.start_offset_time) {
+                  description = `${set.start_offset_time} - ${description}`;
+                }
+                return(<li key={set.id} aria-label="Artist Set">{description}</li>);
+              }
+            )
+          }
         </ul>
       </div>
     );
