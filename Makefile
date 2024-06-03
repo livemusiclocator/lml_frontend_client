@@ -15,14 +15,10 @@ usage:
 install:
 	npm install
 
-dev:
-	$(MAKE) install
-	$(MAKE) run
-
-run:
+run: install
 	npm run dev
 
-ci:
+ci: install
 	npm test
 
 caddy:
