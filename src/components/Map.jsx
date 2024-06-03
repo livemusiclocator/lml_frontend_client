@@ -8,7 +8,9 @@ import "leaflet/dist/leaflet.css";
 import { gigIsSaved } from "../savedGigs";
 
 const Map = () => {
-  const { data: pages = [] } = useGigList();
+  const {
+    data: { pages = [] },
+  } = useGigList();
   const gigs = pages.map((page) => page.gigs).flat();
   const mapRef = useRef();
   const defaultPosition = getMapCenter();

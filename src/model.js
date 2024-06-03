@@ -1,4 +1,12 @@
-import { sortBy, groupBy, uniqBy, flatMap } from "lodash-es";
+import {
+  sortBy,
+  groupBy,
+  uniqBy,
+  flatMap,
+  map,
+  filter,
+  includes,
+} from "lodash-es";
 
 /* tagsy stuff */
 export const matchesTags = (tags, targetTags) => {
@@ -52,31 +60,30 @@ export const pageFromApiResponse = (raw, { date, location }) => {
 const filterPageByTags = ({ gigs, ...page }, tags) => {
   return { ...page, gigs: gigs.filter((gig) => matchesTags(gig.tags, tags)) };
 };
-export const filterPagesByTags = (gigPages, tags) => {
-  if (tags?.length > 0) {
-    return gigPages?.map((page) => filterPageByTags(page, tags));
+export const filterPagesByTags = (gigPages, allTags, tagFilters) => {
+  const allTagIds = map(allTags, "id");
+  const validTagFilters = filter(tagFilters, (tag) => includes(allTagIds, tag));
+  if (validTagFilters.length > 0) {
+    return gigPages?.map((page) => filterPageByTags(page, validTagFilters));
   }
   return gigPages;
 };
 
 export const allTagsForPages = (gigPages) => {
   const tags = flatMap(flatMap(gigPages, "gigs"), "tags");
-  return tags.reduce(
-    (accum, val) => {
-      const dupeIndex = accum.findIndex(arrayItem => arrayItem.id === val.id);
+  return tags.reduce((accum, val) => {
+    const dupeIndex = accum.findIndex((arrayItem) => arrayItem.id === val.id);
 
-      if (dupeIndex === -1) {
-        // Not found, so initialize.
-        accum.push({
-          count: 1,
-          ...val
-        });
-      } else {
-        // Found, so increment counter.
-        accum[dupeIndex].count++;
-      }
-      return accum;
-    },
-    []
-  );
+    if (dupeIndex === -1) {
+      // Not found, so initialize.
+      accum.push({
+        count: 1,
+        ...val,
+      });
+    } else {
+      // Found, so increment counter.
+      accum[dupeIndex].count++;
+    }
+    return accum;
+  }, []);
 };

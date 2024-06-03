@@ -124,7 +124,7 @@ const NoGigsMessage = () => {
 };
 const Content = () => {
   const {
-    data: pages = [],
+    data: { pages = [] },
     isLoading,
     allPagesLoaded,
     gigCount,

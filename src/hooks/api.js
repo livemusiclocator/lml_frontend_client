@@ -28,14 +28,14 @@ const loadGigsPage = async ({ date, location }) => {
 
 export const useAvailableTags = () => {
   const {
-    data: pages,
+    data: { allTags },
     isLoading,
     isValidating,
     allPagesLoaded,
   } = useGigList({ applyFilters: false });
 
   return {
-    data: allTagsForPages(pages),
+    data: allTags,
     isLoading,
     isValidating,
     allPagesLoaded,
@@ -70,13 +70,15 @@ export const useGigList = ({ applyFilters } = {}) => {
     }
   }, [dates, size, isLoading, setSize, pagesUnfiltered]);
 
+  const allTags = allTagsForPages(pagesUnfiltered);
+
   const pages = applyFilters
-    ? filterPagesByTags(pagesUnfiltered, tags)
+    ? filterPagesByTags(pagesUnfiltered, allTags, tags)
     : pagesUnfiltered;
   const gigCount = pages?.flatMap((page) => page?.gigs).length;
 
   return {
-    data: pages,
+    data: { pages, allTags },
     isLoading,
     isValidating,
     allPagesLoaded,
