@@ -48,6 +48,7 @@ const MobileMenu = ({ isMenuOpen }) => (
     <ul className="space-y-6 bg-gray-800 px-6 pt-4 pb-8 flex items-end flex-col">
       <NavItem to="/">Home</NavItem>
       <NavItem to="/about">About</NavItem>
+      <NavItem to="/upcoming">Upcoming</NavItem>
     </ul>
   </div>
 );
