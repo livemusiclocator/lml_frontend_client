@@ -1,6 +1,29 @@
 import React from 'react';
 import lbmfLogo from '../assets/lmllogo.png';
 
+const teamMembers = [
+  { name: "Lily Ryan", role: "RRR “byte into it” Presenter" },
+  { name: "Dr Ned Letcher", role: "Data scientist and Piano Accordion" },
+  { name: "Jen Smith", role: "Tech Leader, Accordion" },
+  { name: "Travis Winters", role: "Long Time Tech leader and Blues guitarist" },
+  { name: "Joe Sustaric", role: "Tech Leader" },
+  { name: "Frederic Robert", role: "PHD AstroPhysist" },
+  { name: "Eugene Tang", role: "Tech Leader" },
+  { name: "Craig Kelly", role: "Bassist and Designer" },
+  { name: "01.Ekka", role: "Hip Hop Artist and Entrepreneur" },
+  { name: "Paige Mulholland", role: "National Media Relations advisor, Ukelele" },
+  { name: "Tom Sulston", role: "Technologist and Social Impact Specialist, Mandolin" },
+  { name: "Patrick Quinlan", role:	"Data Scientist, Guitars" },
+  { name: "Phil Hickey", role: "Designer" },
+  { name: "Luca Cave", role: "Tech Leader" }
+];
+
+const keyMembers = [
+  { name: 'Mark Ryall', role: 'CTO' },
+  { name: 'Martin Paten', role: 'COO' },
+  { name: 'Nick Thorpe', role: 'CPO' }
+];
+
 const About = () => {
   return (
     <div className="container mx-auto p-4">
@@ -14,6 +37,26 @@ const About = () => {
         <p>Plus, we’ve got a free API for developers to use. So hack on that and roll your own personal gig guide.</p>
         <br />
         <p>For more details, check out <a href="https://www.livemusiclocator.com.au/" className="text-customBlue underline hover:text-blue-700" target="_blank" rel="noopener noreferrer">livemusiclocator.com.au</a> and <a href="https://www.lbmf.com.au/" className="text-customBlue underline hover:text-blue-700" target="_blank" rel="noopener noreferrer">https://www.lbmf.com.au</a>.</p>
+        <br/>
+        <p>You can contact us at <a href="mailto:gigs@livemusiclocator.com.au" className="text-customBlue underline hover:text-blue-700">gigs@livemusiclocator.com.au</a>!</p>
+        <br /><br />
+        <p>This experience is brought to you by the passion and expertise of our wonderful volunteer team.</p>
+        <br/>
+        <div>
+          {teamMembers.map((member, index) => (
+            <div className="flex flex-col md:flex-row justify-between mb-2" key={index}>
+              <div className="font-semibold md:w-1/3">{member.name}</div>
+              <div className="md:w-2/3">{member.role}</div>
+            </div>
+          ))}
+          <br /><br />
+          {keyMembers.map((member, index) => (
+            <div className="flex flex-col md:flex-row justify-between mb-2" key={index}>
+              <div className="md:w-1/3">{member.role}</div>
+              <div className="font-semibold md:w-2/3">{member.name}</div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
