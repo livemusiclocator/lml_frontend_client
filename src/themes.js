@@ -1,5 +1,5 @@
 export const lmlTheme = {
-  defaultMapPin: "/alt-marker-2.png",
+  defaultMapPin: "/lml-marker-pink-midnite-outline.png",
   savedMapPin: "/alt-marker-2-saved.png",
   brandmark: "/lml-brandmark.svg",
   title: "Live Music Locator",
