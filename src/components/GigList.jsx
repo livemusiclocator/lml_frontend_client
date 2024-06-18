@@ -52,17 +52,23 @@ const Aside = tw.aside`
 
 `;
 
+import lbmfLogo from '../assets/lbmf2024logo.png';
+
 const GigHeader = ({ gig, showDate = true }) => {
+  const lbmf = gig.series === "lbmf";
   return (
     <header className={`flex justify-between flex-row pb-2`}>
       <hgroup className="break-words text-pretty leading-loose">
-        {showDate && (
-          <p className="text-sm">
-            <DateTimeDisplay value={gig.start_time} type="time" />
-          </p>
+        { showDate && (
+           <p className="text-sm">
+             <DateTimeDisplay value={gig.start_time} type="time" />
+           </p>
         )}
-        <Link to={`gigs/${gig.id}`} onClick={(e) => e.preventDefault()}>
-          <h3 className="text-xl font-bold">{gig.name}</h3>
+      <Link to={`gigs/${gig.id}`} onClick={(e) => e.preventDefault()}>
+        <h3 className="flex text-xl font-bold items-center">
+          { lbmf && <img src={lbmfLogo} className="m-2 flex-shrink w-10" /> }
+          { gig.name }
+        </h3>
         </Link>
       </hgroup>
       <SaveGigButton gig={gig} />
