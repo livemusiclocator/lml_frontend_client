@@ -17,6 +17,9 @@ export default function Sets({ sets }) {
                 if (set.start_offset_time) {
                   description = `${set.start_offset_time} - ${description}`;
                 }
+                if (set.duration) {
+                  description = `${description} (${set.duration} min)`;
+                }
                 return(<li key={set.id} aria-label="Artist Set">{description}</li>);
               }
             )
