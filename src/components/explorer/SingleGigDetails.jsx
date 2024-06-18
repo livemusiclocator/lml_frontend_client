@@ -5,7 +5,6 @@ import { LoadingSpinner } from "../loading/LoadingOverlay";
 import DateTimeDisplay from "../DateTimeDisplay";
 import tw from "tailwind-styled-components";
 import Markdown from "react-markdown";
-
 import DateTime from "./details/DateTime";
 import Genres from "./details/Genres";
 import Venue from "./details/Venue";
@@ -13,6 +12,7 @@ import Prices from "./details/Prices";
 import InfoTags from "./details/InfoTags";
 import Tickets from "./details/Tickets";
 import Sets from "./details/Sets";
+import lbmfLogo from '../../assets/lbmf2024logo.png';
 
 const Aside = tw.aside`
 mx-4
@@ -53,6 +53,7 @@ const GigHeroImageBanner = () => {
 };
 
 const GigHeader = ({ gig, className }) => {
+  const lbmf = gig.series === "lbmf";
   return (
     <header
       className={`flex items-start justify-between flex-row ${className || ""} p-4`}
@@ -61,7 +62,10 @@ const GigHeader = ({ gig, className }) => {
         <p className="font-semibold">
           <DateTimeDisplay value={gig.date} type="briefDate" />
         </p>
-        <h2 className="text-4xl font-bold">{gig.name}</h2>
+        <h2 className="flex text-4xl font-bold items-center">
+          { lbmf && <img src={lbmfLogo} className="m-2 flex-shrink w-10" /> }
+          { gig.name }
+        </h2>
       </hgroup>
       <SaveGigButton gig={gig} />
     </header>

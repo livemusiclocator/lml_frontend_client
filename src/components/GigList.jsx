@@ -9,6 +9,7 @@ import { useGigFilterOptions } from "../hooks/filters";
 import PlaygroundGigFilter from "../playground/GigFilter";
 import GigFilterForDatesActually from "./explorer/GigFilter";
 import { LoadingSpinner } from "./loading/LoadingOverlay";
+import lbmfLogo from '../assets/lbmf2024logo.png';
 
 export const OriginalGigFilter = () => {
   const { dateRanges } = useGigFilterOptions();
@@ -49,10 +50,7 @@ export const OriginalGigFilter = () => {
 const Aside = tw.aside`
   flex
   flex-col
-
 `;
-
-import lbmfLogo from '../assets/lbmf2024logo.png';
 
 const GigHeader = ({ gig, showDate = true }) => {
   const lbmf = gig.series === "lbmf";
