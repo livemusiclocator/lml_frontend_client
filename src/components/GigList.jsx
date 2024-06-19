@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { Link, createSearchParams, useNavigate } from "react-router-dom";
 import tw from "tailwind-styled-components";
-import { MapPinIcon, ClockIcon } from "@heroicons/react/24/solid";
+import { MapPinIcon, ClockIcon, ArrowTopRightOnSquareIcon as ExternalLinkIcon } from "@heroicons/react/24/solid";
 import DateTimeDisplay from "./DateTimeDisplay";
 import SaveGigButton from "./SaveGigButton";
 import { useGigList } from "../hooks/api";
@@ -10,6 +10,8 @@ import PlaygroundGigFilter from "../playground/GigFilter";
 import GigFilterForDatesActually from "./explorer/GigFilter";
 import { LoadingSpinner } from "./loading/LoadingOverlay";
 import lbmfLogo from '../assets/lbmf2024logo.png';
+
+const ExternalLink = tw.a`text-blue-600 hover:underline visited:text-purple-600 inline-flex items-baseline`;
 
 export const OriginalGigFilter = () => {
   const { dateRanges } = useGigFilterOptions();
@@ -54,6 +56,8 @@ const Aside = tw.aside`
 
 const GigHeader = ({ gig, showDate = true }) => {
   const lbmf = gig.series === "lbmf";
+  const navigate = useNavigate();
+
   return (
     <header className={`flex justify-between flex-row pb-2`}>
       <hgroup className="break-words text-pretty leading-loose">
@@ -62,12 +66,18 @@ const GigHeader = ({ gig, showDate = true }) => {
              <DateTimeDisplay value={gig.start_time} type="time" />
            </p>
         )}
-      <Link to={`gigs/${gig.id}`} onClick={(e) => e.preventDefault()}>
-        <h3 className="flex text-xl font-bold items-center">
+        <h3
+          className="flex text-xl font-bold items-center"
+        >
           { lbmf && <img src={lbmfLogo} className="m-2 flex-shrink w-10" /> }
           { gig.name }
+          <ExternalLink
+            className="p-1 items-start text-sm"
+            href={`gigs/${gig.id}`}
+          >
+            (more details)
+          </ExternalLink>
         </h3>
-        </Link>
       </hgroup>
       <SaveGigButton gig={gig} />
     </header>
@@ -75,16 +85,14 @@ const GigHeader = ({ gig, showDate = true }) => {
 };
 
 const GigRow = ({ gig }) => {
-  const navigate = useNavigate();
   return (
     <article
-      className="flex flex-col snap-start  p-4 cursor-pointer"
-      onClick={(e) => {
-        e.preventDefault();
-        navigate(`gigs/${gig.id}`);
-      }}
+      className="flex flex-col snap-start p-4"
     >
-      <GigHeader gig={gig} showDate={false} />
+      <GigHeader
+        gig={gig}
+        showDate={false}
+      />
       <Aside>
         <div className="flex gap-x-1 pb-2 items-start text-sm">
           <MapPinIcon className="text-gray-500 size-4 shrink-0 m-1" />
@@ -93,6 +101,13 @@ const GigRow = ({ gig }) => {
             <p className="text-gray-500" aria-label="Venue address">
               {gig.venue.address}
             </p>
+            {gig.venue.location_url && (
+              <p>
+                <ExternalLink href={gig.venue.location_url}>
+                  Get directions <ExternalLinkIcon className="size-4 self-center" />
+                </ExternalLink>
+              </p>
+             )}
           </div>
         </div>
         {gig.start_time && (
