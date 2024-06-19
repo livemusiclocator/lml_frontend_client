@@ -71,12 +71,6 @@ const GigHeader = ({ gig, showDate = true }) => {
         >
           { lbmf && <img src={lbmfLogo} className="m-2 flex-shrink w-10" /> }
           { gig.name }
-          <ExternalLink
-            className="p-1 items-start text-sm"
-            href={`gigs/${gig.id}`}
-          >
-            (more details)
-          </ExternalLink>
         </h3>
       </hgroup>
       <SaveGigButton gig={gig} />
@@ -120,6 +114,12 @@ const GigRow = ({ gig }) => {
             </ul>
           </div>
         )}
+        <ExternalLink
+          className="p-1 items-start text-sm"
+          href={`gigs/${gig.id}`}
+        >
+          ... more information
+        </ExternalLink>
       </Aside>
 
       {gig.genres && (
