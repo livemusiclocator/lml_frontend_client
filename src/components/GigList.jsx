@@ -56,7 +56,6 @@ const Aside = tw.aside`
 
 const GigHeader = ({ gig, showDate = true }) => {
   const lbmf = gig.series === "lbmf";
-  const navigate = useNavigate();
 
   return (
     <header className={`flex justify-between flex-row pb-2`}>
@@ -79,6 +78,7 @@ const GigHeader = ({ gig, showDate = true }) => {
 };
 
 const GigRow = ({ gig }) => {
+  const navigate = useNavigate();
   return (
     <article
       className="flex flex-col snap-start p-4"
@@ -114,12 +114,6 @@ const GigRow = ({ gig }) => {
             </ul>
           </div>
         )}
-        <ExternalLink
-          className="p-1 items-start text-sm"
-          href={`gigs/${gig.id}`}
-        >
-          ... more information
-        </ExternalLink>
       </Aside>
 
       {gig.genres && (
@@ -134,6 +128,18 @@ const GigRow = ({ gig }) => {
           ))}
         </div>
       )}
+      <ExternalLink
+          className="p-1 items-start text-sm"
+          href="/"
+          onClick={
+            (e) => {
+              e.preventDefault();
+              navigate(`gigs/${gig.id}`);
+            }
+          }
+        >
+          ... more information
+        </ExternalLink>
     </article>
   );
 };
