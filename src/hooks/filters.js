@@ -12,6 +12,11 @@ const dateParamsToSearchParams = ({ customDate, dateRange }) => {
   }
   return { dateRange };
 };
+
+const venueToSearchParams = ({ venueId }) => ({
+  venue: venueId,
+});
+
 /**
  * Simple kind of wrapper around the search/query string params to supply the active gig filters (dates and tags)
  * */
@@ -22,6 +27,7 @@ export const useActiveGigFilters = () => {
     const newParams = {
       ...tagsToSearchParams(gigFilters),
       ...dateParamsToSearchParams(gigFilters),
+      ...venueToSearchParams(gigFilters)
     };
     setSearchParams(newParams);
   };
@@ -29,6 +35,7 @@ export const useActiveGigFilters = () => {
     {
       ...searchParamsToTagFilters(params),
       ...searchParamsToDateFilters(params),
+      ...searchParamsToVenueFilters(params)
     },
     setActiveGigFilters,
   ];
@@ -57,6 +64,10 @@ const searchParamsToDateFilters = (params) => {
     dateRange: dateRange || "today",
   };
 };
+
+const searchParamsToVenueFilters = (params) => ({
+  venueId: params.get('venue'),
+});
 
 const FILTER_TAG_CATEGORIES = [
   {

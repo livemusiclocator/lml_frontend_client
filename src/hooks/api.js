@@ -43,7 +43,7 @@ export const useAvailableTags = () => {
 };
 export const useGigList = ({ applyFilters } = {}) => {
   const location = getLocation();
-  const [{ dateRange, customDate, tags }] = useActiveGigFilters();
+  const [{ dateRange, customDate, tags, venueId }] = useActiveGigFilters();
 
   const dates = datesForDateRange(dateRange, customDate);
   const pagedDates = dates.map((d) => d.format("YYYY-MM-DD"));
@@ -71,11 +71,19 @@ export const useGigList = ({ applyFilters } = {}) => {
   }, [dates, size, isLoading, setSize, pagesUnfiltered]);
 
   const allTags = allTagsForPages(pagesUnfiltered);
+  let pages = pagesUnfiltered;
 
-  const pages = applyFilters
+  pages = applyFilters
     ? filterPagesByTags(pagesUnfiltered, allTags, tags)
     : pagesUnfiltered;
   const gigCount = pages?.flatMap((page) => page?.gigs).length;
+
+  if (applyFilters && venueId) {
+    pages = pages?.map((page) => ({
+      ...page,
+      gigs: page.gigs.filter((gig) => gig.venue.id === venueId),
+    }));
+  }
 
   return {
     data: { pages, allTags },
@@ -83,6 +91,8 @@ export const useGigList = ({ applyFilters } = {}) => {
     isValidating,
     allPagesLoaded,
     gigCount,
+    dateRange,
+    customDate
   };
 };
 

@@ -1,20 +1,42 @@
 import { useRef } from "react";
-import { MapContainer, TileLayer, Marker } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Tooltip } from "react-leaflet";
 import { Icon } from "leaflet";
 import { getMapCenter, getTheme } from "../getLocation";
-import { useNavigate } from "react-router-dom";
 import { useGigList } from "../hooks/api";
 import "leaflet/dist/leaflet.css";
 import { gigIsSaved } from "../savedGigs";
+import { useActiveGigFilters } from "../hooks/filters";
+
+const groupGigsByVenues = (gigs) => {
+  return gigs.reduce((venues, gig) => {
+    const venueId = gig.venue.id;
+    if (!venues[venueId]) {
+      venues[venueId] = {
+        ...gig.venue,
+        gigs: [],
+      };
+    }
+    venues[venueId].gigs.push(gig);
+    return venues;
+  }, {});
+};
 
 const Map = () => {
   const {
     data: { pages = [] },
+    dateRange,
+    customDate
   } = useGigList();
   const gigs = pages.map((page) => page.gigs).flat();
+  const venues = Object.values(groupGigsByVenues(gigs));
   const mapRef = useRef();
   const defaultPosition = getMapCenter();
   const { defaultMapPin, savedMapPin } = getTheme();
+  const [, setActiveGigFilters] = useActiveGigFilters();
+
+  const handleMarkerClick = (venueId) => {
+    setActiveGigFilters({ dateRange, customDate, venueId });
+  };
 
   const customIcon = (gig) => {
     if (gigIsSaved(gig)) {
@@ -30,7 +52,6 @@ const Map = () => {
     });
   };
 
-  const navigate = useNavigate();
   return (
     <>
       <MapContainer
@@ -50,9 +71,9 @@ const Map = () => {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        {gigs.map((gig, index) => {
-          const latitude = parseFloat(gig.venue.latitude);
-          const longitude = parseFloat(gig.venue.longitude);
+        {venues.map((venue, index) => {
+          const latitude = parseFloat(venue.latitude);
+          const longitude = parseFloat(venue.longitude);
 
           if (!isNaN(latitude) && !isNaN(longitude)) {
             const position = [latitude, longitude];
@@ -61,11 +82,11 @@ const Map = () => {
               <Marker
                 key={index}
                 position={position}
-                icon={customIcon(gig)}
+                icon={customIcon(venue.gigs[0])}
                 eventHandlers={{
-                  click: () => navigate(`/gigs/${gig.id}`),
+                  click: () => handleMarkerClick(venue.id),
                 }}
-              ></Marker>
+              ><Tooltip>{venue.name}</Tooltip></Marker>
             );
           } else {
             return null;
