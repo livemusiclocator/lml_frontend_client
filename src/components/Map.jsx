@@ -6,6 +6,7 @@ import { useGigList } from "../hooks/api";
 import "leaflet/dist/leaflet.css";
 import { gigIsSaved } from "../savedGigs";
 import { useActiveGigFilters } from "../hooks/filters";
+import { lbmfTheme } from "../themes";
 
 const groupGigsByVenues = (gigs) => {
   return gigs.reduce((venues, gig) => {
@@ -20,6 +21,9 @@ const groupGigsByVenues = (gigs) => {
     return venues;
   }, {});
 };
+
+const venueHasSavedGig = (gigs) => gigs.some(gigIsSaved);
+const venueHasLbmfGig = (gigs) => gigs.some(gig => gig.series === "lbmf");
 
 const Map = () => {
   const {
@@ -38,11 +42,18 @@ const Map = () => {
     setActiveGigFilters({ dateRange, customDate, venueId });
   };
 
-  const customIcon = (gig) => {
-    if (gigIsSaved(gig)) {
+  const customIcon = (gigs) => {
+    if (venueHasSavedGig(gigs)) {
       return new Icon({
         iconUrl: savedMapPin,
         iconSize: [40, 40],
+      });
+    }
+
+    if (venueHasLbmfGig(gigs)) {
+      return new Icon({
+        iconUrl: lbmfTheme.defaultMapPin,
+        iconSize: [45, 45],
       });
     }
 
@@ -82,7 +93,7 @@ const Map = () => {
               <Marker
                 key={index}
                 position={position}
-                icon={customIcon(venue.gigs[0])}
+                icon={customIcon(venue.gigs)}
                 eventHandlers={{
                   click: () => handleMarkerClick(venue.id),
                 }}
