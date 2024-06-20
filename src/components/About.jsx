@@ -2,7 +2,7 @@ import React from 'react';
 import lbmfLogo from '../assets/lmllogo.png';
 
 const teamMembers = [
-  { name: "Lily Ryan", role: "RRR “byte into it” Presenter" },
+  { name: "Lilly Ryan", role: "Cybersecurity Advisor and RRR “byte into it” Presenter" },
   { name: "Dr Ned Letcher", role: "Data Scientist and Piano Accordion" },
   { name: "Jen Smith", role: "Tech Leader, Accordion" },
   { name: "Travis Winters", role: "Long Time Tech Leader and Blues guitarist" },
