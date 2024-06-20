@@ -3,9 +3,9 @@ import lbmfLogo from '../assets/lmllogo.png';
 
 const teamMembers = [
   { name: "Lilly Ryan", role: "Cybersecurity Advisor and RRR “byte into it” Presenter" },
-  { name: "Dr Ned Letcher", role: "Data Scientist and Piano Accordion" },
+  { name: "Dr Ned Letcher", role: "Data Scientist, Piano Accordion" },
   { name: "Jen Smith", role: "Tech Leader, Accordion" },
-  { name: "Travis Winters", role: "Long Time Tech Leader and Blues guitarist" },
+  { name: "Travis Winters", role: "Long Time Tech Leader, Blues Guitarist" },
   { name: "Joe Sustaric", role: "Tech Leader" },
   { name: "Frederic Robert", role: "PHD Astrophysicist" },
   { name: "Eugene Tang", role: "Tech Leader" },
@@ -13,7 +13,7 @@ const teamMembers = [
   { name: "01.Ekka", role: "Hip Hop Artist and Entrepreneur" },
   { name: "Paige Mulholland", role: "National Media Relations Advisor, Ukelele" },
   { name: "Tom Sulston", role: "Technologist and Social Impact Specialist, Mandolin" },
-  { name: "Patrick Quinlan", role:	"Data Scientist, Guitars" },
+  { name: "Patrick Quinlan", role: "Data Scientist, Guitars" },
   { name: "Phil Hickey", role: "Designer" },
   { name: "Luca Cave", role: "Tech Leader" }
 ];
