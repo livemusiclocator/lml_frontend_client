@@ -6,53 +6,13 @@ import DateTimeDisplay from "./DateTimeDisplay";
 import SaveGigButton from "./SaveGigButton";
 import { useGigList } from "../hooks/api";
 import { useGigFilterOptions } from "../hooks/filters";
-import PlaygroundGigFilter from "../playground/GigFilter";
+import GigFilter from "./GigFilter";
 import GigFilterForDatesActually from "./explorer/GigFilter";
 import { LoadingSpinner } from "./loading/LoadingOverlay";
 import lbmfLogo from '../assets/lbmf2024logo.png';
 
 const ExternalLink = tw.a`text-blue-600 hover:underline visited:text-purple-600 inline-flex items-baseline`;
-
-export const OriginalGigFilter = () => {
-  const { dateRanges } = useGigFilterOptions();
-  // temp until move to new ui
-  const dateFilters = Object.values(dateRanges)
-    .filter((x) => x.id != "customDate")
-    .map(({ id, caption, selected }) => ({
-      id,
-      link: {
-        search: createSearchParams({ dateRange: id }).toString(),
-      },
-      selected,
-      caption,
-    }));
-
-  return (
-    <nav className="p-4 gap-y-4 flex flex-wrap flex-row border-b border-gray-300 justify-center">
-      <div className="flex flex-row gap-x-2 w-full justify-center">
-        {dateFilters.map(({ id, caption, link, selected }) => (
-          <Link
-            key={id}
-            to={link}
-            className={`text-nowrap align-middle text-center text-xs p-2 ${
-              selected
-                ? "bg-gray-800 text-white"
-                : "bg-gray-300 text-gray-800 border"
-            }`}
-          >
-            {caption}
-          </Link>
-        ))}
-      </div>
-      <GigFilterForDatesActually />
-    </nav>
-  );
-};
-
-const Aside = tw.aside`
-  flex
-  flex-col
-`;
+const Aside = tw.aside`flex flex-col`;
 
 const GigHeader = ({ gig, showDate = true }) => {
   const lbmf = gig.series === "lbmf";
@@ -181,7 +141,6 @@ const Content = () => {
 };
 
 const GigList = ({ newGigFilter }) => {
-  const GigFilter = newGigFilter ? PlaygroundGigFilter : OriginalGigFilter;
   return (
     <main className="flex-1 overflow-hidden flex flex-col w-full items-stretch max-w-3xl mx-auto">
       <GigFilter />

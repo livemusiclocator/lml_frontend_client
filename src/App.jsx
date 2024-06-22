@@ -29,7 +29,7 @@ const router = createBrowserRouter([
         // work in progress
         path: "alt",
         children: [
-          { index: true, element: <GigList newGigFilter={true} /> },
+          { index: true, element: <GigList /> },
           {
             path: "gigs/:id",
             element: <SingleGigDetails />,
