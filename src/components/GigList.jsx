@@ -69,7 +69,7 @@ const GigHeader = ({ gig, showDate = true }) => {
           className="flex text-xl font-bold items-center"
         >
           { lbmf && <img src={lbmfLogo} className="m-2 flex-shrink w-10" /> }
-          { gig.name }
+          { gig.name } { gig.status === "cancelled" && "(CANCELLED)" }
         </h3>
       </hgroup>
       <SaveGigButton gig={gig} />
