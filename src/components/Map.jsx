@@ -43,24 +43,31 @@ const Map = () => {
   };
 
   const customIcon = (gigs) => {
-    if (venueHasSavedGig(gigs)) {
-      return new Icon({
-        iconUrl: savedMapPin,
-        iconSize: [40, 40],
-      });
-    }
-
     if (venueHasLbmfGig(gigs)) {
+      if (venueHasSavedGig(gigs)) {
+        return new Icon({
+          iconUrl: lbmfTheme.savedMapPin,
+          iconSize: [40, 40],
+        });
+      }
+
       return new Icon({
         iconUrl: lbmfTheme.defaultMapPin,
         iconSize: [45, 45],
       });
-    }
+    } else {
+      if (venueHasSavedGig(gigs)) {
+        return new Icon({
+          iconUrl: savedMapPin,
+          iconSize: [40, 40],
+        });
+      }
 
-    return new Icon({
-      iconUrl: defaultMapPin,
-      iconSize: [45, 45],
-    });
+      return new Icon({
+        iconUrl: defaultMapPin,
+        iconSize: [45, 45],
+      });
+    }
   };
 
   return (

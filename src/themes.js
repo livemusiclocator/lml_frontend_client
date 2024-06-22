@@ -7,7 +7,7 @@ export const lmlTheme = {
 
 export const lbmfTheme = {
   defaultMapPin: "/lbmf-pin-blue.png",
-  savedMapPin: "/lbmf-marker-green-saved.png",
+  savedMapPin: "/lbmf-pin-blue-saved.png",
   brandmark: "/lbmf-brandmark.png",
   title: "LBMF 2024",
 };
