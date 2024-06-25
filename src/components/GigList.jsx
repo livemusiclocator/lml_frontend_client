@@ -13,6 +13,14 @@ import lbmfLogo from '../assets/lbmf2024logo.png';
 
 const ExternalLink = tw.a`text-blue-600 hover:underline visited:text-purple-600 inline-flex items-baseline`;
 const Aside = tw.aside`flex flex-col`;
+const TicketStatus = tw.div`
+text-xs
+font-medium
+rounded-full
+bg-red-200
+p-2
+m-2
+`;
 
 const GigHeader = ({ gig, showDate = true }) => {
   const lbmf = gig.series === "lbmf";
@@ -29,7 +37,10 @@ const GigHeader = ({ gig, showDate = true }) => {
           className="flex text-xl font-bold items-center"
         >
           { lbmf && <img src={lbmfLogo} className="m-2 flex-shrink w-10" /> }
-          { gig.name } { gig.status === "cancelled" && "(CANCELLED)" }
+          { gig.name }
+          { gig.status === "cancelled" && "(CANCELLED)" }
+          { gig.ticket_status === "selling_fast" && <TicketStatus>SELLING FAST</TicketStatus> }
+          { gig.ticket_status === "sold_out" && <TicketStatus>SOLD OUT</TicketStatus> }
         </h3>
       </hgroup>
       <SaveGigButton gig={gig} />

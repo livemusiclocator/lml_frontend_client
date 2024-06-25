@@ -23,7 +23,7 @@ gap-4
 justify-start
 
 *:shrink
- `;
+`;
 
 const GigHeroImageBanner = () => {
   // probably a case for some actual css here .
@@ -64,8 +64,13 @@ const GigHeader = ({ gig, className }) => {
         </p>
         <h2 className="flex text-4xl font-bold items-center">
           { lbmf && <img src={lbmfLogo} className="m-2 flex-shrink w-10" /> }
-          { gig.name }  { gig.status === "cancelled" && "(CANCELLED)" }
+          { gig.name }
+          { gig.status === "cancelled" && " (CANCELLED)" }
         </h2>
+        <h3 className="font-bold items-center">
+          { gig.ticket_status === "selling_fast" && "SELLING FAST!" }
+          { gig.ticket_status === "sold_out" && "SOLD OUT!" }
+        </h3>
       </hgroup>
       <SaveGigButton gig={gig} />
     </header>
