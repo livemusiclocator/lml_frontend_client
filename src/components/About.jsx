@@ -2,20 +2,20 @@ import React from 'react';
 import lbmfLogo from '../assets/lmllogo.png';
 
 const teamMembers = [
-  { name: "Lilly Ryan", role: "Cybersecurity Advisor and RRR “byte into it” Presenter" },
-  { name: "Dr Ned Letcher", role: "Data Scientist, Piano Accordion" },
-  { name: "Jen Smith", role: "Tech Leader, Accordion" },
-  { name: "Travis Winters", role: "Long Time Tech Leader, Blues Guitarist" },
-  { name: "Joe Sustaric", role: "Tech Leader" },
+  { name: "01.Ekka", role: "Hip Hop Artist, Social Media Coordinator, Entrepreneur" },
+  { name: "Phil Hickey", role: "Graphic Designer" },
+  { name: "Craig Kelly", role: "Graphic Designer, Bassist" },
+  { name: "Dr Ned Letcher", role: "Data Scientist" },
+  { name: "Paige Mulholland", role: "National Media Relations Advisor, Ukeleleist" },
+  { name: "Patrick Quinlan", role: "Data Scientist, Guitarist" },
+  { name: "Lilly Ryan", role: "Cyber Security Advisor, RRR 'byte into it' Presenter" },
   { name: "Frederic Robert", role: "PHD Astrophysicist" },
+  { name: "Jen Smith", role: "Tech Leader, Piano Accordianist" },
+  { name: "Karen Stewart", role: "Venue Liaison" },
+  { name: "Joe Sustaric", role: "Tech Leader" },
+  { name: "Tom Sulston", role: "Technologist, Social Impact Specialist, Mandolinist" },
   { name: "Eugene Tang", role: "Tech Leader" },
-  { name: "Craig Kelly", role: "Bassist and Designer" },
-  { name: "01.Ekka", role: "Hip Hop Artist and Entrepreneur" },
-  { name: "Paige Mulholland", role: "National Media Relations Advisor, Ukelele" },
-  { name: "Tom Sulston", role: "Technologist and Social Impact Specialist, Mandolin" },
-  { name: "Patrick Quinlan", role: "Data Scientist, Guitars" },
-  { name: "Phil Hickey", role: "Designer" },
-  { name: "Luca Cave", role: "Tech Leader" }
+  { name: "Travis Winters", role: "Tech Leader, Blues Guitarist" },
 ];
 
 const keyMembers = [
