@@ -108,13 +108,12 @@ const GigFiltersSummary = ({ showFilterForm }) => {
   const filters = useActiveGigFilterOptions();
   return (
     <div>
-      {
-        filters.map(({ id, caption, count }) => {
-          let description = caption;
-          if (count) {
-            description = `${caption} (${count})`;
-          }
-          return (
+      {filters.map(({ id, caption, count }) => {
+        let description = caption;
+        if (count) {
+          description = `${caption} (${count})`;
+        }
+        return (
           <Badge
             className="text-xs"
             $selected={true}
@@ -123,16 +122,15 @@ const GigFiltersSummary = ({ showFilterForm }) => {
           >
             <span className="px-4 text-nowrap">{description}</span>
           </Badge>
-          );
-        }
-                   )
-      }
+        );
+      })}
     </div>
   );
 };
 
 const GigFiltersForm = () => {
-  const { dateRanges, tagCategories, customDate } = useGigFilterOptions();
+  const { dateRanges, tagCategories, customDate, allVenues } =
+    useGigFilterOptions();
 
   const submit = useSubmit();
 
@@ -220,13 +218,37 @@ const GigFiltersForm = () => {
                         groupName="tags"
                         inputType="checkbox"
                       >
-                        <span className="px-4 text-nowrap">{value} ({count})</span>
+                        <span className="px-4 text-nowrap">
+                          {value} ({count})
+                        </span>
                       </BadgeControl>
                     );
                   })}
                 </div>
               </>
             ))}
+            {allVenues && allVenues.length > 0 && (
+              <>
+                <h3 className="text-sm font-medium">Venues</h3>
+                <div className="flex flex-row items-baseline  flex-wrap justify-start gap-1">
+                  {allVenues.map(({ name, id, selected, count }) => {
+                    return (
+                      <BadgeControl
+                        key={id}
+                        value={id}
+                        defaultChecked={selected}
+                        groupName="venue"
+                        inputType="radio"
+                      >
+                        <span className="px-4 text-nowrap">
+                          {name} ({count})
+                        </span>
+                      </BadgeControl>
+                    );
+                  })}
+                </div>
+              </>
+            )}
           </div>
         </Form>
       </div>

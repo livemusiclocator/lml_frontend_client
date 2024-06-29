@@ -87,3 +87,23 @@ export const allTagsForPages = (gigPages) => {
     return accum;
   }, []);
 };
+
+export const allVenuesForPages = (gigPages) => {
+  const venues = map(flatMap(gigPages, "gigs"), "venue");
+  //todo : this is repeaty code with the above but going live is now so...
+  return venues.reduce((accum, val) => {
+    const dupeIndex = accum.findIndex((arrayItem) => arrayItem.id === val.id);
+
+    if (dupeIndex === -1) {
+      // Not found, so initialize.
+      accum.push({
+        count: 1,
+        ...val,
+      });
+    } else {
+      // Found, so increment counter.
+      accum[dupeIndex].count++;
+    }
+    return accum;
+  }, []);
+};
