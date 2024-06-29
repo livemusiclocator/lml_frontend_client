@@ -10,7 +10,7 @@ const teamMembers = [
   { name: "Patrick Quinlan", role: "Data Scientist, Guitarist" },
   { name: "Lilly Ryan", role: "Cyber Security Advisor, RRR 'byte into it' Presenter" },
   { name: "Frederic Robert", role: "PHD Astrophysicist" },
-  { name: "Jen Smith", role: "Tech Leader, Piano Accordianist" },
+  { name: "Jen Smith", role: "Tech Leader, Piano Accordionist" },
   { name: "Karen Stewart", role: "Venue Liaison" },
   { name: "Joe Sustaric", role: "Tech Leader" },
   { name: "Tom Sulston", role: "Technologist, Social Impact Specialist, Mandolinist" },
