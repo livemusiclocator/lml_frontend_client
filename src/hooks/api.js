@@ -9,6 +9,7 @@ import {
   gigFromApiResponse,
   filterPagesByTags,
   allTagsForPages,
+  allVenuesForPages,
 } from "../model";
 import { datesForDateRange } from "../timeStuff";
 
@@ -26,16 +27,17 @@ const loadGigsPage = async ({ date, location }) => {
   return pageFromApiResponse(response, { date, location });
 };
 
-export const useAvailableTags = () => {
+export const useAvailableTagsAndVenues = () => {
   const {
-    data: { allTags },
+    data: { allTags, allVenues },
     isLoading,
     isValidating,
     allPagesLoaded,
   } = useGigList({ applyFilters: false });
 
   return {
-    data: allTags,
+    allTags,
+    allVenues,
     isLoading,
     isValidating,
     allPagesLoaded,
@@ -71,6 +73,7 @@ export const useGigList = ({ applyFilters } = {}) => {
   }, [dates, size, isLoading, setSize, pagesUnfiltered]);
 
   const allTags = allTagsForPages(pagesUnfiltered);
+  const allVenues = allVenuesForPages(pagesUnfiltered);
   let pages = pagesUnfiltered;
 
   pages = applyFilters
@@ -86,13 +89,13 @@ export const useGigList = ({ applyFilters } = {}) => {
   }
 
   return {
-    data: { pages, allTags },
+    data: { pages, allTags, allVenues },
     isLoading,
     isValidating,
     allPagesLoaded,
     gigCount,
     dateRange,
-    customDate
+    customDate,
   };
 };
 
