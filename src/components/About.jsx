@@ -2,6 +2,7 @@ import React from 'react';
 import lbmfLogo from '../assets/lmllogo.png';
 
 const teamMembers = [
+  { name: "Luca Cave", role: "Tech Leader" },
   { name: "01.Ekka", role: "Hip Hop Artist, Social Media Coordinator, Entrepreneur" },
   { name: "Phil Hickey", role: "Graphic Designer" },
   { name: "Craig Kelly", role: "Graphic Designer, Bassist" },
@@ -19,9 +20,9 @@ const teamMembers = [
 ];
 
 const keyMembers = [
-  { name: 'Mark Ryall', role: 'CTO' },
-  { name: 'Martin Paten', role: 'COO' },
-  { name: 'Nick Thorpe', role: 'CPO' }
+  { name: 'Martin Paten', role: 'Chief Operating Officer' },
+  { name: 'Mark Ryall', role: 'Chief Technology Officer' },
+  { name: 'Nick Thorpe', role: 'Chief Product Officer' }
 ];
 
 const About = () => {
@@ -50,12 +51,15 @@ const About = () => {
             </div>
           ))}
           <br /><br />
-          {keyMembers.map((member, index) => (
-            <div className="flex flex-col md:flex-row justify-between mb-2" key={index}>
-              <div className="md:w-1/3">{member.role}</div>
-              <div className="font-semibold md:w-2/3">{member.name}</div>
-            </div>
-          ))}
+          <div className="mb-2"><b>Live Music Locator - Directors</b></div>
+          <div className="mb-20">
+            {keyMembers.map((member, index) => (
+              <div className="flex flex-col md:flex-row justify-between mb-2" key={index}>
+                <div className="font-semibold md:w-1/3">{member.name}</div>
+                <div className="md:w-2/3">{member.role}</div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
