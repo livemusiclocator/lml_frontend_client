@@ -10,7 +10,7 @@ import SingleGigDetails from "./components/explorer/SingleGigDetails";
 import Explorer from "./components/explorer/Explorer";
 import GigList from "./components/GigList";
 import About from "./components/About";
-import Upcoming from "./components/Upcoming";
+import Events from "./components/Events";
 ReactGA.initialize("G-8TKSCK99CN");
 
 const router = createBrowserRouter([
@@ -22,8 +22,8 @@ const router = createBrowserRouter([
         element: <About />,
       },
       {
-        path: "upcoming",
-        element: <Upcoming />,
+        path: "events",
+        element: <Events />,
       },
       {
         // work in progress

@@ -48,7 +48,7 @@ const MobileMenu = ({ isMenuOpen }) => (
     <ul className="space-y-6 bg-gray-800 px-6 pt-4 pb-8 flex items-end flex-col">
       <NavItem to="/">Home</NavItem>
       <NavItem to="/about">About</NavItem>
-      <NavItem to="/upcoming">Upcoming</NavItem>
+      <NavItem to="/events">Events</NavItem>
     </ul>
   </div>
 );
@@ -58,7 +58,7 @@ const DesktopMenu = () => (
     <ul className="px-2 pt-2 pb-3 flex flex-row sm:px-3">
       <NavItem to="/">Home</NavItem>
       <NavItem to="/about">About</NavItem>
-      <NavItem to="/upcoming">Upcoming</NavItem>
+      <NavItem to="/events">Events</NavItem>
     </ul>
   </div>
 );
