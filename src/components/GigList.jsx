@@ -30,7 +30,7 @@ const GigHeader = ({ gig, showDate = true }) => {
       <hgroup className="break-words text-pretty leading-loose">
         { showDate && (
            <p className="text-sm">
-             <DateTimeDisplay value={gig.start_time} type="time" />
+             <DateTimeDisplay value={gig.start_timestamp} type="time" />
            </p>
         )}
         <h3
@@ -75,12 +75,12 @@ const GigRow = ({ gig }) => {
              )}
           </div>
         </div>
-        {gig.start_time && (
+        {gig.start_timestamp && (
           <div className="flex gap-x-1 items-start text-sm">
             <ClockIcon className="size-4 shrink-0 m-1 text-gray-500" />
             <ul className="font-semibold">
               <li aria-label="Time">
-                <DateTimeDisplay value={gig.start_time} type="dateAndTime" />
+                <DateTimeDisplay value={gig.start_timestamp} type="dateAndTime" />
               </li>
             </ul>
           </div>

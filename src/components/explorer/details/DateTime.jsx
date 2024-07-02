@@ -13,8 +13,8 @@ export default function DateTime({ gig }) {
         </li>
         <li aria-label="Time">
           <DateTimeDisplay
-            start={gig.start_time}
-            end={gig.finish_time}
+            start={gig.start_timestamp}
+            end={gig.finish_timestamp}
             type="time"
           />
         </li>

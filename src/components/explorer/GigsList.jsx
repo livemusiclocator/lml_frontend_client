@@ -7,9 +7,9 @@ export default function GigsList({ gigs }) {
       {gigs.map((gig) => (
         <Link to={`gigs/${gig.id}`} key={gig.id} className="py-2 px-4 block">
           <div className="flex justify-between mb-2">
-            {gig.start_time && (
+            {gig.start_timestamp && (
               <div className="text-nowrap">
-                <DateTimeDisplay value={gig.start_time} type="time" />
+                <DateTimeDisplay value={gig.start_timestamp} type="time" />
               </div>
             )}
             <SaveGigButton gig={gig} />

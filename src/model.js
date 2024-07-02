@@ -52,7 +52,7 @@ export const pageFromApiResponse = (raw, { date, location }) => {
   const gigs = raw.map(gigFromApiResponse);
 
   return {
-    gigs: sortBy(gigs, "start_time"),
+    gigs: sortBy(gigs, "start_timestamp"),
     filters: { date, location },
   };
 };
