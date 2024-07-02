@@ -14,8 +14,8 @@ export default function Sets({ sets }) {
             sets.map(
               (set) => {
                 let description = set.act.name;
-                if (set.start_offset_time) {
-                  description = `${set.start_offset_time} - ${description}`;
+                if (set.start_time) {
+                  description = `${set.start_time} - ${description}`;
                 }
                 if (set.duration) {
                   description = `${description} (${set.duration} min)`;
