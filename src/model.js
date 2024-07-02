@@ -13,35 +13,25 @@ export const matchesTags = (tags, targetTags) => {
   return tags.filter(({ id }) => targetTags.includes(id)).length > 0;
 };
 
-export const parseTags = (rawValues) => {
-  return rawValues?.map((str) => {
-    const parts = str.split(/:\s*/);
-
-    if (parts.length === 2) {
-      const category = parts[0].trim();
-      const value = parts[1].trim();
-      return {
-        category: parts[0].trim(),
-        value: parts[1].trim(),
-        id: [category, value].join(":"),
-      };
-    } else {
-      return {
-        category: "general",
-        value: str.trim(),
-        id: ["general", str.trim()].join(":"),
-      };
-    }
-  });
-};
-
 /**  gigsy stuff */
-export const gigFromApiResponse = ({ tags, ...gig }) => {
-  const tagsParsed = parseTags(tags);
-  const allTags = groupBy(tagsParsed, "category");
+export const gigFromApiResponse = ({ information_tags, genre_tags, ...gig }) => {
+  let tags = [];
+  information_tags.forEach(
+    (value) => {
+      const tag = value.toLowerCase();
+      tags.push({ category: "information", value: tag, id: `information:${tag}`});
+    }
+  );
+  genre_tags.forEach(
+    (value) => {
+      const tag = value.toLowerCase();
+      tags.push({ category: "genre", value: tag, id: `genre:${tag}` });
+    }
+  );
+  const allTags = groupBy(tags, "category");
   return {
     ...gig,
-    tags: tagsParsed,
+    tags: tags,
     genres: allTags["genre"],
     infoTags: allTags["information"],
   };
@@ -60,6 +50,7 @@ export const pageFromApiResponse = (raw, { date, location }) => {
 const filterPageByTags = ({ gigs, ...page }, tags) => {
   return { ...page, gigs: gigs.filter((gig) => matchesTags(gig.tags, tags)) };
 };
+
 export const filterPagesByTags = (gigPages, allTags, tagFilters) => {
   const allTagIds = map(allTags, "id");
   const validTagFilters = filter(tagFilters, (tag) => includes(allTagIds, tag));
