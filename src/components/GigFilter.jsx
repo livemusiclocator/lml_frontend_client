@@ -7,22 +7,20 @@ import {
 } from "../hooks/filters";
 import { Form, useSubmit } from "react-router-dom";
 const FilterContainer = tw.div`
-  w-full
-  min-width-sm
-  border
-  rounded
-  shadow
-
+w-full
+min-width-sm
+border
+rounded
+shadow
 transition-[max-height]
-
 flex
 flex-col
 ${(p) => (p.$expanded ? "max-h-80" : "max-h-12")}
 bg-white
 overflow-none
 `;
-const DateInput = tw.input`
 
+const DateInput = tw.input`
 peer
   items-center
   disabled:hidden
@@ -101,7 +99,12 @@ const BadgeControl = ({
 };
 
 const FilterToggleButton = tw.button`
-bg-gray-800 hover:bg-gray-900 text-white font-medium p-1 rounded text-xs
+bg-gray-800
+hover:bg-gray-900
+text-white
+font-medium p-1
+rounded
+text-xs
 `;
 
 const GigFiltersSummary = ({ showFilterForm }) => {
@@ -237,21 +240,19 @@ const GigFiltersForm = () => {
 const GigFilters = () => {
   const [showFilters, setShowFilters] = useState(false);
   return (
-    <div className="h-20 z-50">
-      <FilterContainer $expanded={showFilters}>
-        {showFilters && <GigFiltersForm />}
-        <div className="flex justify-between items-start p-1">
-          <div>
-            {!showFilters && (
-              <GigFiltersSummary showFilterForm={() => setShowFilters(true)} />
-            )}
-          </div>
-          <FilterToggleButton onClick={() => setShowFilters(!showFilters)}>
-            {showFilters ? "close" : "filters"}
-          </FilterToggleButton>
+    <FilterContainer $expanded={showFilters}>
+      {showFilters && <GigFiltersForm />}
+      <div className="flex justify-between items-start p-1">
+        <div>
+          {!showFilters && (
+            <GigFiltersSummary showFilterForm={() => setShowFilters(true)} />
+          )}
         </div>
-      </FilterContainer>
-    </div>
+        <FilterToggleButton onClick={() => setShowFilters(!showFilters)}>
+          {showFilters ? "close" : "filters"}
+        </FilterToggleButton>
+      </div>
+    </FilterContainer>
   );
 };
 
