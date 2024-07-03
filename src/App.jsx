@@ -11,7 +11,7 @@ import Explorer from "./components/explorer/Explorer";
 import GigList from "./components/GigList";
 import About from "./components/About";
 import Events from "./components/Events";
-ReactGA.initialize("G-8TKSCK99CN");
+ReactGA.initialize("G-T8T6NBQH36");
 
 const router = createBrowserRouter([
   {
