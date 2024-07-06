@@ -3,6 +3,7 @@ import dayjs from "dayjs";
 import { useSearchParams } from "react-router-dom";
 import { DATE_RANGES, todaysDate } from "../timeStuff";
 import { useAvailableTagsAndVenues } from "./api";
+
 const dateParamsToSearchParams = ({ customDate, dateRange }) => {
   if (customDate) {
     return {
@@ -13,9 +14,11 @@ const dateParamsToSearchParams = ({ customDate, dateRange }) => {
   return { dateRange };
 };
 
-const venueToSearchParams = ({ venueId }) => ({
-  venue: venueId,
-});
+const venuesToSearchParams = ({ venues }) => {
+  if (venues && venues.length > 0) {
+    return { venues: venues.map(({ id }) => id) };
+  }
+};
 
 /**
  * Simple kind of wrapper around the search/query string params to supply the active gig filters (dates and tags)
@@ -27,7 +30,7 @@ export const useActiveGigFilters = () => {
     const newParams = {
       ...tagsToSearchParams(gigFilters),
       ...dateParamsToSearchParams(gigFilters),
-      ...venueToSearchParams(gigFilters),
+      ...venuesToSearchParams(gigFilters),
     };
     setSearchParams(newParams);
   };
@@ -35,7 +38,7 @@ export const useActiveGigFilters = () => {
     {
       ...searchParamsToTagFilters(params),
       ...searchParamsToDateFilters(params),
-      ...searchParamsToVenueFilters(params),
+      ...searchParamsToVenuesFilters(params),
     },
     setActiveGigFilters,
   ];
@@ -65,9 +68,11 @@ const searchParamsToDateFilters = (params) => {
   };
 };
 
-const searchParamsToVenueFilters = (params) => ({
-  venueId: params.get("venue"),
-});
+const searchParamsToVenuesFilters = (params) => {
+  return {
+    venues: params.getAll("venues"),
+  };
+};
 
 const FILTER_TAG_CATEGORIES = [
   {
@@ -86,7 +91,7 @@ export const useGigFilterOptions = () => {
       dateRange: selectedDateRange,
       customDate,
       tags: selectedTags = [],
-      venueId: selectedVenueId,
+      venues: selectedVenues = [],
     },
   ] = useActiveGigFilters();
   const dateRanges = mapValues(DATE_RANGES, (range) => ({
@@ -119,7 +124,7 @@ export const useGigFilterOptions = () => {
     allVenues: allVenues.map(({ id, ...venue }) => ({
       ...venue,
       id,
-      selected: id === selectedVenueId,
+      selected: selectedVenues.includes(id),
     })),
     customDate,
   };
@@ -128,7 +133,6 @@ export const useGigFilterOptions = () => {
 export const useActiveGigFilterOptions = () => {
   const { dateRanges, tagCategories, allVenues } = useGigFilterOptions();
 
-  // eek
   return [
     ...filter(values(dateRanges), "selected"),
     ...filter(flatMap(tagCategories, "values"), "selected"),

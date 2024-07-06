@@ -38,8 +38,9 @@ const Map = () => {
   const { defaultMapPin, savedMapPin } = getTheme();
   const [, setActiveGigFilters] = useActiveGigFilters();
 
-  const handleMarkerClick = (venueId) => {
-    setActiveGigFilters({ dateRange, customDate, venueId });
+  const handleMarkerClick = (venue) => {
+    const venues = [venue];
+    setActiveGigFilters({ dateRange, customDate, venues });
   };
 
   const customIcon = (gigs) => {
@@ -101,9 +102,7 @@ const Map = () => {
                 key={index}
                 position={position}
                 icon={customIcon(venue.gigs)}
-                eventHandlers={{
-                  click: () => handleMarkerClick(venue.id),
-                }}
+                eventHandlers={{ click: () => handleMarkerClick(venue) }}
               ><Tooltip>{venue.name}</Tooltip></Marker>
             );
           } else {

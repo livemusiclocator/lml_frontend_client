@@ -238,7 +238,7 @@ const GigFiltersForm = () => {
                         key={id}
                         value={id}
                         defaultChecked={selected}
-                        groupName="venue"
+                        groupName="venues"
                         inputType="checkbox"
                       >
                         <span className="px-4 text-nowrap">
