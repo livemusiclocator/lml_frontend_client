@@ -15,7 +15,7 @@ shadow
 transition-[max-height]
 flex
 flex-col
-${(p) => (p.$expanded ? "max-h-80" : "max-h-12")}
+${(p) => (p.$expanded ? "" : "max-h-12")}
 bg-white
 overflow-none
 `;
