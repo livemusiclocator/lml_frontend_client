@@ -89,6 +89,7 @@ export const allVenuesForPages = (gigPages) => {
       // Not found, so initialize.
       accum.push({
         count: 1,
+        caption: val.name,
         ...val,
       });
     } else {

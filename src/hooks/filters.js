@@ -79,6 +79,7 @@ const FILTER_TAG_CATEGORIES = [
     caption: "Other",
   },
 ];
+
 export const useGigFilterOptions = () => {
   const [
     {
@@ -111,6 +112,7 @@ export const useGigFilterOptions = () => {
   const tagCategories = FILTER_TAG_CATEGORIES.map((category) => {
     return { ...category, values: allTagsByCategory[category.id] || [] };
   }).filter((category) => category.values.length > 0);
+
   return {
     dateRanges,
     tagCategories,
@@ -124,11 +126,12 @@ export const useGigFilterOptions = () => {
 };
 
 export const useActiveGigFilterOptions = () => {
-  const { dateRanges, tagCategories } = useGigFilterOptions();
+  const { dateRanges, tagCategories, allVenues } = useGigFilterOptions();
 
   // eek
   return [
     ...filter(values(dateRanges), "selected"),
     ...filter(flatMap(tagCategories, "values"), "selected"),
+    ...filter(allVenues, "selected"),
   ];
 };
