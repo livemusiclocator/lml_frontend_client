@@ -6,18 +6,19 @@ import {
   useActiveGigFilterOptions,
 } from "../hooks/filters";
 import { Form, useSubmit } from "react-router-dom";
+
 const FilterContainer = tw.div`
-w-full
-min-width-sm
-border
-rounded
-shadow
-transition-[max-height]
-flex
-flex-col
-${(p) => (p.$expanded ? "" : "max-h-12")}
-bg-white
-overflow-none
+  w-full
+  min-width-sm
+  border
+  rounded
+  shadow
+  transition-[max-height]
+  flex
+  flex-col
+  ${(p) => (p.$expanded ? "" : "max-h-12")}
+  bg-white
+  overflow-none
 `;
 
 const DateInput = tw.input`
@@ -54,7 +55,8 @@ bg-gray-200
 hover:text-indigo-700
 hover:bg-indigo-300
 transition-colors
-${(p) => (p.$selected ? "bg-indigo-200 text-indigo-700" : "bg-gray-200 text-gray-700")}
+${(p) =>
+  p.$selected ? "bg-indigo-200 text-indigo-700" : "bg-gray-200 text-gray-700"}
 has-[:checked]:bg-indigo-200
 has-[:checked]:text-indigo-700
 has-[:checked]:hover:bg-indigo-300
@@ -103,27 +105,23 @@ text-xs
 const GigFiltersSummary = ({ showFilterForm }) => {
   const filters = useActiveGigFilterOptions();
   return (
-    <div>
-      {
-        filters.map(
-          ({ id, caption, count }) => {
-            let description = caption;
-            if (count) {
-              description = `${caption} (${count})`;
-            }
-            return (
-              <Badge
-                className="text-xs"
-                $selected={true}
-                onClick={() => showFilterForm()}
-                key={id}
-              >
-                <span className="px-4 text-nowrap">{description}</span>
-              </Badge>
-            );
-          }
-        )
-      }
+    <div className="flex flex-wrap" style={{ maxHeight: "24px" }}>
+      {filters.map(({ id, caption, count }) => {
+        let description = caption;
+        if (count) {
+          description = `${caption} (${count})`;
+        }
+        return (
+          <Badge
+            className="text-xs"
+            $selected={true}
+            onClick={() => showFilterForm()}
+            key={id}
+          >
+            <span className="px-4 text-nowrap">{description}</span>
+          </Badge>
+        );
+      })}
     </div>
   );
 };
@@ -150,7 +148,10 @@ const GigFiltersForm = () => {
 
   return (
     <>
-      <div className="mb-2 px-4 min bg-white overflow-hidden flex-1  min-h-0">
+      <div
+        className="mb-2 px-4 min bg-white overflow-scroll flex-1 min-h-0"
+        style={{ maxHeight: "50vh" }}
+      >
         <h2 className="font-semibold text-sm text-center">Filters</h2>
         <Form
           method="get"
@@ -197,7 +198,7 @@ const GigFiltersForm = () => {
                       {caption}
                     </span>
                   </BadgeControl>
-                ),
+                )
               )}
             </div>
             {tagCategories.map(({ id, caption, values }) => (
@@ -262,12 +263,15 @@ const GigFilters = () => {
     <FilterContainer $expanded={showFilters}>
       {showFilters && <GigFiltersForm />}
       <div className="flex justify-between items-start p-1">
-        <div>
+        <div style={{ overflow: "hidden" }}>
           {!showFilters && (
             <GigFiltersSummary showFilterForm={() => setShowFilters(true)} />
           )}
         </div>
-        <FilterToggleButton onClick={() => setShowFilters(!showFilters)}>
+        <FilterToggleButton
+          onClick={() => setShowFilters(!showFilters)}
+          style={{ marginLeft: "1rem" }}
+        >
           {showFilters ? "close" : "filters"}
         </FilterToggleButton>
       </div>
