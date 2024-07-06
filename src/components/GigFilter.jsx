@@ -40,20 +40,14 @@ invalid:ring-offset-2
 `;
 
 const Badge = tw.div`
-
 inline-flex
 justify-center
 min-w-min
-
 py-1
-
-
 text-xs
 text-nowrap
 font-medium
-
 cursor-pointer
-
 rounded-full
 text-gray-700
 bg-gray-200
@@ -64,7 +58,6 @@ ${(p) => (p.$selected ? "bg-indigo-200 text-indigo-700" : "bg-gray-200 text-gray
 has-[:checked]:bg-indigo-200
 has-[:checked]:text-indigo-700
 has-[:checked]:hover:bg-indigo-300
-
 `;
 
 const BadgeControl = ({
@@ -111,22 +104,26 @@ const GigFiltersSummary = ({ showFilterForm }) => {
   const filters = useActiveGigFilterOptions();
   return (
     <div>
-      {filters.map(({ id, caption, count }) => {
-        let description = caption;
-        if (count) {
-          description = `${caption} (${count})`;
-        }
-        return (
-          <Badge
-            className="text-xs"
-            $selected={true}
-            onClick={() => showFilterForm()}
-            key={id}
-          >
-            <span className="px-4 text-nowrap">{description}</span>
-          </Badge>
-        );
-      })}
+      {
+        filters.map(
+          ({ id, caption, count }) => {
+            let description = caption;
+            if (count) {
+              description = `${caption} (${count})`;
+            }
+            return (
+              <Badge
+                className="text-xs"
+                $selected={true}
+                onClick={() => showFilterForm()}
+                key={id}
+              >
+                <span className="px-4 text-nowrap">{description}</span>
+              </Badge>
+            );
+          }
+        )
+      }
     </div>
   );
 };
@@ -241,7 +238,7 @@ const GigFiltersForm = () => {
                         value={id}
                         defaultChecked={selected}
                         groupName="venue"
-                        inputType="radio"
+                        inputType="checkbox"
                       >
                         <span className="px-4 text-nowrap">
                           {name} ({count})
