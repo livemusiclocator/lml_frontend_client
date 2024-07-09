@@ -3,23 +3,24 @@
 set -euo pipefail
 
 projects=(
-    "brisbanelivemusiclocator.github.io"
-    "livemusiclocator.github.io"
-    "melbournelivemusiclocator.github.io"
+  "livemusiclocator.github.io"
+  "brisbanelivemusiclocator.github.io"
+  "castlemainelivemusiclocator.github.io"
+  "melbournelivemusiclocator.github.io"
 )
 
 export sha=$(cat .git/refs/heads/main)
 npm run build
 for project in "${projects[@]}"; do
-    pushd ../${project}
-    git pull
-    rm -rf index.html
-    rm -rf 404.html
-    rm -rf assets
-    cp -r ../lml_frontend_client/dist/* .
-    cp index.html 404.html
-    git add .
-    git commit -m "Release ${sha}"
-    git push
-    popd
+  pushd ../${project}
+  git pull
+  rm -rf index.html
+  rm -rf 404.html
+  rm -rf assets
+  cp -r ../lml_frontend_client/dist/* .
+  cp index.html 404.html
+  git add .
+  git commit -m "Release ${sha}"
+  git push
+  popd
 done
