@@ -10,7 +10,7 @@ const locations = {
     theme: lmlTheme,
   },
   castlemaine: {
-    mapCentre: [-37.063670785361964, 144.21660007885495],
+    mapCenter: [-37.063670785361964, 144.21660007885495],
     theme: lmlTheme,
   },
   melbourne: {
@@ -24,10 +24,6 @@ const locations = {
   sydney: {
     mapCenter: [-33.8695692, 151.1307609],
     theme: lmlTheme,
-  },
-  lbmf: {
-    mapCenter: [-37.798375850534065, 144.97863448586907],
-    theme: lbmfTheme,
   },
 };
 
