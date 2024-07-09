@@ -9,6 +9,10 @@ const locations = {
     mapCenter: [-27.4704072, 153.012729],
     theme: lmlTheme,
   },
+  castlemaine: {
+    mapCentre: [-37.063670785361964, 144.21660007885495],
+    theme: lmlTheme,
+  },
   melbourne: {
     mapCenter: [-37.798375850534065, 144.97863448586907],
     theme: lmlTheme,
