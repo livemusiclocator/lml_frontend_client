@@ -115,7 +115,7 @@ export const useGigFilterOptions = () => {
   );
 
   const tagCategories = FILTER_TAG_CATEGORIES.map((category) => {
-    return { ...category, values: allTagsByCategory[category.id] || [] };
+    return { ...category, values: (allTagsByCategory[category.id] || []).sort((a, b) => b.count - a.count) };
   }).filter((category) => category.values.length > 0);
 
   return {
