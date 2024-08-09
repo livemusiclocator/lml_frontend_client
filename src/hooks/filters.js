@@ -121,7 +121,7 @@ export const useGigFilterOptions = () => {
   return {
     dateRanges,
     tagCategories,
-    allVenues: allVenues.map(({ id, ...venue }) => ({
+    allVenues: allVenues.sort((a, b) => b.count - a.count).map(({ id, ...venue }) => ({
       ...venue,
       id,
       selected: selectedVenues.includes(id),
