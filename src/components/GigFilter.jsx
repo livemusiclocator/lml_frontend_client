@@ -52,8 +52,6 @@ cursor-pointer
 rounded-full
 text-gray-700
 bg-gray-200
-hover:text-violet-700
-hover:bg-violet-300
 transition-colors
 ${(p) =>
   p.$selected ? "bg-indigo-200 text-indigo-700" : "bg-gray-200 text-gray-700"}
