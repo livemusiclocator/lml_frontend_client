@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { MapContainer, TileLayer, Marker, Tooltip } from "react-leaflet";
 import { Icon } from "leaflet";
-import { getMapCenter, getTheme } from "../getLocation";
+import { getMapCenter, getZoom, getTheme } from "../getLocation";
 import { useGigList } from "../hooks/api";
 import "leaflet/dist/leaflet.css";
 import { gigIsSaved } from "../savedGigs";
@@ -35,6 +35,7 @@ const Map = () => {
   const venues = Object.values(groupGigsByVenues(gigs));
   const mapRef = useRef();
   const defaultPosition = getMapCenter();
+  const defaultZoom = getZoom();
   const { defaultMapPin, savedMapPin } = getTheme();
   const [, setActiveGigFilters] = useActiveGigFilters();
 
@@ -76,7 +77,7 @@ const Map = () => {
       <MapContainer
         ref={mapRef}
         center={defaultPosition}
-        zoom={15}
+        zoom={defaultZoom}
         style={{
           height: "100%",
           width: "100%",
