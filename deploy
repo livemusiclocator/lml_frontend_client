@@ -7,6 +7,7 @@ projects=(
   "brisbanelivemusiclocator.github.io"
   "castlemainelivemusiclocator.github.io"
   "melbournelivemusiclocator.github.io"
+  "goldfieldslivemusiclocator.github.io"
 )
 
 export sha=$(cat .git/refs/heads/main)
@@ -20,7 +21,7 @@ for project in "${projects[@]}"; do
   cp -r ../lml_frontend_client/dist/* .
   cp index.html 404.html
   git add .
-  git commit -m "Release ${sha}"
+  git commit -m "Release ${sha}" || echo already up to date
   git push
   popd
 done
