@@ -10,6 +10,7 @@ import GigFilter from "./GigFilter";
 import GigFilterForDatesActually from "./explorer/GigFilter";
 import { LoadingSpinner } from "./loading/LoadingOverlay";
 import lbmfLogo from '../assets/lbmf2024logo.png';
+import skLogo from '../assets/skf_blacklogo.svg';
 
 const ExternalLink = tw.a`text-blue-600 hover:underline visited:text-purple-600 inline-flex items-baseline`;
 const Aside = tw.aside`flex flex-col`;
@@ -24,6 +25,7 @@ m-2
 
 const GigHeader = ({ gig, showDate = true }) => {
   const lbmf = gig.series === "lbmf";
+  const sk = gig.series === "stkildafestival2025";
 
   return (
     <header className={`flex justify-between flex-row pb-2`}>
@@ -37,6 +39,7 @@ const GigHeader = ({ gig, showDate = true }) => {
           className="flex text-xl font-bold items-center"
         >
           { lbmf && <img src={lbmfLogo} className="m-2 flex-shrink w-10" /> }
+          { sk && <img src={skLogo} className="m-2 flex-shrink w-10" /> }
           { gig.name }
           { gig.status === "cancelled" && "(CANCELLED)" }
           { gig.ticket_status === "selling_fast" && <TicketStatus>SELLING FAST</TicketStatus> }

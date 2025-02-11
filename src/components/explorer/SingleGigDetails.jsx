@@ -13,6 +13,7 @@ import InfoTags from "./details/InfoTags";
 import Tickets from "./details/Tickets";
 import Sets from "./details/Sets";
 import lbmfLogo from '../../assets/lbmf2024logo.png';
+import skLogo from '../../assets/skf_blacklogo.svg';
 
 const Aside = tw.aside`
 mx-4
@@ -54,6 +55,7 @@ const GigHeroImageBanner = () => {
 
 const GigHeader = ({ gig, className }) => {
   const lbmf = gig.series === "lbmf";
+  const sk = gig.series === "stkildafestival2025";
   return (
     <header
       className={`flex items-start justify-between flex-row ${className || ""} p-4`}
@@ -64,6 +66,7 @@ const GigHeader = ({ gig, className }) => {
         </p>
         <h2 className="flex text-4xl font-bold items-center">
           { lbmf && <img src={lbmfLogo} className="m-2 flex-shrink w-10" /> }
+          { sk && <img src={skLogo} className="m-2 flex-shrink w-10" /> }
           { gig.name }
           { gig.status === "cancelled" && " (CANCELLED)" }
         </h2>

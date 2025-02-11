@@ -23,7 +23,7 @@ const groupGigsByVenues = (gigs) => {
 };
 
 const venueHasSavedGig = (gigs) => gigs.some(gigIsSaved);
-const venueHasLbmfGig = (gigs) => gigs.some(gig => gig.series === "lbmf");
+const venueHasLbmfGig = (gigs) => gigs.some(gig => gig.series);
 
 const Map = () => {
   const {

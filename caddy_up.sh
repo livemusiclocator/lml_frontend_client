@@ -5,6 +5,7 @@ domains=(
   "lbmf.lml-development.live"
   "melbourne.lml-development.live"
   "sydney.lml-development.live"
+  "stkilda.lml-development.live"
   "brisbane.lml-development.live"
   "perth.lml-development.live"
   "adelaide.lml-development.live"
@@ -20,4 +21,3 @@ for domain in "${domains[@]}"; do
 done
 
 caddy run
-
