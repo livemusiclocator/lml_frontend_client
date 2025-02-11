@@ -6,7 +6,7 @@ import { useGigList } from "../hooks/api";
 import "leaflet/dist/leaflet.css";
 import { gigIsSaved } from "../savedGigs";
 import { useActiveGigFilters } from "../hooks/filters";
-import { lbmfTheme } from "../themes";
+import { stkTheme } from "../themes";
 
 const groupGigsByVenues = (gigs) => {
   return gigs.reduce((venues, gig) => {
@@ -23,7 +23,7 @@ const groupGigsByVenues = (gigs) => {
 };
 
 const venueHasSavedGig = (gigs) => gigs.some(gigIsSaved);
-const venueHasLbmfGig = (gigs) => gigs.some(gig => gig.series);
+const venueHasSeriesGig = (gigs) => gigs.some(gig => gig.series);
 
 const Map = () => {
   const {
@@ -45,16 +45,16 @@ const Map = () => {
   };
 
   const customIcon = (gigs) => {
-    if (venueHasLbmfGig(gigs)) {
+    if (venueHasSeriesGig(gigs)) {
       if (venueHasSavedGig(gigs)) {
         return new Icon({
-          iconUrl: lbmfTheme.savedMapPin,
+          iconUrl: stkTheme.savedMapPin,
           iconSize: [40, 40],
         });
       }
 
       return new Icon({
-        iconUrl: lbmfTheme.defaultMapPin,
+        iconUrl: stkTheme.defaultMapPin,
         iconSize: [45, 45],
       });
     } else {
