@@ -36,6 +36,11 @@ const locations = {
     zoom: 15,
     theme: lmlTheme,
   },
+  stkilda: {
+    mapCenter: [-37.87047572959667, 144.9841046470599],
+    zoom: 15,
+    theme: lmlTheme,
+  },
 };
 
 export const getLocation = () => {

@@ -8,6 +8,7 @@ projects=(
   "castlemainelivemusiclocator.github.io"
   "melbournelivemusiclocator.github.io"
   "goldfieldslivemusiclocator.github.io"
+  "stkildalivemusiclocator.github.io"
 )
 
 export sha=$(cat .git/refs/heads/main)
