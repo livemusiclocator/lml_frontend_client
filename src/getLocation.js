@@ -13,6 +13,10 @@ const locations = {
     mapCenter: [-37.798375850534065, 144.97863448586907],
     theme: lmlTheme,
   },
+  stkilda: {
+    mapCenter: [-37.8642383, 144.9613908],
+    theme: lmlTheme,
+  },
   perth: {
     mapCenter: [-31.95211262081573, 115.85813946429992],
     theme: lmlTheme,
