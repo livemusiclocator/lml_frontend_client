@@ -25,6 +25,11 @@ const venuesToSearchParams = ({ venues }) => {
  * */
 export const useActiveGigFilters = () => {
   let [params, setSearchParams] = useSearchParams();
+  const activeGigFilters = {
+    ...searchParamsToTagFilters(params),
+    ...searchParamsToDateFilters(params),
+    ...searchParamsToVenuesFilters(params),
+  };
 
   const setActiveGigFilters = (gigFilters) => {
     const newParams = {
@@ -35,11 +40,7 @@ export const useActiveGigFilters = () => {
     setSearchParams(newParams);
   };
   return [
-    {
-      ...searchParamsToTagFilters(params),
-      ...searchParamsToDateFilters(params),
-      ...searchParamsToVenuesFilters(params),
-    },
+    activeGigFilters,
     setActiveGigFilters,
   ];
 };

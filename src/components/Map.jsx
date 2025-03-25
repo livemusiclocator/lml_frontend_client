@@ -37,7 +37,7 @@ const Map = () => {
   const defaultPosition = getMapCenter();
   const defaultZoom = getZoom();
   const { defaultMapPin, savedMapPin } = getTheme();
-  const [, setActiveGigFilters] = useActiveGigFilters();
+  const [activeGigFilters, setActiveGigFilters] = useActiveGigFilters();
 
   const handleMarkerClick = (venue) => {
     const venues = [venue];
@@ -94,8 +94,12 @@ const Map = () => {
         {venues.map((venue, index) => {
           const latitude = parseFloat(venue.latitude);
           const longitude = parseFloat(venue.longitude);
+          let isVenueFiltered = true;
+          if (activeGigFilters.venues && activeGigFilters.venues.length > 0) {
+            isVenueFiltered = activeGigFilters.venues.includes(venue.id);
+          }
 
-          if (!isNaN(latitude) && !isNaN(longitude)) {
+          if (!isNaN(latitude) && !isNaN(longitude) && isVenueFiltered) {
             const position = [latitude, longitude];
 
             return (
