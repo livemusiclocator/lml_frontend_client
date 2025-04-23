@@ -31,9 +31,11 @@ const About = () => {
       <h1 className="text-3xl font-bold text-center mb-6">About</h1>
       <div className="flex flex-col items-center">
         <img src={lbmfLogo} alt="Live Music Locator logo" className="w-48 h-48 md:w-72 md:h-72 mb-10 object-contain" />
-        <p>Live Music Locator is a pilot service that helps you discover all live music events in the City of Yarra, covering every gig across all genres and venues for July, August, and September 2024. Help us make the pilot successful by telling other people about this solution, and we will make it work for all of Victoria.</p>
+        <p>Live Music Locator is a pilot service that helps you discover all live music events in the St Kilda Live Music Precinct.</p>
         <br />
-        <p>Our data is verified within 48 hours, ensuring you get accurate and up-to-date info. We’re a not-for-profit partnering with the City of Yarra and the Leaps and Bounds Festival to support local musicians and venues.</p>
+        <p>Our data is verified within 48 hours, ensuring you get accurate and up-to-date info.</p>
+        <br />
+        <p>Live Music Locator is a not-for-profit charity, partnering with the City of Port Phillip, as well as the Acland Street Village Business Association and the Fitzroy St Business Association to support local music and local venues.</p>
         <br />
         <p>Plus, we’ve got a free API for developers to use. So hack on that and roll your own personal gig guide.</p>
         <br />
