@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 
 domains=(
-  "gigs.lml-development.live"
-  "melbourne.lml-development.live"
-  "sydney.lml-development.live"
-  "stkilda.lml-development.live"
-  "brisbane.lml-development.live"
-  "perth.lml-development.live"
   "adelaide.lml-development.live"
+  "brisbane.lml-development.live"
   "castlemaine.lml-development.live"
+  "gigs.lml-development.live"
   "goldfields.lml-development.live"
+  "melbourne.lml-development.live"
+  "perth.lml-development.live"
+  "stkilda.lml-development.live"
+  "sydney.lml-development.live"
 )
 
 for domain in "${domains[@]}"; do
