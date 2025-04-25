@@ -2,32 +2,30 @@ import React from "react";
 import lmlLogo from "../assets/lmllogo.png";
 
 const teamMembers = [
-  { name: "Luca Cave", role: "Tech Leader" },
-  {
-    name: "01.Ekka",
-    role: "Hip Hop Artist, Social Media Coordinator, Entrepreneur",
-  },
-  { name: "Phil Hickey", role: "Graphic Designer" },
+  { name: "01.Ekka", role: "Hip Hop Artist, Social Media Coordinator, Entrepreneur" },
+  { name: "Aron Lebani", role: "Tech Volunteer" },
+  { name: "Ben Eldridge", role: "Tech Volunteer" },
+  { name: "Craig Kelly", role: "Design" },
   { name: "Craig Kelly", role: "Graphic Designer, Bassist" },
   { name: "Dr Ned Letcher", role: "Data Scientist" },
-  {
-    name: "Paige Mulholland",
-    role: "National Media Relations Advisor, Ukeleleist",
-  },
-  { name: "Patrick Quinlan", role: "Data Scientist, Guitarist" },
-  {
-    name: "Lilly Ryan",
-    role: "Cyber Security Advisor, RRR 'byte into it' Presenter",
-  },
+  { name: "Eugene Tang", role: "Tech Leader" },
   { name: "Frederic Robert", role: "PHD Astrophysicist" },
   { name: "Jen Smith", role: "Tech Leader, Piano Accordionist" },
-  { name: "Karen Stewart", role: "Venue Liaison" },
   { name: "Joe Sustaric", role: "Tech Leader" },
-  {
-    name: "Tom Sulston",
-    role: "Technologist, Social Impact Specialist, Mandolinist",
-  },
-  { name: "Eugene Tang", role: "Tech Leader" },
+  { name: "Johnny Cussen", role: "Tech Volunteer" },
+  { name: "Karen Stewart", role: "Venue Relations" },
+  { name: "Lilly Ryan", role: "Cyber Security Advisor, RRR 'byte into it' Presenter" },
+  { name: "Luca Cave", role: "Tech Leader" },
+  { name: "Mark Pirie", role: "Gig Researcher" },
+  { name: "Paige Mulholland", role: "National Media Relations Advisor, Ukeleleist" },
+  { name: "Patrick Quinlan", role: "Data Scientist, Guitarist" },
+  { name: "Paul Ellis", role: "Pro Bono Legal" },
+  { name: "Peter Bodin", role: "Gig Researcher" },
+  { name: "Phil Hickey", role: "Graphic Designer" },
+  { name: "Richard Turton", role: "Photography" },
+  { name: "Sharon Irish", role: "Gig Researcher & UX Specialist" },
+  { name: "Stefan Schutt", role: "Gig Researcher" },
+  { name: "Tom Sulston", role: "Technologist, Social Impact Specialist, Mandolinist" },
   { name: "Travis Winters", role: "Tech Leader, Blues Guitarist" },
 ];
 
