@@ -5,7 +5,6 @@ const teamMembers = [
   { name: "01.Ekka", role: "Hip Hop Artist, Social Media Coordinator, Entrepreneur" },
   { name: "Aron Lebani", role: "Tech Volunteer" },
   { name: "Ben Eldridge", role: "Tech Volunteer" },
-  { name: "Craig Kelly", role: "Design" },
   { name: "Craig Kelly", role: "Graphic Designer, Bassist" },
   { name: "Dr Ned Letcher", role: "Data Scientist" },
   { name: "Eugene Tang", role: "Tech Leader" },
