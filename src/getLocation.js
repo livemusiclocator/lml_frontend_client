@@ -1,4 +1,4 @@
-import { lbmfTheme, lmlTheme } from "./themes";
+import { lmlTheme } from "./themes";
 
 const locations = {
   adelaide: {
@@ -40,12 +40,25 @@ const locations = {
     mapCenter: [-37.8642383, 144.9613908],
     zoom: 15,
     theme: lmlTheme,
+    heading: `Live Music Locator is a pilot service that helps you discover all live music events in the St Kilda Live Music Precinct.`,
+    partners: `Live Music Locator is a not-for-profit charity, partnering with the
+      City of Port Phillip, as well as the Acland Street Village Business
+      Association and the Fitzroy St Business Association to support local
+      music and local venues.`,
   },
 };
 
 export const getLocation = () => {
   const location = window.location.host.split(".")[0];
   return locations[location] ? location : "melbourne";
+};
+
+export const getHeading = () => {
+  return locations[getLocation()].heading || "Live Music Locator is a free service that helps you discover live music events.";
+};
+
+export const getPartners = () => {
+  return locations[getLocation()].partners || "Live Music Locator is a not-for-profit registered charity, formed to support local music and local venues.";
 };
 
 export const getMapCenter = () => {

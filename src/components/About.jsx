@@ -1,5 +1,6 @@
 import React from "react";
 import lmlLogo from "../assets/lmllogo.png";
+import { getHeading, getPartners } from "../getLocation";
 
 const teamMembers = [
   { name: "01.Ekka", role: "Hip Hop Artist, Social Media Coordinator, Entrepreneur" },
@@ -44,31 +45,21 @@ const About = () => {
           alt="Live Music Locator logo"
           className="w-48 h-48 md:w-72 md:h-72 mb-10 object-contain"
         />
-        <p>
-          Live Music Locator is a pilot service that helps you discover all live
-          music events in the St Kilda Live Music Precinct.
-        </p>
+        <p>{getHeading()}</p>
         <br />
         <p>
-          Our data is verified within 48 hours, ensuring you get accurate and
-          up-to-date info.
+          Our data is verified within 48 hours, ensuring you get accurate and up-to-date info.
         </p>
         <br />
-        <p>
-          Live Music Locator is a not-for-profit charity, partnering with the
-          City of Port Phillip, as well as the Acland Street Village Business
-          Association and the Fitzroy St Business Association to support local
-          music and local venues.
-        </p>
+        <p>{getPartners()}</p>
         <br />
         <p>
           Plus, we’ve got a free API for developers to use. So hack on that and
-          roll your own personal gig guide.
+          roll your own personal gig guide. Or if you’d like to join us, you can volunteer!
         </p>
         <br />
         <p>
-          For more details, check out{" "}
-          <a
+          For more details, check out <a
             href="https://www.livemusiclocator.com.au/"
             className="text-customBlue underline hover:text-blue-700"
             target="_blank"
@@ -80,8 +71,7 @@ const About = () => {
         </p>
         <br />
         <p>
-          You can contact us at{" "}
-          <a
+          You can contact us at <a
             href="mailto:gigs@livemusiclocator.com.au"
             className="text-customBlue underline hover:text-blue-700"
           >
@@ -92,8 +82,7 @@ const About = () => {
         <br />
         <br />
         <p>
-          This experience is brought to you by the passion and expertise of our
-          wonderful volunteer team.
+          This experience is brought to you by the passion and expertise of our wonderful volunteer team.
         </p>
         <br />
         <div>
