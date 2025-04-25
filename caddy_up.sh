@@ -2,7 +2,6 @@
 
 domains=(
   "gigs.lml-development.live"
-  "lbmf.lml-development.live"
   "melbourne.lml-development.live"
   "sydney.lml-development.live"
   "stkilda.lml-development.live"
