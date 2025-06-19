@@ -48,8 +48,17 @@ const locations = {
   },
 };
 
+
+// Old way of doing it - using the first part of the hostname
+const getLocationKeyFromHost = () => window.location.host.split(".")[0]
+
+// New way of doing it - vite env var
+const getLocationKeyFromViteEnv = () => import.meta.env.VITE_LML_LOCATION
+
+const getLocationKeyWithFallback = ()=> getLocationKeyFromViteEnv() ?? getLocationKeyFromHost()
+
 export const getLocation = () => {
-  const location = window.location.host.split(".")[0];
+  const location = getLocationKeyWithFallback()
   return locations[location] ? location : "melbourne";
 };
 
