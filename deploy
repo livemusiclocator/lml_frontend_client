@@ -3,26 +3,38 @@
 set -euo pipefail
 
 projects=(
-  "livemusiclocator.github.io"
-  "brisbanelivemusiclocator.github.io"
-  "castlemainelivemusiclocator.github.io"
-  "melbournelivemusiclocator.github.io"
-  "goldfieldslivemusiclocator.github.io"
-  "stkildalivemusiclocator.github.io"
+  "" # hacky way of saying 'default project'
+  "brisbane"
+  "castlemaine"
+  "melbourne"
+  "goldfields"
+  "stkilda"
 )
 
 export sha=$(cat .git/refs/heads/main)
-npm run build
-for project in "${projects[@]}"; do
-  pushd ../${project}
-  git pull
-  rm -rf index.html
-  rm -rf 404.html
-  rm -rf assets
-  cp -r ../lml_frontend_client/dist/* .
-  cp index.html 404.html
-  git add .
-  git commit -m "Release ${sha}" || echo already up to date
-  git push
+
+if [[ -z ${SKIP_BUILD:-} ]] ; then
+  for edition in "${projects[@]}"; do
+    out_dir="dists/${edition:-lml}"
+
+    VITE_LML_LOCATION=$edition npm run build -- --outDir $out_dir
+  done
+fi
+if [[ -z ${SKIP_GITHUB_DEPLOY:-} ]] ; then
+  for edition in "${projects[@]}"; do
+    project="${edition}livemusiclocator.github.io"
+    out_dir="dists/${edition:-lml}"
+    pushd ../${project}
+    git pull
+    git reset HEAD --hard
+    rm -rf index.html
+    rm -rf 404.html
+    rm -rf assets
+    cp -r ../lml_frontend_client/${out_dir}/ .
+    cp index.html 404.html
+    git add .
+    git commit -m "Release ${sha}" || echo already up to date
+    git push
   popd
-done
+    done
+fi
