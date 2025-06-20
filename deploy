@@ -15,11 +15,28 @@ export sha=$(cat .git/refs/heads/main)
 
 if [[ -z ${SKIP_BUILD:-} ]] ; then
   for edition in "${projects[@]}"; do
+    if [[ -z ${edition:-} ]]; then
+      continue;
+    fi
     out_dir="dists/${edition:-lml}"
-
-    VITE_LML_LOCATION=$edition npm run build -- --outDir $out_dir
+    unified_out_dir="dists/unified/editions/${edition:-lml}"
+    # regular build
+    VITE_LML_LOCATION=$edition npm run build -- --outDir=$out_dir
+    # build with basedir for unified version
+    VITE_LML_LOCATION=$edition npm run build -- --outDir=$unified_out_dir --base="/editions/${edition}"
   done
 fi
+
+# build main one separately
+
+npm run build -- --outDir dists/lml
+
+npm run build -- --outDir dists/unified/gigs --base="/gigs"
+
+# copy our temp index too
+
+cp "./top_level_index.html" dists/unified/index.html
+
 if [[ -z ${SKIP_GITHUB_DEPLOY:-} ]] ; then
   for edition in "${projects[@]}"; do
     project="${edition}livemusiclocator.github.io"

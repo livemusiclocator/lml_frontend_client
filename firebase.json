@@ -1,0 +1,55 @@
+{
+  "apphosting": {
+    "backendId": "lml-thingymaybe",
+    "rootDir": "dists/lml",
+    "ignore": [
+      "node_modules",
+      ".git",
+      "firebase-debug.log",
+      "firebase-debug.*.log",
+      "functions"
+    ]
+  },
+  "hosting": {
+    "public": "dists/unified/",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      {
+        "source": "/gigs/**",
+        "destination": "/gigs/index.html"
+      },
+      {
+        "source": "/editions/adelaide/**",
+        "destination": "/editions/adelaide/index.html"
+      },
+      {
+        "source": "/editions/brisbane/**",
+        "destination": "/editions/brisbane/index.html"
+      },
+      {
+        "source": "/editions/castlemaine/**",
+        "destination": "/editions/castlemaine/index.html"
+      },
+      {
+        "source": "/editions/goldfields/**",
+        "destination": "/editions/goldfields/index.html"
+      },
+      {
+        "source": "/editions/melbourne/**",
+        "destination": "/editions/melbourne/index.html"
+      },
+      {
+        "source": "/editions/perth/**",
+        "destination": "/editions/perth/index.html"
+      },
+      {
+        "source": "/editions/sydney/**",
+        "destination": "/editions/sydney/index.html"
+      },
+      {
+        "source": "/editions/stkilda/**",
+        "destination": "/editions/stkilda/index.html"
+      }
+    ]
+  }
+}
