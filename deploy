@@ -55,3 +55,5 @@ if [[ -z ${SKIP_GITHUB_DEPLOY:-} ]] ; then
   popd
     done
 fi
+
+firebase deploy --only hosting
