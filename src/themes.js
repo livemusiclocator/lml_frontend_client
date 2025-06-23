@@ -6,13 +6,13 @@ const getImageUrl = (name) => {
 const makeTheme = ({
   defaultMapPin,
   savedMapPin,
-  brandMark,
+  brandmark,
   ...otherProps
 }) => {
   return {
     defaultMapPin: getImageUrl(defaultMapPin),
     savedMapPin: getImageUrl(savedMapPin),
-    brandmark: getImageUrl(brandMark),
+    brandmark: getImageUrl(brandmark),
     ...otherProps,
   };
 };
