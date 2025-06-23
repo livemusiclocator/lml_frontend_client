@@ -1,4 +1,4 @@
-import { useParams, useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router";
 import SaveGigButton from "../SaveGigButton";
 import { useGig } from "../../hooks/api";
 import { LoadingSpinner } from "../loading/LoadingOverlay";

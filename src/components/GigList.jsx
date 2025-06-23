@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { Link, createSearchParams, useNavigate } from "react-router-dom";
+import { Link, createSearchParams, useNavigate } from "react-router";
 import tw from "tailwind-styled-components";
 import { MapPinIcon, ClockIcon, ArrowTopRightOnSquareIcon as ExternalLinkIcon } from "@heroicons/react/24/solid";
 import DateTimeDisplay from "./DateTimeDisplay";

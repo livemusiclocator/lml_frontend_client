@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Bars3Icon } from "@heroicons/react/24/solid";
-import { NavLink, Link, Outlet } from "react-router-dom";
+import { NavLink, Link, Outlet } from "react-router";
 import { getTheme } from "../getLocation";
 
 const Logo = () => (

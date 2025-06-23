@@ -1,6 +1,6 @@
 import { mapValues, filter, groupBy, values, flatMap } from "lodash-es";
 import dayjs from "dayjs";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router";
 import { DATE_RANGES, todaysDate } from "../timeStuff";
 import { useAvailableTagsAndVenues } from "./api";
 

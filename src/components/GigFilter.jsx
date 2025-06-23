@@ -5,7 +5,7 @@ import {
   useGigFilterOptions,
   useActiveGigFilterOptions,
 } from "../hooks/filters";
-import { Form, useSubmit } from "react-router-dom";
+import { Form, useSubmit } from "react-router";
 
 const FilterContainer = tw.div`
   w-full
