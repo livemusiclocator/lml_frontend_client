@@ -11,8 +11,9 @@ import Explorer from "./components/explorer/Explorer";
 import GigList from "./components/GigList";
 import About from "./components/About";
 import Events from "./components/Events";
-ReactGA.initialize("GT-WRFXTBL7");
+import getConfig from "./config";
 
+ReactGA.initialize(getConfig().gaProject);
 const router = createBrowserRouter(
   [
     {
@@ -52,8 +53,8 @@ const router = createBrowserRouter(
     },
   ],
   {
-    basename: import.meta.env.BASE_URL,
-  },
+    basename: getConfig().root_path,
+  }
 );
 
 const App = () => {
