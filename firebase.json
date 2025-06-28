@@ -13,6 +13,17 @@
   "hosting": {
     "public": "dists/unified/",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "headers": [
+      {
+        "source": "/rails_spa/**/*.*",
+        "headers": [
+          {
+            "key": "Access-Control-Allow-Origin",
+            "value": "https://api.lml.live"
+          }
+        ]
+      }
+    ],
     "rewrites": [
       {
         "source": "/gigs/**",
