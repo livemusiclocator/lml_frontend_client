@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+export CI=yup
+
+projects=(
+  "brisbane"
+  "castlemaine"
+  "melbourne"
+  "goldfields"
+  "stkilda"
+)
+
+rm -rf dists/*
+
+
+for edition in "${projects[@]}"; do
+  out_dir="dists/${edition:-lml}"
+  unified_out_dir="dists/unified/editions/${edition:-lml}"
+  # build with basedir for unified version and ROOT_PATH which is used for the react router (base is supposed to be for assets only)
+  VITE_LML_ROOT_PATH="/editions/${edition}" VITE_LML_LOCATION=$edition npm run build -- --outDir=$unified_out_dir --base="/editions/${edition}" &
+done
+
+# build main one separately
+
+npm run build -- --outDir dists/lml &
+
+# build with basedir for unified version and ROOT_PATH which is used for the react router (base is supposed to be for assets only)
+
+VITE_LML_ROOT_PATH="/gigs" npm run build -- --outDir dists/unified/gigs --base="/gigs" &
+# definitely not cool do make this a wait thing but in my defence, all these builds should become unnecessary soon
+wait
+
+# copy our temp index too
+
+cp "./top_level_index.html" dists/unified/index.html
+
+
+# Run one final build - this one will be used by the rails app so we don't need to set anything apart from the asset base url
+npm run build -- --outDir dists/unified/rails_spa/ --base="./" --manifest=manifest.json
+
+npx firebase deploy --only hosting
