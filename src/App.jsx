@@ -13,7 +13,7 @@ import About from "./components/About";
 import Events from "./components/Events";
 import getConfig from "./config";
 
-ReactGA.initialize(getConfig().gaProject);
+ReactGA.initialize(getConfig().ga_project);
 const router = createBrowserRouter(
   [
     {
@@ -54,7 +54,7 @@ const router = createBrowserRouter(
   ],
   {
     basename: getConfig().root_path,
-  }
+  },
 );
 
 const App = () => {

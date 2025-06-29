@@ -3,7 +3,7 @@ import useSWR from "swr";
 import useSWRInfinite from "swr/infinite";
 import { getLocation } from "../getLocation";
 import { useActiveGigFilters } from "./filters";
-
+import getConfig from "../config";
 import {
   pageFromApiResponse,
   gigFromApiResponse,
@@ -12,13 +12,14 @@ import {
   allVenuesForPages,
 } from "../model";
 import { datesForDateRange } from "../timeStuff";
+const GIGS_ENDPOINT = getConfig().gigs_endpoint;
 
 const loadData = async (url) => {
   const response = await fetch(url);
   return await response.json();
 };
 const gigByDayEndpoint = ({ date, location }) => {
-  return `https://api.lml.live/gigs/query?location=${location}&date_from=${date}&date_to=${date}`;
+  return `${GIGS_ENDPOINT}/query?location=${location}&date_from=${date}&date_to=${date}`;
 };
 
 const loadGigsPage = async ({ date, location }) => {
@@ -100,7 +101,7 @@ export const useGigList = ({ applyFilters } = {}) => {
 };
 
 export const useGig = (id) => {
-  return useSWR(`https://api.lml.live/gigs/${id}`, async (key) => {
+  return useSWR(`${GIGS_ENDPOINT}/${id}`, async (key) => {
     return gigFromApiResponse(await loadData(key));
   });
 };

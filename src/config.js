@@ -1,6 +1,7 @@
 const STANDALONE_CONFIG = {
   root_path: import.meta.env.VITE_LML_ROOT_PATH || "/",
-  gaProject: "GT-WRFXTBL7",
+  gigs_endpoint: "https://api.lml.live/gigs",
+  ga_project: "GT-WRFXTBL7",
 };
 
 export default () => {
