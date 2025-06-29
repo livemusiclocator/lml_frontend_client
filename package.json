@@ -4,8 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev-toplevel": "vite",
-    "dev": "vite --base=/lml",
+    "dev": "vite",
     "dev-adelaide": "VITE_LML_LOCATION=adelaide vite --base=/adelaide",
     "dev-brisbane": "VITE_LML_LOCATION=brisbane vite --base=/brisbane",
     "dev-castlemaine": "VITE_LML_LOCATION=castlemaine vite --base=/castlemaine",
