@@ -1,6 +1,7 @@
 import "bootstrap-icons/font/bootstrap-icons.css";
 import ReactGA from "react-ga4";
 import DefaultLayout from "./layouts/default";
+import NoLayout from "./layouts/nolayout";
 // does this just happen automatically?
 import "./index.css";
 import { ThemeProvider } from "styled-components";
@@ -13,11 +14,14 @@ import About from "./components/About";
 import Events from "./components/Events";
 import getConfig from "./config";
 
-ReactGA.initialize(getConfig().ga_project);
+const APP_CONFIG = getConfig();
+ReactGA.initialize(APP_CONFIG.ga_project);
+
+const LayoutComponent = APP_CONFIG.render_app_layout ? DefaultLayout : NoLayout;
 const router = createBrowserRouter(
   [
     {
-      element: <DefaultLayout />,
+      element: <LayoutComponent />,
       children: [
         {
           path: "about",
