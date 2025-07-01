@@ -9,7 +9,7 @@ const Logo = () => (
       to="/"
       className="flex justify-start items-center text-slate-50 space-x-2 font-sans"
     >
-      <img src={getTheme().brandmark} className="flex-shrink w-10" />
+      <img src={getTheme().brandmark} className="shrink w-10" />
       <span className="text-xl">{getTheme().title}</span>
     </Link>
   </div>

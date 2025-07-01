@@ -29,7 +29,7 @@ justify-start
 const GigHeroImageBanner = () => {
   // probably a case for some actual css here .
   return (
-    <div className="relative max-h-[40svh] overflow-hidden aspect-[2/1] w-full">
+    <div className="relative max-h-[40svh] overflow-hidden aspect-2/1 w-full">
       <div className="absolute left-0 top-0 w-full h-full">
         <picture>
           <img
@@ -65,8 +65,8 @@ const GigHeader = ({ gig, className }) => {
           <DateTimeDisplay value={gig.date} type="briefDate" />
         </p>
         <h2 className="flex text-4xl font-bold items-center">
-          { lbmf && <img src={lbmfLogo} className="m-2 flex-shrink w-10" /> }
-          { sk && <img src={skLogo} className="m-2 flex-shrink w-10" /> }
+          { lbmf && <img src={lbmfLogo} className="m-2 shrink w-10" /> }
+          { sk && <img src={skLogo} className="m-2 shrink w-10" /> }
           { gig.name }
           { gig.status === "cancelled" && " (CANCELLED)" }
         </h2>

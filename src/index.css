@@ -1,6 +1,14 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@theme {
+  --color-lmlpink: rgb(235 0 139);
+  --color-custom-blue: #1da1f2;
+
+  --font-sans: "Montserrat", ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+  --animate-spinner-grow: spinner-grow 1s linear infinite;
+  --animate-delayed-entrance: delayed-entrance 0.5s linear;
+}
 
 /* Ported from bootstrap - we could use one of the built in anims too */
 @keyframes spinner-grow {

@@ -38,8 +38,8 @@ const GigHeader = ({ gig, showDate = true }) => {
         <h3
           className="flex text-xl font-bold items-center"
         >
-          { lbmf && <img src={lbmfLogo} className="m-2 flex-shrink w-10" /> }
-          { sk && <img src={skLogo} className="m-2 flex-shrink w-10" /> }
+          { lbmf && <img src={lbmfLogo} className="m-2 shrink w-10" /> }
+          { sk && <img src={skLogo} className="m-2 shrink w-10" /> }
           { gig.name }
           { gig.status === "cancelled" && "(CANCELLED)" }
           { gig.ticket_status === "selling_fast" && <TicketStatus>SELLING FAST</TicketStatus> }

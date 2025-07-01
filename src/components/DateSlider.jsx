@@ -30,7 +30,7 @@ export default function DateSlider({ date, onChange, className = "" }) {
         ◀
       </button>
       <input
-        className="form-control mx-2 border border-1 border-gray-400"
+        className="form-control mx-2 border border border-gray-400"
         type="date"
         onChange={handleDateChange}
         value={dayjs(date).format("YYYY-MM-DD")}

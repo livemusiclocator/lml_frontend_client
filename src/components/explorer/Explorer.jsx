@@ -32,7 +32,9 @@ export default function Explorer() {
       <Map />
       {/**  overlay to the map - for small screens, just use whole width for big screens (not primary usecase) max out at 2xl, but try and keep to a proportion of the screen so you get a lot of map as well */}
       <FilterWrapper $listMaximised={listMaximised}>
-        <nav className={`flex items-center border-b w-full p-2`}>
+        <nav
+          className={`flex items-center border-b border-gray-200 w-full p-2`}
+        >
           {showBackButton && (
             <Link to={backButtonLocation}>
               <ChevronLeftIcon className="size-6" />

@@ -11,6 +11,7 @@ const FilterContainer = tw.div`
   w-full
   min-width-sm
   border
+  border-gray-200
   rounded
   shadow
   transition-[max-height]
@@ -55,9 +56,9 @@ bg-gray-200
 transition-colors
 ${(p) =>
   p.$selected ? "bg-indigo-200 text-indigo-700" : "bg-gray-200 text-gray-700"}
-has-[:checked]:bg-indigo-200
-has-[:checked]:text-indigo-700
-has-[:checked]:hover:bg-indigo-300
+has-checked:bg-indigo-200
+has-checked:text-indigo-700
+has-checked:hover:bg-indigo-300
 `;
 
 const BadgeControl = ({
@@ -196,7 +197,7 @@ const GigFiltersForm = () => {
                       {caption}
                     </span>
                   </BadgeControl>
-                )
+                ),
               )}
             </div>
             {tagCategories.map(({ id, caption, values }) => (
