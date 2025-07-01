@@ -8,7 +8,6 @@ import {
 } from "react-router";
 import { ChevronLeftIcon } from "@heroicons/react/24/solid";
 import { useState, useEffect } from "react";
-import "./styles.scss";
 import Map from "../Map";
 
 export default function Explorer() {
