@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Tooltip } from "react-leaflet";
 import { useMap } from "react-leaflet/hooks";
 import { Icon } from "leaflet";
@@ -102,36 +102,26 @@ const VenueMarkers = () => {
 const MapPositioner = () => {
   const map = useMap();
   const [activeGigFilters] = useActiveGigFilters();
-  const location = getLocationMapSettings(activeGigFilters.location);
 
-  const defaultPosition = location.mapCenter;
-  const defaultZoom = location.zoom;
-
-  // todo: Make this do useEffect as it gets quite annoying
-  if (map) {
-    map.setView(defaultPosition, defaultZoom, { animate: true });
-  }
+  useEffect(() => {
+    const location = getLocationMapSettings(activeGigFilters.location);
+    if (map && location) {
+      const defaultPosition = location.mapCenter;
+      const defaultZoom = location.zoom;
+      map.setView(defaultPosition, defaultZoom, { animate: true });
+    }
+  }, [map, activeGigFilters.location]); // Only run when location changes
 
   return null;
 };
 
 const Map = () => {
   const mapRef = useRef();
-  const [activeGigFilters] = useActiveGigFilters();
-  const location = getLocationMapSettings(activeGigFilters.location);
 
-  if (!location) {
-    return null;
-  }
-
-  const defaultPosition = location.mapCenter;
-  const defaultZoom = location.zoom;
   // todo : avoid hardcoded styles ?
   return (
     <MapContainer
       ref={mapRef}
-      center={defaultPosition}
-      zoom={defaultZoom}
       style={{
         height: "100%",
         width: "100%",
