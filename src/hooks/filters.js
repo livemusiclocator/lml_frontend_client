@@ -3,6 +3,8 @@ import dayjs from "dayjs";
 import { useSearchParams } from "react-router";
 import { DATE_RANGES, todaysDate } from "../timeStuff";
 import { useAvailableTagsAndVenues } from "./api";
+import getConfig from "../config";
+import { ALL_LOCATIONS } from "../locations";
 
 const dateParamsToSearchParams = ({ customDate, dateRange }) => {
   if (customDate) {
@@ -20,6 +22,17 @@ const venuesToSearchParams = ({ venues }) => {
   }
 };
 
+const locationToSearchParams = ({ location }) => {
+  const { allow_select_location, default_location } = getConfig();
+
+  if (!allow_select_location) {
+    return { location: default_location };
+  }
+  if (location) {
+    return { location: location };
+  }
+};
+
 /**
  * Simple kind of wrapper around the search/query string params to supply the active gig filters (dates and tags)
  * */
@@ -29,6 +42,7 @@ export const useActiveGigFilters = () => {
     ...searchParamsToTagFilters(params),
     ...searchParamsToDateFilters(params),
     ...searchParamsToVenuesFilters(params),
+    ...searchParamsToLocationFilter(params),
   };
 
   const setActiveGigFilters = (gigFilters) => {
@@ -36,13 +50,11 @@ export const useActiveGigFilters = () => {
       ...tagsToSearchParams(gigFilters),
       ...dateParamsToSearchParams(gigFilters),
       ...venuesToSearchParams(gigFilters),
+      ...locationToSearchParams(gigFilters),
     };
     setSearchParams(newParams);
   };
-  return [
-    activeGigFilters,
-    setActiveGigFilters,
-  ];
+  return [activeGigFilters, setActiveGigFilters];
 };
 // todo: gross - clean this up jen
 const tagsToSearchParams = ({ tags }) =>
@@ -74,6 +86,15 @@ const searchParamsToVenuesFilters = (params) => {
     venues: params.getAll("venues"),
   };
 };
+const searchParamsToLocationFilter = (params) => {
+  const { allow_select_location, default_location } = getConfig();
+  if (!allow_select_location) {
+    return { location: default_location };
+  }
+  return {
+    location: params.get("location") || default_location,
+  };
+};
 
 const FILTER_TAG_CATEGORIES = [
   {
@@ -93,6 +114,7 @@ export const useGigFilterOptions = () => {
       customDate,
       tags: selectedTags = [],
       venues: selectedVenues = [],
+      location: selectedLocation,
     },
   ] = useActiveGigFilters();
   const dateRanges = mapValues(DATE_RANGES, (range) => ({
@@ -116,25 +138,45 @@ export const useGigFilterOptions = () => {
   );
 
   const tagCategories = FILTER_TAG_CATEGORIES.map((category) => {
-    return { ...category, values: (allTagsByCategory[category.id] || []).sort((a, b) => b.count - a.count) };
+    return {
+      ...category,
+      values: (allTagsByCategory[category.id] || []).sort(
+        (a, b) => b.count - a.count,
+      ),
+    };
   }).filter((category) => category.values.length > 0);
+  const { allow_select_location } = getConfig();
+  const allLocations = allow_select_location
+    ? ALL_LOCATIONS.sort((a, b) => a.sort_order - b.sort_order).map(
+        ({ id, ...location }) => ({
+          ...location,
+          id,
+          selected: selectedLocation === id,
+        }),
+      )
+    : [];
 
   return {
     dateRanges,
     tagCategories,
-    allVenues: allVenues.sort((a, b) => b.count - a.count).map(({ id, ...venue }) => ({
-      ...venue,
-      id,
-      selected: selectedVenues.includes(id),
-    })),
+    allLocations,
+    allVenues: allVenues
+      .sort((a, b) => b.count - a.count)
+      .map(({ id, ...venue }) => ({
+        ...venue,
+        id,
+        selected: selectedVenues.includes(id),
+      })),
     customDate,
   };
 };
 
 export const useActiveGigFilterOptions = () => {
-  const { dateRanges, tagCategories, allVenues } = useGigFilterOptions();
+  const { dateRanges, tagCategories, allVenues, allLocations } =
+    useGigFilterOptions();
 
   return [
+    ...filter(allLocations, "selected"),
     ...filter(values(dateRanges), "selected"),
     ...filter(flatMap(tagCategories, "values"), "selected"),
     ...filter(allVenues, "selected"),

@@ -4,6 +4,7 @@ import useSWRInfinite from "swr/infinite";
 import { getLocation } from "../getLocation";
 import { useActiveGigFilters } from "./filters";
 import getConfig from "../config";
+
 import {
   pageFromApiResponse,
   gigFromApiResponse,
@@ -45,8 +46,8 @@ export const useAvailableTagsAndVenues = () => {
   };
 };
 export const useGigList = ({ applyFilters } = {}) => {
-  const location = getLocation();
-  const [{ dateRange, customDate, tags, venues }] = useActiveGigFilters();
+
+  const [{ dateRange, customDate, tags, venues,location }] = useActiveGigFilters();
 
   const dates = datesForDateRange(dateRange, customDate);
   const pagedDates = dates.map((d) => d.format("YYYY-MM-DD"));

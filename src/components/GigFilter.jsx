@@ -126,9 +126,9 @@ const GigFiltersSummary = ({ showFilterForm }) => {
 };
 
 const GigFiltersForm = () => {
-  const { dateRanges, tagCategories, customDate, allVenues } =
+  const { dateRanges, tagCategories, customDate, allVenues, allLocations } =
     useGigFilterOptions();
-
+  const selectedLocation = allLocations.find((location) => location.selected);
   const submit = useSubmit();
 
   const customDateInput = useRef();
@@ -161,6 +161,27 @@ const GigFiltersForm = () => {
           }}
         >
           <div className="flex flex-col ">
+            {allLocations && allLocations.length > 0 && (
+              <>
+                <h3 className="text-sm font-medium">Where</h3>
+                <div className="flex flex-row items-baseline  flex-wrap justify-start gap-1">
+                  <select
+                    name="location"
+                    defaultValue={selectedLocation?.id}
+                    className="text-xs p-1 text-center rounded-full transition-colors bg-indigo-200 text-indigo-700 hover:bg-indigo-300 font-medium "
+                  >
+                    {allLocations.map(({ caption, id }) => {
+                      return (
+                        <option value={id} key={`gig-filter-location${id}`}>
+                          {caption}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+              </>
+            )}
+
             <h3 className="text-sm font-medium">When</h3>
             <div className="flex flex-row items-baseline flex-wrap justify-start gap-1">
               {Object.values(dateRanges).map(
@@ -227,6 +248,7 @@ const GigFiltersForm = () => {
                 </div>
               </>
             ))}
+
             {allVenues && allVenues.length > 0 && (
               <>
                 <h3 className="text-sm font-medium">Venues</h3>

@@ -1,6 +1,8 @@
 import { lmlTheme } from "./themes";
 import getConfig from "./config";
-const locations = {
+
+// these should be deprecated once we move front end to rails
+const edition_locations = {
   adelaide: {
     mapCenter: [-34.9256018, 138.5801261],
     zoom: 15,
@@ -62,33 +64,35 @@ const getLocationKeyWithFallback = () =>
   getLocationKeyFromViteEnv() ??
   getLocationKeyFromHost();
 
+//  deprecatd: use locations in combo with config
 export const getLocation = () => {
   const location = getLocationKeyWithFallback();
-  return locations[location] ? location : "melbourne";
+  return edition_locations[location] ? location : "melbourne";
 };
-
 export const getHeading = () => {
   return (
-    locations[getLocation()].heading ||
+    edition_locations[getLocation()].heading ||
     "Live Music Locator is a free service that helps you discover live music events."
   );
 };
 
 export const getPartners = () => {
   return (
-    locations[getLocation()].partners ||
+    edition_locations[getLocation()].partners ||
     "Live Music Locator is a not-for-profit registered charity, formed to support local music and local venues."
   );
 };
 
+//  deprecatd: use locations.js
 export const getMapCenter = () => {
-  return locations[getLocation()].mapCenter;
+  return edition_locations[getLocation()].mapCenter;
 };
 
 export const getZoom = () => {
-  return locations[getLocation()].zoom;
+  return edition_locations[getLocation()].zoom;
 };
 
+//  deprecatd - everyone appears to be using the same theme !
 export const getTheme = () => {
-  return locations[getLocation()].theme;
+  return edition_locations[getLocation()].theme;
 };

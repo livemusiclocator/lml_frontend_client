@@ -1,7 +1,11 @@
 import React, { useRef } from "react";
 import { Link, createSearchParams, useNavigate } from "react-router";
 import tw from "tailwind-styled-components";
-import { MapPinIcon, ClockIcon, ArrowTopRightOnSquareIcon as ExternalLinkIcon } from "@heroicons/react/24/solid";
+import {
+  MapPinIcon,
+  ClockIcon,
+  ArrowTopRightOnSquareIcon as ExternalLinkIcon,
+} from "@heroicons/react/24/solid";
 import DateTimeDisplay from "./DateTimeDisplay";
 import SaveGigButton from "./SaveGigButton";
 import { useGigList } from "../hooks/api";
@@ -9,9 +13,9 @@ import { useGigFilterOptions } from "../hooks/filters";
 import GigFilter from "./GigFilter";
 import GigFilterForDatesActually from "./explorer/GigFilter";
 import { LoadingSpinner } from "./loading/LoadingOverlay";
-import lbmfLogo from '../assets/lbmf2024logo.png';
-import skLogo from '../assets/skf_blacklogo.svg';
-
+import lbmfLogo from "../assets/lbmf2024logo.png";
+import skLogo from "../assets/skf_blacklogo.svg";
+import { uniqBy } from "lodash-es";
 const ExternalLink = tw.a`text-blue-600 hover:underline visited:text-purple-600 inline-flex items-baseline`;
 const Aside = tw.aside`flex flex-col`;
 const TicketStatus = tw.div`
@@ -30,20 +34,22 @@ const GigHeader = ({ gig, showDate = true }) => {
   return (
     <header className={`flex justify-between flex-row pb-2`}>
       <hgroup className="break-words text-pretty leading-loose">
-        { showDate && (
-           <p className="text-sm">
-             <DateTimeDisplay value={gig.start_timestamp} type="time" />
-           </p>
+        {showDate && (
+          <p className="text-sm">
+            <DateTimeDisplay value={gig.start_timestamp} type="time" />
+          </p>
         )}
-        <h3
-          className="flex text-xl font-bold items-center"
-        >
-          { lbmf && <img src={lbmfLogo} className="m-2 shrink w-10" /> }
-          { sk && <img src={skLogo} className="m-2 shrink w-10" /> }
-          { gig.name }
-          { gig.status === "cancelled" && "(CANCELLED)" }
-          { gig.ticket_status === "selling_fast" && <TicketStatus>SELLING FAST</TicketStatus> }
-          { gig.ticket_status === "sold_out" && <TicketStatus>SOLD OUT</TicketStatus> }
+        <h3 className="flex text-xl font-bold items-center">
+          {lbmf && <img src={lbmfLogo} className="m-2 shrink w-10" />}
+          {sk && <img src={skLogo} className="m-2 shrink w-10" />}
+          {gig.name}
+          {gig.status === "cancelled" && "(CANCELLED)"}
+          {gig.ticket_status === "selling_fast" && (
+            <TicketStatus>SELLING FAST</TicketStatus>
+          )}
+          {gig.ticket_status === "sold_out" && (
+            <TicketStatus>SOLD OUT</TicketStatus>
+          )}
         </h3>
       </hgroup>
       <SaveGigButton gig={gig} />
@@ -54,13 +60,8 @@ const GigHeader = ({ gig, showDate = true }) => {
 const GigRow = ({ gig }) => {
   const navigate = useNavigate();
   return (
-    <article
-      className="flex flex-col snap-start p-4"
-    >
-      <GigHeader
-        gig={gig}
-        showDate={false}
-      />
+    <article className="flex flex-col snap-start p-4">
+      <GigHeader gig={gig} showDate={false} />
       <Aside>
         <div className="flex gap-x-1 pb-2 items-start text-sm">
           <MapPinIcon className="text-gray-500 size-4 shrink-0 m-1" />
@@ -72,10 +73,11 @@ const GigRow = ({ gig }) => {
             {gig.venue.location_url && (
               <p>
                 <ExternalLink href={gig.venue.location_url}>
-                  Get directions <ExternalLinkIcon className="size-4 self-center" />
+                  Get directions{" "}
+                  <ExternalLinkIcon className="size-4 self-center" />
                 </ExternalLink>
               </p>
-             )}
+            )}
           </div>
         </div>
         {gig.start_timestamp && (
@@ -83,7 +85,10 @@ const GigRow = ({ gig }) => {
             <ClockIcon className="size-4 shrink-0 m-1 text-gray-500" />
             <ul className="font-semibold">
               <li aria-label="Time">
-                <DateTimeDisplay value={gig.start_timestamp} type="dateAndTime" />
+                <DateTimeDisplay
+                  value={gig.start_timestamp}
+                  type="dateAndTime"
+                />
               </li>
             </ul>
           </div>
@@ -92,7 +97,7 @@ const GigRow = ({ gig }) => {
 
       {gig.genres && (
         <div className="flex gap-2 flex-wrap p-4">
-          {gig.genres.map(({ id, value }) => (
+          {uniqBy(gig.genres, "id").map(({ id, value }) => (
             <span
               key={id}
               className="bg-lmlpink text-white text-xs font-medium p-2"
@@ -103,17 +108,15 @@ const GigRow = ({ gig }) => {
         </div>
       )}
       <ExternalLink
-          className="p-1 items-start text-sm"
-          href="/"
-          onClick={
-            (e) => {
-              e.preventDefault();
-              navigate(`gigs/${gig.id}`);
-            }
-          }
-        >
-          ... more information
-        </ExternalLink>
+        className="p-1 items-start text-sm"
+        href="/"
+        onClick={(e) => {
+          e.preventDefault();
+          navigate(`gigs/${gig.id}`);
+        }}
+      >
+        ... more information
+      </ExternalLink>
     </article>
   );
 };

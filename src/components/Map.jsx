@@ -1,12 +1,14 @@
 import { useRef } from "react";
 import { MapContainer, TileLayer, Marker, Tooltip } from "react-leaflet";
+import { useMap } from "react-leaflet/hooks";
 import { Icon } from "leaflet";
-import { getMapCenter, getZoom, getTheme } from "../getLocation";
+import { getTheme } from "../getLocation";
 import { useGigList } from "../hooks/api";
 import "leaflet/dist/leaflet.css";
 import { gigIsSaved } from "../savedGigs";
 import { useActiveGigFilters } from "../hooks/filters";
 import { stkTheme } from "../themes";
+import { getLocationMapSettings } from "../locations";
 
 const groupGigsByVenues = (gigs) => {
   return gigs.reduce((venues, gig) => {
@@ -23,25 +25,38 @@ const groupGigsByVenues = (gigs) => {
 };
 
 const venueHasSavedGig = (gigs) => gigs.some(gigIsSaved);
-const venueHasSeriesGig = (gigs) => gigs.some(gig => gig.series);
+const venueHasSeriesGig = (gigs) => gigs.some((gig) => gig.series);
+const MapPositioner = () => {
+  const map = useMap();
+  const [activeGigFilters, setActiveGigFilters] = useActiveGigFilters();
+  const location = getLocationMapSettings(activeGigFilters.location);
 
+  const defaultPosition = location.mapCenter;
+  const defaultZoom = location.zoom;
+  // todo: Make this do useEffect as it gets quite annoying
+  if (map) {
+    map.setView(defaultPosition, defaultZoom, { animate: true });
+  }
+};
+
+// todo: we could make this a bit less rendery perhaps if moved most of the functions to sub parts of MapContainer
 const Map = () => {
   const {
     data: { pages = [] },
-    dateRange,
-    customDate
   } = useGigList();
   const gigs = pages.map((page) => page.gigs).flat();
   const venues = Object.values(groupGigsByVenues(gigs));
   const mapRef = useRef();
-  const defaultPosition = getMapCenter();
-  const defaultZoom = getZoom();
   const { defaultMapPin, savedMapPin } = getTheme();
   const [activeGigFilters, setActiveGigFilters] = useActiveGigFilters();
+  const location = getLocationMapSettings(activeGigFilters.location);
+
+  const defaultPosition = location.mapCenter;
+  const defaultZoom = location.zoom;
 
   const handleMarkerClick = (venue) => {
     const venues = [venue];
-    setActiveGigFilters({ dateRange, customDate, venues });
+    setActiveGigFilters({ ...activeGigFilters, venues });
   };
 
   const customIcon = (gigs) => {
@@ -72,6 +87,9 @@ const Map = () => {
     }
   };
 
+  if (!location) {
+    return null;
+  }
   return (
     <>
       <MapContainer
@@ -108,12 +126,15 @@ const Map = () => {
                 position={position}
                 icon={customIcon(venue.gigs)}
                 eventHandlers={{ click: () => handleMarkerClick(venue) }}
-              ><Tooltip>{venue.name}</Tooltip></Marker>
+              >
+                <Tooltip>{venue.name}</Tooltip>
+              </Marker>
             );
           } else {
             return null;
           }
         })}
+        <MapPositioner />
       </MapContainer>
     </>
   );
