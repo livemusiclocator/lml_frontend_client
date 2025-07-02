@@ -26,33 +26,16 @@ const groupGigsByVenues = (gigs) => {
 
 const venueHasSavedGig = (gigs) => gigs.some(gigIsSaved);
 const venueHasSeriesGig = (gigs) => gigs.some((gig) => gig.series);
-const MapPositioner = () => {
-  const map = useMap();
-  const [activeGigFilters, setActiveGigFilters] = useActiveGigFilters();
-  const location = getLocationMapSettings(activeGigFilters.location);
 
-  const defaultPosition = location.mapCenter;
-  const defaultZoom = location.zoom;
-  // todo: Make this do useEffect as it gets quite annoying
-  if (map) {
-    map.setView(defaultPosition, defaultZoom, { animate: true });
-  }
-};
-
-// todo: we could make this a bit less rendery perhaps if moved most of the functions to sub parts of MapContainer
-const Map = () => {
+// VenueMarkers component that handles all data access and venue logic
+const VenueMarkers = () => {
   const {
     data: { pages = [] },
   } = useGigList();
   const gigs = pages.map((page) => page.gigs).flat();
   const venues = Object.values(groupGigsByVenues(gigs));
-  const mapRef = useRef();
   const { defaultMapPin, savedMapPin } = getTheme();
   const [activeGigFilters, setActiveGigFilters] = useActiveGigFilters();
-  const location = getLocationMapSettings(activeGigFilters.location);
-
-  const defaultPosition = location.mapCenter;
-  const defaultZoom = location.zoom;
 
   const handleMarkerClick = (venue) => {
     const venues = [venue];
@@ -67,7 +50,6 @@ const Map = () => {
           iconSize: [40, 40],
         });
       }
-
       return new Icon({
         iconUrl: stkTheme.defaultMapPin,
         iconSize: [45, 45],
@@ -79,7 +61,6 @@ const Map = () => {
           iconSize: [40, 40],
         });
       }
-
       return new Icon({
         iconUrl: defaultMapPin,
         iconSize: [45, 45],
@@ -87,56 +68,86 @@ const Map = () => {
     }
   };
 
+  return (
+    <>
+      {venues.map((venue, index) => {
+        const latitude = parseFloat(venue.latitude);
+        const longitude = parseFloat(venue.longitude);
+        let isVenueFiltered = true;
+
+        if (activeGigFilters.venues && activeGigFilters.venues.length > 0) {
+          isVenueFiltered = activeGigFilters.venues.includes(venue.id);
+        }
+
+        if (!isNaN(latitude) && !isNaN(longitude) && isVenueFiltered) {
+          const position = [latitude, longitude];
+
+          return (
+            <Marker
+              key={index}
+              position={position}
+              icon={customIcon(venue.gigs)}
+              eventHandlers={{ click: () => handleMarkerClick(venue) }}
+            >
+              <Tooltip>{venue.name}</Tooltip>
+            </Marker>
+          );
+        }
+        return null;
+      })}
+    </>
+  );
+};
+
+const MapPositioner = () => {
+  const map = useMap();
+  const [activeGigFilters] = useActiveGigFilters();
+  const location = getLocationMapSettings(activeGigFilters.location);
+
+  const defaultPosition = location.mapCenter;
+  const defaultZoom = location.zoom;
+
+  // todo: Make this do useEffect as it gets quite annoying
+  if (map) {
+    map.setView(defaultPosition, defaultZoom, { animate: true });
+  }
+
+  return null;
+};
+
+const Map = () => {
+  const mapRef = useRef();
+  const [activeGigFilters] = useActiveGigFilters();
+  const location = getLocationMapSettings(activeGigFilters.location);
+
   if (!location) {
     return null;
   }
+
+  const defaultPosition = location.mapCenter;
+  const defaultZoom = location.zoom;
+  // todo : avoid hardcoded styles ?
   return (
-    <>
-      <MapContainer
-        ref={mapRef}
-        center={defaultPosition}
-        zoom={defaultZoom}
-        style={{
-          height: "100%",
-          width: "100%",
-          zIndex: 0,
-          top: 0,
-          left: 0,
-          position: "absolute",
-        }}
-      >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        {venues.map((venue, index) => {
-          const latitude = parseFloat(venue.latitude);
-          const longitude = parseFloat(venue.longitude);
-          let isVenueFiltered = true;
-          if (activeGigFilters.venues && activeGigFilters.venues.length > 0) {
-            isVenueFiltered = activeGigFilters.venues.includes(venue.id);
-          }
-
-          if (!isNaN(latitude) && !isNaN(longitude) && isVenueFiltered) {
-            const position = [latitude, longitude];
-
-            return (
-              <Marker
-                key={index}
-                position={position}
-                icon={customIcon(venue.gigs)}
-                eventHandlers={{ click: () => handleMarkerClick(venue) }}
-              >
-                <Tooltip>{venue.name}</Tooltip>
-              </Marker>
-            );
-          } else {
-            return null;
-          }
-        })}
-        <MapPositioner />
-      </MapContainer>
-    </>
+    <MapContainer
+      ref={mapRef}
+      center={defaultPosition}
+      zoom={defaultZoom}
+      style={{
+        height: "100%",
+        width: "100%",
+        zIndex: 0,
+        top: 0,
+        left: 0,
+        position: "absolute",
+      }}
+    >
+      <TileLayer
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      />
+      <VenueMarkers />
+      <MapPositioner />
+    </MapContainer>
   );
 };
 
