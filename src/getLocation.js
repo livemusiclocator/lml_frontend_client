@@ -1,5 +1,5 @@
 import { lmlTheme } from "./themes";
-
+import getConfig from "./config";
 const locations = {
   adelaide: {
     mapCenter: [-34.9256018, 138.5801261],
@@ -48,26 +48,37 @@ const locations = {
   },
 };
 
-
 // Old way of doing it - using the first part of the hostname
-const getLocationKeyFromHost = () => window.location.host.split(".")[0]
+const getLocationKeyFromHost = () => window.location.host.split(".")[0];
 
 // New way of doing it - vite env var
-const getLocationKeyFromViteEnv = () => import.meta.env.VITE_LML_LOCATION
+const getLocationKeyFromViteEnv = () => import.meta.env.VITE_LML_LOCATION;
 
-const getLocationKeyWithFallback = ()=> getLocationKeyFromViteEnv() ?? getLocationKeyFromHost()
+// New new way of doing it - app config
+const getLocationKeyFromAppConfig = () => getConfig().default_location;
+
+const getLocationKeyWithFallback = () =>
+  getLocationKeyFromAppConfig() ??
+  getLocationKeyFromViteEnv() ??
+  getLocationKeyFromHost();
 
 export const getLocation = () => {
-  const location = getLocationKeyWithFallback()
+  const location = getLocationKeyWithFallback();
   return locations[location] ? location : "melbourne";
 };
 
 export const getHeading = () => {
-  return locations[getLocation()].heading || "Live Music Locator is a free service that helps you discover live music events.";
+  return (
+    locations[getLocation()].heading ||
+    "Live Music Locator is a free service that helps you discover live music events."
+  );
 };
 
 export const getPartners = () => {
-  return locations[getLocation()].partners || "Live Music Locator is a not-for-profit registered charity, formed to support local music and local venues.";
+  return (
+    locations[getLocation()].partners ||
+    "Live Music Locator is a not-for-profit registered charity, formed to support local music and local venues."
+  );
 };
 
 export const getMapCenter = () => {
