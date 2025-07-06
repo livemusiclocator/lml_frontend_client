@@ -68,16 +68,17 @@ const tagsToSearchParams = ({ tags }) => {
     .filter(({ category }) => category === "genres")
     .map(({ value }) => value);
 
-  return { information: informationTags, genre: genreTags };
+  // using this style because we have to agree with rails and rails is harder to change
+  return { "information[]": informationTags, "genre[]": genreTags };
 };
 
 const searchParamsToTagFilters = (params) => {
-  // tags come from two different query strings - disambiguate using 'category'
+  // tags come from two different query string params- disambiguate using 'category'
 
   const informationTags = params
-    .getAll("information")
+    .getAll("information[]")
     .map((tag) => `information:${tag}`);
-  const genreTags = params.getAll("genre").map((tag) => `genre:${tag}`);
+  const genreTags = params.getAll("genre[]").map((tag) => `genre:${tag}`);
   return { tags: [...informationTags, ...genreTags] };
 };
 

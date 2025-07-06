@@ -236,7 +236,7 @@ const GigFiltersForm = () => {
                         key={id}
                         value={value}
                         defaultChecked={selected}
-                        groupName={tagCategory}
+                        groupName={`${tagCategory}[]`}
                         inputType="checkbox"
                       >
                         <span className="px-4 text-nowrap">
