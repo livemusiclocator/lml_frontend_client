@@ -221,22 +221,22 @@ const GigFiltersForm = () => {
                 ),
               )}
             </div>
-            {tagCategories.map(({ id, caption, values }) => (
+            {tagCategories.map(({ id: tagCategory, caption, values }) => (
               <>
-                <h3 key={id} className="text-sm font-medium">
+                <h3 key={tagCategory} className="text-sm font-medium">
                   {caption}
                 </h3>
                 <div
-                  key={`div-${id}`}
+                  key={`div-${tagCategory}`}
                   className="flex flex-row items-baseline  flex-wrap justify-start gap-1"
                 >
                   {values.map(({ value, id, selected, count }) => {
                     return (
                       <BadgeControl
                         key={id}
-                        value={id}
+                        value={value}
                         defaultChecked={selected}
-                        groupName="tags"
+                        groupName={tagCategory}
                         inputType="checkbox"
                       >
                         <span className="px-4 text-nowrap">
