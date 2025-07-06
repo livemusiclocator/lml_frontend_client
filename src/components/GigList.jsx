@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { Link, createSearchParams, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import tw from "tailwind-styled-components";
 import {
   MapPinIcon,
@@ -9,9 +9,7 @@ import {
 import DateTimeDisplay from "./DateTimeDisplay";
 import SaveGigButton from "./SaveGigButton";
 import { useGigList } from "../hooks/api";
-import { useGigFilterOptions } from "../hooks/filters";
 import GigFilter from "./GigFilter";
-import GigFilterForDatesActually from "./explorer/GigFilter";
 import { LoadingSpinner } from "./loading/LoadingOverlay";
 import lbmfLogo from "../assets/lbmf2024logo.png";
 import skLogo from "../assets/skf_blacklogo.svg";
@@ -95,7 +93,6 @@ const GigRow = ({ gig }) => {
           </div>
         )}
       </Aside>
-
       {gig.genres && (
         <div className="flex gap-2 flex-wrap p-4">
           {uniqBy(gig.genres, "id").map(({ id, value }) => (
@@ -129,7 +126,7 @@ const Content = () => {
   const {
     data: { gigs },
     isLoading,
-    allPagesLoaded,
+    dataLoaded,
     gigCount,
   } = useGigList({ applyFilters: true });
 
@@ -152,7 +149,7 @@ const Content = () => {
         </React.Fragment>
       ))}
       {isLoading && <LoadingSpinner />}
-      {allPagesLoaded && gigCount == 0 && <NoGigsMessage />}
+      {dataLoaded && gigCount == 0 && <NoGigsMessage />}
     </div>
   );
 };
