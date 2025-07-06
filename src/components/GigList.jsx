@@ -26,6 +26,7 @@ bg-red-200
 p-2
 m-2
 `;
+import { groupBy } from "lodash-es";
 
 const GigHeader = ({ gig, showDate = true }) => {
   const lbmf = gig.series === "lbmf";
@@ -126,7 +127,7 @@ const NoGigsMessage = () => {
 };
 const Content = () => {
   const {
-    data: { pages = [] },
+    data: { gigs },
     isLoading,
     allPagesLoaded,
     gigCount,
@@ -134,16 +135,15 @@ const Content = () => {
 
   const scroller = useRef();
 
-  const pagesWithGigs = pages.filter((page) => page?.gigs?.length > 0);
-
+  const groupedByDate = groupBy(gigs, "date");
   return (
     <div
       ref={scroller}
       className="flex flex-col overflow-y-auto divide-y divide-gray-200 px-2 w-full"
     >
-      {pagesWithGigs.map(({ filters: { date }, gigs }) => (
+      {Object.entries(groupedByDate).map(([date, gigs]) => (
         <React.Fragment key={date}>
-          <h2 className="font-semibold p-4a">
+          <h2 className="font-semibold">
             <DateTimeDisplay value={date} />
           </h2>
           {gigs.map((gig) => (
@@ -157,7 +157,7 @@ const Content = () => {
   );
 };
 
-const GigList = ({ newGigFilter }) => {
+const GigList = () => {
   return (
     <main className="flex-1 overflow-hidden flex flex-col w-full items-stretch max-w-3xl mx-auto">
       <GigFilter />
