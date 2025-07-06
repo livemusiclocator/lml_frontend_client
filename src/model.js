@@ -1,101 +1,147 @@
 import {
   sortBy,
-  groupBy,
   uniqBy,
   flatMap,
   map,
   filter,
   includes,
+  countBy,
 } from "lodash-es";
 
-/* tagsy stuff */
-export const matchesTags = (tags, targetTags) => {
-  return tags.filter(({ id }) => targetTags.includes(id)).length > 0;
+const TAG_CATEGORIES = {
+  INFORMATION: "information",
+  GENRE: "genre",
 };
 
-/**  gigsy stuff */
-export const gigFromApiResponse = ({ information_tags, genre_tags, ...gig }) => {
-  let tags = [];
-  information_tags.forEach(
-    (value) => {
-      const tag = value.toLowerCase();
-      tags.push({ category: "information", value: tag, id: `information:${tag}`});
-    }
-  );
-  genre_tags.forEach(
-    (value) => {
-      const tag = value.toLowerCase();
-      tags.push({ category: "genre", value: tag, id: `genre:${tag}` });
-    }
-  );
-  const allTags = groupBy(tags, "category");
+/* Tag utilities */
+
+const createTag = (category, value) => {
+  const normalizedValue = value.toLowerCase();
   return {
-    ...gig,
-    tags: tags,
-    genres: allTags["genre"],
-    infoTags: allTags["information"],
+    category,
+    value: normalizedValue,
+    id: `${category}:${normalizedValue}`,
   };
 };
 
-/** pagey stuff*/
-export const pageFromApiResponse = (raw, { date, location }) => {
+const createTagsFromStrings = (tagStrings, category) => {
+  return tagStrings.map((value) => createTag(category, value));
+};
+
+export const matchesTags = (tags, targetTags) => {
+  return tags.some(({ id }) => targetTags.includes(id));
+};
+
+/* Gig transformations */
+
+export const gigFromApiResponse = ({
+  information_tags = [],
+  genre_tags = [],
+  ...gig
+}) => {
+  const informationTags = createTagsFromStrings(
+    information_tags,
+    TAG_CATEGORIES.INFORMATION,
+  );
+  const genreTags = createTagsFromStrings(genre_tags, TAG_CATEGORIES.GENRE);
+
+  const allTags = [...informationTags, ...genreTags];
+
+  return {
+    ...gig,
+    tags: allTags,
+    genres: genreTags,
+    infoTags: informationTags,
+  };
+};
+
+/* Page transformations */
+
+export const pageFromApiResponse = (raw, { dates, location }) => {
   const gigs = raw.map(gigFromApiResponse);
 
   return {
     gigs: sortBy(gigs, "start_timestamp"),
-    filters: { date, location },
+    filters: {
+      date: dates[0],
+      dates,
+      location,
+    },
   };
 };
 
-const filterPageByTags = ({ gigs, ...page }, tags) => {
-  return { ...page, gigs: gigs.filter((gig) => matchesTags(gig.tags, tags)) };
+const validateFilters = (filters, allValues) => {
+  const allTagIds = map(allValues ?? [], "id");
+  return filter(filters ?? [], (tag) => includes(allTagIds, tag));
 };
 
-export const filterPagesByTags = (gigPages, allTags, tagFilters) => {
-  const allTagIds = map(allTags, "id");
-  const validTagFilters = filter(tagFilters, (tag) => includes(allTagIds, tag));
-  if (validTagFilters.length > 0) {
-    return gigPages?.map((page) => filterPageByTags(page, validTagFilters));
+export const filterGigsByTags = (gigs, allTags, tagFilters) => {
+  const validTagFilters = validateFilters(tagFilters, allTags);
+
+  if (validTagFilters.length === 0) {
+    return gigs;
   }
-  return gigPages;
+
+  return gigs.filter((gig) => matchesTags(gig.tags, validTagFilters));
+};
+
+export const filterGigsByVenues = (gigs, allVenues, venueIds) => {
+  const validVenueIds = validateFilters(venueIds, allVenues);
+  if (validVenueIds.length === 0) {
+    return gigs;
+  }
+  return gigs.filter((gig) => validVenueIds.includes(gig.venue.id));
+};
+
+/* Aggregation utilities */
+
+const aggregateItemsById = (items, transform) => {
+  // Count occurrences of each ID
+  const countsByIds = countBy(items, "id");
+
+  // Get unique items by ID and add count
+  const uniqueItems = uniqBy(items, "id");
+
+  return uniqueItems.map((item) => ({
+    ...transform(item),
+    count: countsByIds[item.id],
+  }));
+};
+
+export const allTagsForPage = (gigPage) => {
+  const allTags = flatMap(gigPage.gigs, "tags");
+
+  return aggregateItemsById(allTags, (tag) => ({
+    count: 1,
+    ...tag,
+  }));
+};
+
+export const allVenuesForPage = (gigPage) => {
+  const allVenues = map(gigPage.gigs, "venue");
+
+  return aggregateItemsById(allVenues, (venue) => ({
+    count: 1,
+    caption: venue.name,
+    ...venue,
+  }));
 };
 
 export const allTagsForPages = (gigPages) => {
-  const tags = flatMap(flatMap(gigPages, "gigs"), "tags");
-  return tags.reduce((accum, val) => {
-    const dupeIndex = accum.findIndex((arrayItem) => arrayItem.id === val.id);
+  const allTags = flatMap(flatMap(gigPages, "gigs"), "tags");
 
-    if (dupeIndex === -1) {
-      // Not found, so initialize.
-      accum.push({
-        count: 1,
-        ...val,
-      });
-    } else {
-      // Found, so increment counter.
-      accum[dupeIndex].count++;
-    }
-    return accum;
-  }, []);
+  return aggregateItemsById(allTags, (tag) => ({
+    count: 1,
+    ...tag,
+  }));
 };
 
 export const allVenuesForPages = (gigPages) => {
-  const venues = map(flatMap(gigPages, "gigs"), "venue");
-  //todo : this is repeaty code with the above but going live is now so...
-  return venues.reduce((accum, val) => {
-    const dupeIndex = accum.findIndex((arrayItem) => arrayItem.id === val.id);
+  const allVenues = map(flatMap(gigPages, "gigs"), "venue");
 
-    if (dupeIndex === -1) {
-      // Not found, so initialize.
-      accum.push({
-        count: 1,
-        caption: val.name,
-        ...val,
-      });
-    } else {
-      // Found, so increment counter.
-      accum[dupeIndex].count++;
-    }
-    return accum;
-  }, []);
+  return aggregateItemsById(allVenues, (venue) => ({
+    count: 1,
+    caption: venue.name,
+    ...venue,
+  }));
 };

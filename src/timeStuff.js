@@ -21,17 +21,6 @@ dayjs.extend(isoWeek);
 
 dayjs.locale("en-au");
 
-function generateDateRange(startDate, endDate) {
-  const start = dayjs(startDate);
-  const end = dayjs(endDate);
-  const diffDays = end.diff(start, "day");
-
-  const result = Array.from({ length: diffDays + 1 }, (_, i) =>
-    start.add(i, "day"),
-  );
-  return result;
-}
-
 export const todaysDate = () => {
   // HARDCODING TIMEZONE here
   //
@@ -58,14 +47,14 @@ export const DATE_RANGES = {
       // todo: Gigs that have a start time of midnight Sunday night should count as weekend - can we just use the start date and assume it's legit?
       const startOfWeekend = today.isoWeekday(5);
       const endOfWeekend = today.isoWeekday(7);
-      return generateDateRange(startOfWeekend, endOfWeekend);
+      return [startOfWeekend, endOfWeekend];
     },
   },
   thisWeek: {
     caption: "This Week",
     id: "thisWeek",
     datesFn: (today) => {
-      return generateDateRange(today, today.endOf("isoWeek"));
+      return [today, today.endOf("isoWeek")];
     },
   },
   nextWeek: {
@@ -74,7 +63,7 @@ export const DATE_RANGES = {
     datesFn: (today) => {
       const nextWeekStart = today.add(1, "week").startOf("isoWeek");
       const nextWeekEnd = nextWeekStart.endOf("isoWeek");
-      return generateDateRange(nextWeekStart, nextWeekEnd);
+      return [nextWeekStart, nextWeekEnd];
     },
   },
   customDate: {
@@ -82,60 +71,20 @@ export const DATE_RANGES = {
     ui: "datetime",
     id: "customDate",
     datesFn: (today, customDate) => {
-      return [customDate || today];
+      return [dayjs(customDate || today)];
     },
   },
 };
 
-export function generateTimePeriods() {
-  const periods = [];
-  const today = todaysDate();
-  const tomorrow = today.add(1, "day");
-  const endOfWeek = today.endOf("isoWeek");
-  // "the weekend starts here" ... or here...
-  const startOfWeekend = dayjs().isoWeekday(5);
-  const startOfCurrentWeekend = startOfWeekend; //dayjs.max(today, startOfWeekend);
-  const endOfWeekend = dayjs().isoWeekday(7);
-
-  const nextWeekStart = today.add(1, "week").startOf("isoWeek");
-  const nextWeekEnd = nextWeekStart.endOf("isoWeek");
-
-  periods.push({
-    caption: "Today",
-    dates: [today],
-    id: "today",
-  });
-
-  periods.push({
-    caption: "Tomorrow",
-    dates: [tomorrow],
-    id: "tomorrow",
-  });
-
-  periods.push({
-    caption: "Weekend",
-    dates: generateDateRange(startOfCurrentWeekend, endOfWeekend),
-    id: "this-weekend",
-  });
-  periods.push({
-    caption: "This week",
-    dates: generateDateRange(today, endOfWeek),
-    id: "this-week",
-  });
-
-  periods.push({
-    caption: "Next week",
-    dates: generateDateRange(nextWeekStart, nextWeekEnd),
-    id: "next-week",
-  });
-
-  return periods.reduce((map, period) => {
-    map[period.id] = period;
-    return map;
-  }, {});
-}
-
+/**
+ * Calculates the date range for a given date range ID and optional custom date
+ * Returns dates as formatted strings in YYYY-MM-DD format
+ */
 export function datesForDateRange(id, customDate) {
   const dateRange = DATE_RANGES[id] || DATE_RANGES.today;
-  return dateRange.datesFn(todaysDate(), customDate);
+
+  const dates = dateRange.datesFn(todaysDate(), customDate);
+  return dates.map((d) => {
+    return d.format("YYYY-MM-DD");
+  });
 }

@@ -35,7 +35,7 @@ const locationToSearchParams = ({ location }) => {
 
 /**
  * Simple kind of wrapper around the search/query string params to supply the active gig filters (dates and tags)
- * */
+ */
 export const useActiveGigFilters = () => {
   let [params, setSearchParams] = useSearchParams();
   const activeGigFilters = {
@@ -56,15 +56,29 @@ export const useActiveGigFilters = () => {
   };
   return [activeGigFilters, setActiveGigFilters];
 };
-// todo: gross - clean this up jen
-const tagsToSearchParams = ({ tags }) =>
-  tags &&
-  tags.length > 0 && {
-    tags: tags.map(({ id }) => id),
-  };
+
+/**
+ * Converts tag parameters to search params format
+ */
+const tagsToSearchParams = ({ tags }) => {
+  const informationTags = tags
+    .filter(({ category }) => category === "information")
+    .map(({ value }) => value);
+  const genreTags = tags
+    .filter(({ category }) => category === "genres")
+    .map(({ value }) => value);
+
+  return { information: informationTags, genre: genreTags };
+};
 
 const searchParamsToTagFilters = (params) => {
-  return { tags: params.getAll("tags") };
+  // tags come from two different query strings - disambiguate using 'category'
+
+  const informationTags = params
+    .getAll("information")
+    .map((tag) => `information:${tag}`);
+  const genreTags = params.getAll("genre").map((tag) => `genre:${tag}`);
+  return { tags: [...informationTags, ...genreTags] };
 };
 
 const searchParamsToDateFilters = (params) => {
@@ -86,6 +100,7 @@ const searchParamsToVenuesFilters = (params) => {
     venues: params.getAll("venues"),
   };
 };
+
 const searchParamsToLocationFilter = (params) => {
   const { allow_select_location, default_location } = getConfig();
   if (!allow_select_location) {
@@ -117,15 +132,18 @@ export const useGigFilterOptions = () => {
       location: selectedLocation,
     },
   ] = useActiveGigFilters();
+
   const dateRanges = mapValues(DATE_RANGES, (range) => ({
     ...range,
     selected: range.id === selectedDateRange,
   }));
+
   if (customDate) {
     dateRanges.customDate.caption = customDate.format("L");
     dateRanges.customDate.customDate = customDate;
   }
-  // todo: this is a circular dep on api.js - not actually but in terms of the files
+
+  // API dependency for getting available filter options
   const { allTags, allVenues } = useAvailableTagsAndVenues();
 
   const allTagsByCategory = groupBy(
@@ -145,6 +163,7 @@ export const useGigFilterOptions = () => {
       ),
     };
   }).filter((category) => category.values.length > 0);
+
   const { allow_select_location } = getConfig();
   const allLocations = allow_select_location
     ? ALL_LOCATIONS.sort((a, b) => a.sort_order - b.sort_order).map(

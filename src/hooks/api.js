@@ -1,103 +1,118 @@
-import { useEffect } from "react";
 import useSWR from "swr";
-import useSWRInfinite from "swr/infinite";
-import { getLocation } from "../getLocation";
 import { useActiveGigFilters } from "./filters";
 import getConfig from "../config";
 
 import {
   pageFromApiResponse,
   gigFromApiResponse,
-  filterPagesByTags,
-  allTagsForPages,
-  allVenuesForPages,
+  filterGigsByTags,
+  filterGigsByVenues,
+  allTagsForPage,
+  allVenuesForPage,
 } from "../model";
 import { datesForDateRange } from "../timeStuff";
+
 const GIGS_ENDPOINT = getConfig().gigs_endpoint;
 
 const loadData = async (url) => {
   const response = await fetch(url);
   return await response.json();
 };
-const gigByDayEndpoint = ({ date, location }) => {
-  return `${GIGS_ENDPOINT}/query?location=${location}&date_from=${date}&date_to=${date}`;
+
+const buildGigsEndpoint = ({ dates: [from, to], location }) => {
+  to = to ?? from;
+  return `${GIGS_ENDPOINT}/query?location=${location}&date_from=${from}&date_to=${to}`;
 };
 
-const loadGigsPage = async ({ date, location }) => {
-  const url = gigByDayEndpoint({ date, location });
+const loadGigs = async ({ dates, location }) => {
+  const url = buildGigsEndpoint({ dates, location });
   const response = await loadData(url);
-  return pageFromApiResponse(response, { date, location });
+  return pageFromApiResponse(response, { dates, location });
 };
 
+/**
+ * Hook to get all available tags and venues
+ */
 export const useAvailableTagsAndVenues = () => {
   const {
     data: { allTags, allVenues },
     isLoading,
     isValidating,
-    allPagesLoaded,
-  } = useGigList({ applyFilters: false });
+    dataLoaded,
+  } = useGigListUnfiltered();
 
   return {
     allTags,
     allVenues,
     isLoading,
     isValidating,
-    allPagesLoaded,
+    dataLoaded,
   };
 };
-export const useGigList = ({ applyFilters } = {}) => {
 
-  const [{ dateRange, customDate, tags, venues,location }] = useActiveGigFilters();
+const useGigListUnfiltered = () => {
+  const [{ dateRange, customDate, location }] = useActiveGigFilters();
 
   const dates = datesForDateRange(dateRange, customDate);
-  const pagedDates = dates.map((d) => d.format("YYYY-MM-DD"));
+
   const {
-    data: pagesUnfiltered,
+    data: gigPage,
     isLoading,
     isValidating,
-    size,
-    setSize,
-  } = useSWRInfinite(
-    (index) => {
-      if (index >= pagedDates.length) {
-        return null;
-      }
-      return { location, date: pagedDates[index] };
-    },
-    loadGigsPage,
-    { initialSize: 1, revalidateFirstPage: false },
-  );
-  const allPagesLoaded = pagesUnfiltered?.length >= dates.length;
-  useEffect(() => {
-    if (pagesUnfiltered?.length >= size && size < dates.length && !isLoading) {
-      setSize(size + 1);
-    }
-  }, [dates, size, isLoading, setSize, pagesUnfiltered]);
+  } = useSWR({ location, dates }, loadGigs);
 
-  const allTags = allTagsForPages(pagesUnfiltered);
-  const allVenues = allVenuesForPages(pagesUnfiltered);
-  let pages = pagesUnfiltered;
+  // Early return if no data
+  if (!gigPage) {
+    return {
+      data: {
+        gigs: [],
+        allTags: [],
+        allVenues: [],
+      },
+      isLoading,
+      isValidating,
+      dataLoaded: false,
+    };
+  }
 
-  pages = applyFilters
-    ? filterPagesByTags(pagesUnfiltered, allTags, tags)
-    : pagesUnfiltered;
-  const gigCount = pages?.flatMap((page) => page?.gigs).length;
+  // Calculate aggregated data from the single page
+  const allTags = allTagsForPage(gigPage);
+  const allVenues = allVenuesForPage(gigPage);
+  return {
+    data: { allTags, allVenues, gigs: gigPage.gigs },
+    isLoading,
+    isValidating,
+    dataLoaded: true,
+  };
+};
 
-  if (applyFilters && venues && venues.length > 0) {
-    pages = pages?.map((page) => ({
-      ...page,
-      gigs: page.gigs.filter((gig) => venues.includes(gig.venue.id)),
-    }));
+export const useGigList = () => {
+  const [{ tags, venues }] = useActiveGigFilters();
+
+  const {
+    data: { gigs, allTags, allVenues },
+    isLoading,
+    isValidating,
+    dataLoaded,
+  } = useGigListUnfiltered();
+
+  let filteredGigs = gigs;
+
+  if (dataLoaded) {
+    // Apply tag filters
+    filteredGigs = filterGigsByTags(filteredGigs, allTags, tags);
+    // Apply venue filters
+    filteredGigs = filterGigsByVenues(filteredGigs, allVenues, venues);
   }
 
   return {
-    data: { pages, allTags, allVenues },
+    data: {
+      gigs: filteredGigs,
+    },
     isLoading,
     isValidating,
-    allPagesLoaded,
-    gigCount,
-    dateRange,
-    customDate,
+    dataLoaded,
+    gigCount: filteredGigs.length,
   };
 };
 
