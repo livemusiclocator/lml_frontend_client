@@ -16,8 +16,6 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: manualChunks,
-        entryFileNames: "lml.js", // Single predictable name
-        chunkFileNames: "lml-[name].js",
       },
     },
   },
