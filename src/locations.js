@@ -3,6 +3,7 @@ export const ALL_LOCATIONS = [
     id: "anywhere",
     caption: "Anywhere",
     hideMap: true,
+    selectable: true,
   },
   //adelaide:
   {
@@ -38,6 +39,7 @@ export const ALL_LOCATIONS = [
     id: "melbourne",
     mapCenter: [-37.798375850534065, 144.97863448586907],
     zoom: 15,
+    selectable: true,
   },
   //perth:
   {
@@ -59,8 +61,13 @@ export const ALL_LOCATIONS = [
     id: "stkilda",
     mapCenter: [-37.8642383, 144.9613908],
     zoom: 15,
+    selectable: true,
   },
 ];
+// TODO : We could make this configurable perhaps
+export const getSelectableLocations = () => {
+  return ALL_LOCATIONS.filter(({ selectable }) => selectable);
+};
 
 export const getLocationMapSettings = (location) => {
   return ALL_LOCATIONS.find(({ id }) => location === id);

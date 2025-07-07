@@ -4,7 +4,7 @@ import { useSearchParams } from "react-router";
 import { DATE_RANGES, todaysDate } from "../timeStuff";
 import { useAvailableTagsAndVenues } from "./api";
 import getConfig from "../config";
-import { ALL_LOCATIONS } from "../locations";
+import { getSelectableLocations } from "../locations";
 
 const dateParamsToSearchParams = ({ customDate, dateRange }) => {
   if (customDate) {
@@ -92,7 +92,7 @@ const searchParamsToDateFilters = (params) => {
     };
   }
   return {
-    dateRange: dateRange || "today",
+    dateRange: dateRange || "thisWeek",
   };
 };
 
@@ -167,13 +167,13 @@ export const useGigFilterOptions = () => {
 
   const { allow_select_location } = getConfig();
   const allLocations = allow_select_location
-    ? ALL_LOCATIONS.sort((a, b) => a.sort_order - b.sort_order).map(
-        ({ id, ...location }) => ({
+    ? getSelectableLocations()
+        .sort((a, b) => a.sort_order - b.sort_order)
+        .map(({ id, ...location }) => ({
           ...location,
           id,
           selected: selectedLocation === id,
-        }),
-      )
+        }))
     : [];
 
   return {
