@@ -19,7 +19,7 @@
         "headers": [
           {
             "key": "Access-Control-Allow-Origin",
-            "value": "https://api.lml.live"
+            "value": "https://beta.livemusiclocator.com.au"
           }
         ]
       }
