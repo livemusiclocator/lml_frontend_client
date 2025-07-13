@@ -30,9 +30,8 @@ const venueHasSeriesGig = (gigs) => gigs.some((gig) => gig.series);
 // VenueMarkers component that handles all data access and venue logic
 const VenueMarkers = () => {
   const {
-    data: { pages = [] },
+    data: { gigs = [] },
   } = useGigList();
-  const gigs = pages.map((page) => page.gigs).flat();
   const venues = Object.values(groupGigsByVenues(gigs));
   const { defaultMapPin, savedMapPin } = getTheme();
   const [activeGigFilters, setActiveGigFilters] = useActiveGigFilters();
