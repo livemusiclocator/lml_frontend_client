@@ -16,9 +16,9 @@ const dateParamsToSearchParams = ({ customDate, dateRange }) => {
   return { dateRange };
 };
 
-const venuesToSearchParams = ({ venues }) => {
-  if (venues && venues.length > 0) {
-    return { venues: venues.map(({ id }) => id) };
+const venuesToSearchParams = ({ venueIds }) => {
+  if (venueIds && venueIds.length > 0) {
+    return { venues: venueIds };
   }
 };
 
@@ -98,7 +98,7 @@ const searchParamsToDateFilters = (params) => {
 
 const searchParamsToVenuesFilters = (params) => {
   return {
-    venues: params.getAll("venues"),
+    venuesIds: params.getAll("venues"),
   };
 };
 
@@ -129,7 +129,7 @@ export const useGigFilterOptions = () => {
       dateRange: selectedDateRange,
       customDate,
       tags: selectedTags = [],
-      venues: selectedVenues = [],
+      venueIds: selectedVenueIds = [],
       location: selectedLocation,
     },
   ] = useActiveGigFilters();
@@ -185,7 +185,7 @@ export const useGigFilterOptions = () => {
       .map(({ id, ...venue }) => ({
         ...venue,
         id,
-        selected: selectedVenues.includes(id),
+        selected: selectedVenueIds.includes(id),
       })),
     customDate,
   };

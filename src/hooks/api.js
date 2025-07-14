@@ -87,7 +87,7 @@ const useGigListUnfiltered = () => {
 };
 
 export const useGigList = () => {
-  const [{ tags, venues }] = useActiveGigFilters();
+  const [{ tags, venueIds }] = useActiveGigFilters();
 
   const {
     data: { gigs, allTags, allVenues },
@@ -95,19 +95,26 @@ export const useGigList = () => {
     isValidating,
     dataLoaded,
   } = useGigListUnfiltered();
-
+  let allGigs = gigs;
   let filteredGigs = gigs;
 
+  // todo: make the filtering thing just set isVisible rather
+  // than actually filtering list
   if (dataLoaded) {
     // Apply tag filters
     filteredGigs = filterGigsByTags(filteredGigs, allTags, tags);
     // Apply venue filters
-    filteredGigs = filterGigsByVenues(filteredGigs, allVenues, venues);
+    filteredGigs = filterGigsByVenues(filteredGigs, allVenues, venueIds);
   }
+  const filteredGigIds = filteredGigs.map((gig) => gig.id);
+  allGigs = allGigs.map((gig) => {
+    return { ...gig, visible: filteredGigIds.includes(gig.id) };
+  });
 
   return {
     data: {
       gigs: filteredGigs,
+      allGigs,
     },
     isLoading,
     isValidating,

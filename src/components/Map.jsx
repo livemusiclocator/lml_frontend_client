@@ -6,65 +6,52 @@ import { getTheme } from "../getLocation";
 import { useGigList } from "../hooks/api";
 import "leaflet/dist/leaflet.css";
 import { gigIsSaved } from "../savedGigs";
-import { useActiveGigFilters } from "../hooks/filters";
+import { useActiveGigFilters, useGigFilterOptions } from "../hooks/filters";
 import { stkTheme } from "../themes";
+import { groupBy } from "lodash-es";
 import { getLocationMapSettings } from "../locations";
 
-const groupGigsByVenues = (gigs) => {
-  return gigs.reduce((venues, gig) => {
-    const venueId = gig.venue.id;
-    if (!venues[venueId]) {
-      venues[venueId] = {
-        ...gig.venue,
-        gigs: [],
-      };
-    }
-    venues[venueId].gigs.push(gig);
-    return venues;
-  }, {});
-};
+const addGigsToVenues = (venues, allGigs) => {
+  const gigsByVenue = groupBy(allGigs, "venue.id");
+  return venues.map((venue) => {
+    const gigs = gigsByVenue[venue.id] ?? [];
 
-const venueHasSavedGig = (gigs) => gigs.some(gigIsSaved);
-const venueHasSeriesGig = (gigs) => gigs.some((gig) => gig.series);
+    return {
+      ...venue,
+      gigs,
+      hasVisibleGigs: gigs.some((gig) => gig.visible),
+      hasSavedGigs: gigs.some(gigIsSaved),
+      hasSeriesGigs: gigs.some((gig) => gig.series),
+    };
+  });
+};
 
 // VenueMarkers component that handles all data access and venue logic
 const VenueMarkers = () => {
   const {
-    data: { gigs = [] },
+    data: { allGigs = [] },
   } = useGigList();
-  const venues = Object.values(groupGigsByVenues(gigs));
-  const { defaultMapPin, savedMapPin } = getTheme();
+  const { allVenues } = useGigFilterOptions();
+  const venues = addGigsToVenues(allVenues, allGigs);
+  const theme = getTheme() ?? {};
   const [activeGigFilters, setActiveGigFilters] = useActiveGigFilters();
 
   const handleMarkerClick = (venue) => {
-    const venues = [venue];
-    setActiveGigFilters({ ...activeGigFilters, venues });
+    const newVenueFilters = venue.selected ? [] : [venue.id];
+
+    setActiveGigFilters({ ...activeGigFilters, venuesIds: newVenueFilters });
   };
 
-  const customIcon = (gigs) => {
-    if (venueHasSeriesGig(gigs)) {
-      if (venueHasSavedGig(gigs)) {
-        return new Icon({
-          iconUrl: stkTheme.savedMapPin,
-          iconSize: [40, 40],
-        });
-      }
-      return new Icon({
-        iconUrl: stkTheme.defaultMapPin,
-        iconSize: [45, 45],
-      });
-    } else {
-      if (venueHasSavedGig(gigs)) {
-        return new Icon({
-          iconUrl: savedMapPin,
-          iconSize: [40, 40],
-        });
-      }
-      return new Icon({
-        iconUrl: defaultMapPin,
-        iconSize: [45, 45],
-      });
-    }
+  const customIcon = ({ hasSeriesGigs, hasSavedGigs, hasVisibleGigs }) => {
+    const { savedMapPin, defaultMapPin } = hasSeriesGigs ? stkTheme : theme;
+
+    const iconUrl = hasSavedGigs ? savedMapPin : defaultMapPin;
+    const className = hasVisibleGigs ? "" : "grayscale saturate-50 opacity-50";
+    return new Icon({
+      iconUrl,
+      className,
+      iconSize: [45, 45],
+    });
   };
 
   return (
@@ -72,20 +59,19 @@ const VenueMarkers = () => {
       {venues.map((venue, index) => {
         const latitude = parseFloat(venue.latitude);
         const longitude = parseFloat(venue.longitude);
-        let isVenueFiltered = true;
 
-        if (activeGigFilters.venues && activeGigFilters.venues.length > 0) {
-          isVenueFiltered = activeGigFilters.venues.includes(venue.id);
-        }
+        //if (activeGigFilters.venues && activeGigFilters.venues.length > 0) {
+        //  isVenueFiltered = activeGigFilters.venues.includes(venue.id);
+        //}
 
-        if (!isNaN(latitude) && !isNaN(longitude) && isVenueFiltered) {
+        if (!isNaN(latitude) && !isNaN(longitude)) {
           const position = [latitude, longitude];
 
           return (
             <Marker
               key={index}
               position={position}
-              icon={customIcon(venue.gigs)}
+              icon={customIcon(venue)}
               eventHandlers={{ click: () => handleMarkerClick(venue) }}
             >
               <Tooltip>{venue.name}</Tooltip>
