@@ -1,25 +1,31 @@
 {
-  "apphosting": {
-    "backendId": "lml-thingymaybe",
-    "rootDir": "dists/lml",
-    "ignore": [
-      "node_modules",
-      ".git",
-      "firebase-debug.log",
-      "firebase-debug.*.log",
-      "functions"
-    ]
-  },
   "hosting": {
-    "public": "dists/unified/",
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "public": "dists/firebase_root/",
     "headers": [
       {
-        "source": "/rails_spa/**/*.*",
+        "source": "/lml_gig_explorer_beta/**/*.*",
         "headers": [
           {
             "key": "Access-Control-Allow-Origin",
             "value": "https://beta.livemusiclocator.com.au"
+          }
+        ]
+      },
+      {
+        "source": "/lml_gig_explorer_www/**/*.*",
+        "headers": [
+          {
+            "key": "Access-Control-Allow-Origin",
+            "value": "https://www.livemusiclocator.com.au"
+          }
+        ]
+      },
+      {
+        "source": "/lml_gig_explorer_dev/**/*.*",
+        "headers": [
+          {
+            "key": "Access-Control-Allow-Origin",
+            "value": "*"
           }
         ]
       }
