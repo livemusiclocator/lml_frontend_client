@@ -6,7 +6,11 @@ import { getTheme } from "../getLocation";
 import { useGigList } from "../hooks/api";
 import "leaflet/dist/leaflet.css";
 import { gigIsSaved } from "../savedGigs";
-import { useActiveGigFilters, useGigFilterOptions } from "../hooks/filters";
+import {
+  useNavigateToGigList,
+  useGigFilterOptions,
+  useActiveGigFilters,
+} from "../hooks/filters";
 import { stkTheme } from "../themes";
 import { groupBy } from "lodash-es";
 import { getLocationMapSettings } from "../locations";
@@ -34,12 +38,12 @@ const VenueMarkers = () => {
   const { allVenues } = useGigFilterOptions();
   const venues = addGigsToVenues(allVenues, allGigs);
   const theme = getTheme() ?? {};
-  const [activeGigFilters, setActiveGigFilters] = useActiveGigFilters();
 
-  const handleMarkerClick = (venue) => {
+  const navigateToGigList = useNavigateToGigList();
+
+  const handleMarkerClick = async (venue) => {
     const newVenueFilters = venue.selected ? [] : [venue.id];
-
-    setActiveGigFilters({ ...activeGigFilters, venuesIds: newVenueFilters });
+    await navigateToGigList({ venueIds: newVenueFilters });
   };
 
   const customIcon = ({ hasSeriesGigs, hasSavedGigs, hasVisibleGigs }) => {

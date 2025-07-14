@@ -1,6 +1,6 @@
 import { mapValues, filter, groupBy, values, flatMap } from "lodash-es";
 import dayjs from "dayjs";
-import { useSearchParams } from "react-router";
+import { useSearchParams, useNavigate, createSearchParams } from "react-router";
 import { DATE_RANGES, todaysDate } from "../timeStuff";
 import { useAvailableTagsAndVenues } from "./api";
 import getConfig from "../config";
@@ -13,7 +13,8 @@ const dateParamsToSearchParams = ({ customDate, dateRange }) => {
       customDate: customDate.format("YYYY-MM-DD"),
     };
   }
-  return { dateRange };
+  if (dateRange) return { dateRange };
+  return {};
 };
 
 const venuesToSearchParams = ({ venueIds }) => {
@@ -37,30 +38,37 @@ const locationToSearchParams = ({ location }) => {
  * Simple kind of wrapper around the search/query string params to supply the active gig filters (dates and tags)
  */
 export const useActiveGigFilters = () => {
-  let [params, setSearchParams] = useSearchParams();
+  let [params] = useSearchParams();
   const activeGigFilters = {
     ...searchParamsToTagFilters(params),
     ...searchParamsToDateFilters(params),
     ...searchParamsToVenuesFilters(params),
     ...searchParamsToLocationFilter(params),
   };
+  return [activeGigFilters];
+};
+export const useNavigateToGigList = () => {
+  let navigate = useNavigate();
 
-  const setActiveGigFilters = (gigFilters) => {
+  return (gigFilters) => {
     const newParams = {
       ...tagsToSearchParams(gigFilters),
       ...dateParamsToSearchParams(gigFilters),
       ...venuesToSearchParams(gigFilters),
       ...locationToSearchParams(gigFilters),
     };
-    setSearchParams(newParams);
+    const search = "?" + createSearchParams(newParams).toString();
+    return navigate({ pathname: "/", search });
   };
-  return [activeGigFilters, setActiveGigFilters];
 };
 
 /**
  * Converts tag parameters to search params format
  */
 const tagsToSearchParams = ({ tags }) => {
+  if (!tags) {
+    return {};
+  }
   const informationTags = tags
     .filter(({ category }) => category === "information")
     .map(({ value }) => value);
@@ -98,7 +106,7 @@ const searchParamsToDateFilters = (params) => {
 
 const searchParamsToVenuesFilters = (params) => {
   return {
-    venuesIds: params.getAll("venues"),
+    venueIds: params.getAll("venues"),
   };
 };
 
