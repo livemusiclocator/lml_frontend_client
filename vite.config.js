@@ -15,6 +15,12 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
+        entryFileNames: "lml_gig_explorer.js",
+        assetFileNames: (assetInfo) => {
+          if (assetInfo.name == "styles.css") return "lml_gig_explorer.css";
+          // use original file names for everything else
+          return assetInfo.name;
+        },
         manualChunks: manualChunks,
       },
     },
