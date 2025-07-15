@@ -40,15 +40,21 @@ const VenueMarkers = () => {
   const theme = getTheme() ?? {};
 
   const navigateToGigList = useNavigateToGigList();
+  const [activeGigFilters] = useActiveGigFilters();
 
   const handleMarkerClick = async (venue) => {
+    activeGigFilters;
     const newVenueFilters = venue.selected ? [] : [venue.id];
-    await navigateToGigList({ venueIds: newVenueFilters });
+    await navigateToGigList({ ...activeGigFilters, venueIds: newVenueFilters });
   };
 
-  const customIcon = ({ hasSeriesGigs, hasSavedGigs, hasVisibleGigs }) => {
+  const customIcon = ({
+    hasSeriesGigs,
+    hasSavedGigs,
+    hasVisibleGigs,
+    selected,
+  }) => {
     const { savedMapPin, defaultMapPin } = hasSeriesGigs ? stkTheme : theme;
-
     const iconUrl = hasSavedGigs ? savedMapPin : defaultMapPin;
     const className = hasVisibleGigs ? "" : "grayscale saturate-50 opacity-50";
     return new Icon({

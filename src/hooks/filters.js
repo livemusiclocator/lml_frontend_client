@@ -50,10 +50,8 @@ export const useActiveGigFilters = () => {
 };
 export const useNavigateToGigList = () => {
   let navigate = useNavigate();
-  let [existingParams] = useSearchParams();
   return (gigFilters) => {
     const newParams = {
-      ...Object.fromEntries(existingParams),
       ...tagsToSearchParams(gigFilters),
       ...dateParamsToSearchParams(gigFilters),
       ...venuesToSearchParams(gigFilters),
