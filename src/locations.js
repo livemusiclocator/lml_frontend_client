@@ -37,8 +37,8 @@ export const ALL_LOCATIONS = [
   {
     caption: "Melbourne",
     id: "melbourne",
-    mapCenter: [-37.798375850534065, 144.97863448586907],
-    zoom: 15,
+    mapCenter: [-37.80198943476701, 144.9594068527222],
+    zoom: 14,
     selectable: true,
   },
   //perth:
