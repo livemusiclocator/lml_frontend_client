@@ -4,6 +4,6 @@ set -euo pipefail
 
 export CI=yup
 
-make build
+make clean build
 
 npx firebase deploy --only hosting
