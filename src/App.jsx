@@ -15,7 +15,9 @@ import Events from "./components/Events";
 import getConfig from "./config";
 
 const APP_CONFIG = getConfig();
-ReactGA.initialize(APP_CONFIG.ga_project);
+if (APP_CONFIG.ga_project) {
+  ReactGA.initialize(APP_CONFIG.ga_project);
+}
 
 const LayoutComponent = APP_CONFIG.render_app_layout ? DefaultLayout : NoLayout;
 
