@@ -1,6 +1,6 @@
 import { useParams, useSearchParams } from "react-router";
 import SaveGigButton from "../SaveGigButton";
-import { useGig } from "../../hooks/api";
+import { useGig } from "../../hooks/api_v2";
 import { LoadingSpinner } from "../loading/LoadingOverlay";
 import DateTimeDisplay from "../DateTimeDisplay";
 import tw from "tailwind-styled-components";
@@ -12,8 +12,8 @@ import Prices from "./details/Prices";
 import InfoTags from "./details/InfoTags";
 import Tickets from "./details/Tickets";
 import Sets from "./details/Sets";
-import lbmfLogo from '../../assets/lbmf2024logo.png';
-import skLogo from '../../assets/skf_blacklogo.svg';
+import lbmfLogo from "../../assets/lbmf2024logo.png";
+import skLogo from "../../assets/skf_blacklogo.svg";
 
 const Aside = tw.aside`
 mx-4
@@ -65,14 +65,14 @@ const GigHeader = ({ gig, className }) => {
           <DateTimeDisplay value={gig.date} type="briefDate" />
         </p>
         <h2 className="flex text-4xl font-bold items-center">
-          { lbmf && <img src={lbmfLogo} className="m-2 shrink w-10" /> }
-          { sk && <img src={skLogo} className="m-2 shrink w-10" /> }
-          { gig.name }
-          { gig.status === "cancelled" && " (CANCELLED)" }
+          {lbmf && <img src={lbmfLogo} className="m-2 shrink w-10" />}
+          {sk && <img src={skLogo} className="m-2 shrink w-10" />}
+          {gig.name}
+          {gig.status === "cancelled" && " (CANCELLED)"}
         </h2>
         <h3 className="font-bold items-center">
-          { gig.ticket_status === "selling_fast" && "SELLING FAST!" }
-          { gig.ticket_status === "sold_out" && "SOLD OUT!" }
+          {gig.ticket_status === "selling_fast" && "SELLING FAST!"}
+          {gig.ticket_status === "sold_out" && "SOLD OUT!"}
         </h3>
       </hgroup>
       <SaveGigButton gig={gig} />
@@ -102,7 +102,7 @@ export default function SingleGigDetails({ className }) {
         <Venue venue={gig.venue} />
         <Sets sets={gig.sets || []} />
         <Prices prices={gig.prices || []} />
-        <InfoTags infoTags={gig.infoTags || []} />
+        <InfoTags infoTags={gig.informationTags || []} />
       </Aside>
       <section className="px-4 prose">
         {/*
@@ -147,7 +147,8 @@ export default function SingleGigDetails({ className }) {
           {gig.description}
         </Markdown>
       </section>
-      <Genres genres={gig.genres} />
+      <Genres genres={gig.genreTags} />
+
       <Tickets url={gig.ticketing_url} />
     </article>
   );
