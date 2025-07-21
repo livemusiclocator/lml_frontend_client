@@ -6,31 +6,19 @@ import NoLayout from "./layouts/nolayout";
 import "./index.css";
 import { ThemeProvider } from "styled-components";
 import { getTheme } from "./getLocation";
-import { createBrowserRouter, RouterProvider, Outlet } from "react-router";
+import { createBrowserRouter, RouterProvider } from "react-router";
 import SingleGigDetails from "./components/explorer/SingleGigDetails";
 import Explorer from "./components/explorer/Explorer";
 import GigList from "./components/GigList";
 import About from "./components/About";
 import Events from "./components/Events";
 import getConfig from "./config";
-import { useActiveGigFilters } from "./hooks/filters";
-import { getLocationMapSettings } from "./locations";
 
 const APP_CONFIG = getConfig();
 ReactGA.initialize(APP_CONFIG.ga_project);
 
 const LayoutComponent = APP_CONFIG.render_app_layout ? DefaultLayout : NoLayout;
 
-const ConditionalMapView = () => {
-  const [activeGigFilters] = useActiveGigFilters();
-  const location = getLocationMapSettings(activeGigFilters.location);
-  if (!location || location.hideMap) {
-    // render without map
-    return <Outlet />;
-  } else {
-    return <Explorer />;
-  }
-};
 const router = createBrowserRouter(
   [
     {
@@ -45,24 +33,25 @@ const router = createBrowserRouter(
           element: <Events />,
         },
         {
-          // work in progress
-          path: "alt",
+          element: <Explorer />,
+          handle: {
+            hello: 1,
+          },
           children: [
-            { index: true, element: <GigList /> },
             {
-              path: "gigs/:id",
-              element: <SingleGigDetails />,
+              index: true,
+              element: <GigList newGigFilter={true} />,
+              handle: {
+                datasourceKey: "gigList",
+              },
             },
-          ],
-        },
-        {
-          element: <ConditionalMapView />,
-          children: [
-            { index: true, element: <GigList newGigFilter={true} /> },
             {
               path: "gigs/:id",
               element: <SingleGigDetails />,
-              handle: { showBackButton: true },
+              handle: {
+                showBackButton: true,
+                datasourceKey: "singleGig",
+              },
             },
           ],
         },
