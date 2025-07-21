@@ -8,7 +8,7 @@ import {
 } from "@heroicons/react/24/solid";
 import DateTimeDisplay from "./DateTimeDisplay";
 import SaveGigButton from "./SaveGigButton";
-import { useGigList } from "../hooks/api";
+import { useGigSearchResults } from "../hooks/api_v2";
 import GigFilter from "./GigFilter";
 import { LoadingSpinner } from "./loading/LoadingOverlay";
 import lbmfLogo from "../assets/lbmf2024logo.png";
@@ -93,9 +93,9 @@ const GigRow = ({ gig }) => {
           </div>
         )}
       </Aside>
-      {gig.genres && (
+      {gig.genreTags && (
         <div className="flex gap-2 flex-wrap p-4">
-          {uniqBy(gig.genres, "id").map(({ id, value }) => (
+          {uniqBy(gig.genreTags, "id").map(({ id, value }) => (
             <span
               key={id}
               className="bg-lmlpink text-white text-xs font-medium p-2"
@@ -123,15 +123,10 @@ const NoGigsMessage = () => {
   return <p className="italic">No gigs found</p>;
 };
 const Content = () => {
-  const {
-    data: { gigs },
-    isLoading,
-    dataLoaded,
-    gigCount,
-  } = useGigList({ applyFilters: true });
-
+  const { data, isLoading, dataLoaded } = useGigSearchResults();
+  const gigCount = data?.gigs?.length;
+  const gigs = data?.gigs ?? [];
   const scroller = useRef();
-
   const groupedByDate = groupBy(gigs, "date");
   return (
     <div
