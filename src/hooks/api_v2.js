@@ -35,70 +35,40 @@ const singleGigLoader = async ({ id }) => {
   const url = buildSingleGigEndpoint(id);
   return url && (await loadData(url));
 };
+
 const gigListLoader = async (requestKey) => {
   const url = buildGigsEndpoint(requestKey);
   const rawResult = url && (await loadData(url));
   return transformGigData(rawResult, requestKey);
 };
 
-const DATASOURCES = [
-  {
-    datasourceType: "gigList",
-    findParams: ({ searchParams }) => parseSearchParams(searchParams),
-    loader: gigListLoader,
-    transformer: applyFilters,
-    makeRequestKey: ({ locationId, dateRangeId, customDate }) => ({
-      locationId: locationId,
-      dateRangeId: dateRangeId,
-      dates: datesForDateRange(dateRangeId, customDate),
-    }),
-  },
-  {
-    datasourceType: "singleGig",
-    paramKeyMappings: { id: "id" },
-    findParams: ({ routeParams }) => ({ id: routeParams["id"] }),
-    loader: singleGigLoader,
-    transformer: gigFromApiResponse,
-    makeRequestKey: ({ id }) => ({ id }),
-  },
-];
-
-const useCurrentDatasourceType = (expectedType) => {
-  // this might get a bit expensive ? - and could be cached based on the matches values
-  const matches = useMatches();
-  // assume that we just use first one we find
-  const routeDatasourceType = compact(
-    matches.map((match) => match.handle?.datasourceKey),
-  )[0];
-  if (!expectedType || routeDatasourceType === expectedType) {
-    return DATASOURCES.find(
-      ({ datasourceType }) => datasourceType == routeDatasourceType,
-    );
-  }
-};
-
-const useCurrentDatasource = (expectedType = null) => {
-  const datasource = useCurrentDatasourceType(expectedType) || {};
-  const {
-    findParams,
-    loader,
-    transformer = () => null,
-    makeRequestKey = () => null,
-  } = datasource;
-  const routeParams = useParams();
+// Gig list specific functions
+const useGigListData = () => {
+  const routeType = useCurrentRouteType();
   const [searchParams] = useSearchParams();
 
-  const params = findParams && findParams({ searchParams, routeParams });
-  const requestKey = makeRequestKey(params);
+  const params = parseSearchParams(searchParams);
+  const requestKey =
+    routeType == "gigList"
+      ? {
+          locationId: params.locationId,
+          dateRangeId: params.dateRangeId,
+          dates: datesForDateRange(params.dateRangeId, params.customDate),
+        }
+      : null;
+
   const {
     data: rawResult,
     error,
     isLoading,
     isValidating,
-  } = useSWR(requestKey, (requestKey) => {
-    return loader && loader(requestKey);
+  } = useSWR(requestKey, (requestKey) => gigListLoader(requestKey), {
+    keepPreviousData: true,
+    revalidateOnFocus: false, // dont refetch on focus (if you wait too long with tab open the dates will change anyway  I guess)
   });
-  const result = !error ? transformer(rawResult, params) : null;
+
+  const result = !error ? applyFilters(rawResult, params) : null;
+
   return {
     data: result,
     isLoading,
@@ -107,6 +77,77 @@ const useCurrentDatasource = (expectedType = null) => {
     error,
   };
 };
+
+// Single gig specific functions
+const useSingleGigData = () => {
+  const routeType = useCurrentRouteType();
+  const routeParams = useParams();
+
+  const requestKey = routeType == "singleGig" ? { id: routeParams.id } : null;
+
+  const {
+    data: rawResult,
+    error,
+    isLoading,
+    isValidating,
+  } = useSWR(requestKey, (requestKey) => singleGigLoader(requestKey), {
+    keepPreviousData: true,
+    revalidateOnFocus: false, // dont refetch on focus (will do so the next time the gig page is mounted or page refreshed)
+  });
+
+  const result = !error ? rawResult : null;
+
+  return {
+    data: result,
+    isLoading,
+    isValidating,
+    dataLoaded: !!rawResult,
+    error,
+  };
+};
+
+// Helper function to determine current route type
+const useCurrentRouteType = () => {
+  const matches = useMatches();
+  const routeDatasourceType = compact(
+    matches.map((match) => match.handle?.datasourceKey),
+  )[0];
+  return routeDatasourceType;
+};
+
+// Generic datasource hook that delegates to specific implementations
+const useCurrentDatasource = (expectedType = null) => {
+  const routeType = useCurrentRouteType();
+
+  // Always call both hooks to avoid conditional hook calls
+  const gigListResult = useGigListData();
+  const singleGigResult = useSingleGigData();
+
+  if (expectedType && routeType !== expectedType) {
+    return {
+      data: null,
+      isLoading: false,
+      isValidating: false,
+      dataLoaded: false,
+      error: null,
+    };
+  }
+
+  if (routeType === "gigList") {
+    return gigListResult;
+  } else if (routeType === "singleGig") {
+    return singleGigResult;
+  }
+
+  return {
+    data: null,
+    isLoading: false,
+    isValidating: false,
+    dataLoaded: false,
+    error: null,
+  };
+};
+
 export const useGig = () => {
   return useCurrentDatasource("singleGig");
 };
