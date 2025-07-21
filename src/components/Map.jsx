@@ -1,57 +1,30 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState, useLayoutEffect } from "react";
 import { MapContainer, TileLayer, Marker, Tooltip } from "react-leaflet";
 import { useMap } from "react-leaflet/hooks";
 import { Icon } from "leaflet";
 import { getTheme } from "../getLocation";
-import { useGigList } from "../hooks/api";
 import "leaflet/dist/leaflet.css";
-import { gigIsSaved } from "../savedGigs";
-import {
-  useNavigateToGigList,
-  useGigFilterOptions,
-  useActiveGigFilters,
-} from "../hooks/filters";
+
+import { useNavigateToGigList } from "../hooks/searchParams_v2";
 import { stkTheme } from "../themes";
-import { groupBy } from "lodash-es";
-import { getLocationMapSettings } from "../locations";
+import { useCurrentLocationSettings, useMapVenues } from "../hooks/api_v2";
 
-const addGigsToVenues = (venues, allGigs) => {
-  const gigsByVenue = groupBy(allGigs, "venue.id");
-  return venues.map((venue) => {
-    const gigs = gigsByVenue[venue.id] ?? [];
-
-    return {
-      ...venue,
-      gigs,
-      hasVisibleGigs: gigs.some((gig) => gig.visible),
-      hasSavedGigs: gigs.some(gigIsSaved),
-      hasSeriesGigs: gigs.some((gig) => gig.series),
-    };
-  });
-};
-
-// VenueMarkers component that handles all data access and venue logic
 const VenueMarkers = () => {
-  const {
-    data: { allGigs = [] },
-  } = useGigList();
-  const { allVenues } = useGigFilterOptions();
-  const venues = addGigsToVenues(allVenues, allGigs);
-  const theme = getTheme() ?? {};
+  const { data: venues } = useMapVenues();
 
+  const theme = getTheme() ?? {};
   const navigateToGigList = useNavigateToGigList();
-  const [activeGigFilters] = useActiveGigFilters();
 
   const handleMarkerClick = async (venue) => {
-    activeGigFilters;
+    // todo: Perhaps we should clear the tag filters here as more likely to get no results - maybe keep location and that's it
     const newVenueFilters = venue.selected ? [] : [venue.id];
-    await navigateToGigList({ ...activeGigFilters, venueIds: newVenueFilters });
+    await navigateToGigList({ venueIds: newVenueFilters });
   };
-
-  const customIcon = ({ hasSeriesGigs, hasSavedGigs, hasVisibleGigs }) => {
-    const { savedMapPin, defaultMapPin } = hasSeriesGigs ? stkTheme : theme;
+  const customIcon = ({ hasSavedGigs, seriesGigCount, showAsActive }) => {
+    const { savedMapPin, defaultMapPin } =
+      seriesGigCount > 0 ? stkTheme : theme;
     const iconUrl = hasSavedGigs ? savedMapPin : defaultMapPin;
-    const className = hasVisibleGigs ? "" : "grayscale opacity-60";
+    const className = showAsActive > 0 ? "" : "grayscale opacity-60";
     return new Icon({
       iconUrl,
       className,
@@ -63,10 +36,6 @@ const VenueMarkers = () => {
       {venues.map((venue, index) => {
         const latitude = parseFloat(venue.latitude);
         const longitude = parseFloat(venue.longitude);
-
-        //if (activeGigFilters.venues && activeGigFilters.venues.length > 0) {
-        //  isVenueFiltered = activeGigFilters.venues.includes(venue.id);
-        //}
 
         if (!isNaN(latitude) && !isNaN(longitude)) {
           const position = [latitude, longitude];
@@ -88,19 +57,48 @@ const VenueMarkers = () => {
   );
 };
 
+// todo: map positioner could be a bit more smart - it should update the position only if it really needs to - so if i move
+// the map it does not randomly wiggle it back to where it was
 const MapPositioner = () => {
   const map = useMap();
-  const [activeGigFilters] = useActiveGigFilters();
+  const {
+    data: mapSettings,
+    dataLoaded,
+    isLoading,
+  } = useCurrentLocationSettings();
+  const [currentMapSettings, setCurrentMapSettings] = useState(null);
 
   useEffect(() => {
-    const location = getLocationMapSettings(activeGigFilters.location);
-    if (map && location) {
-      const defaultPosition = location.mapCenter;
-      const defaultZoom = location.zoom;
+    if (dataLoaded || currentMapSettings == null) {
+      setCurrentMapSettings((previous) => {
+        if (previous?.mapCenter.join() != mapSettings?.mapCenter.join()) {
+          return mapSettings;
+        }
+        return previous;
+      });
+    }
+  }, [mapSettings, dataLoaded, setCurrentMapSettings, currentMapSettings]); // Only run when location changes
+  useLayoutEffect(() => {
+    if (map && currentMapSettings) {
+      const defaultPosition = currentMapSettings.mapCenter;
+      const defaultZoom = currentMapSettings.zoom;
       map.setView(defaultPosition, defaultZoom, { animate: true });
     }
-  }, [map, activeGigFilters.location]); // Only run when location changes
-
+  }, [currentMapSettings, map]);
+  if (import.meta.env.MODE == "development") {
+    return (
+      <div className="absolute right-0 top-0 z-400">
+        Map centering info Location set center
+        <ul>
+          <li>location: {currentMapSettings?.caption}</li>
+          <li>center: {currentMapSettings?.mapCenter?.join(",")}</li>
+          <li>default zoom: {currentMapSettings?.defaultZoom}</li>
+          <li>has loaded {dataLoaded.toString()}</li>
+          <li>is loading {isLoading.toString()}</li>
+        </ul>
+      </div>
+    );
+  }
   return null;
 };
 
