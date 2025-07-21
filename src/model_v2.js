@@ -52,16 +52,28 @@ export const gigFromApiResponse = (gig) => {
     "information",
   );
   const genreTags = createTagsFromStrings(gig?.genre_tags || [], "genre");
+
+  const mapVenues = gig.venue
+    ? [
+        {
+          ...gig.venue,
+          selected: true,
+          selectedGigCount: 1,
+          showAsActive: true,
+        },
+      ]
+    : [];
+  const mapSettings = gig.venue
+    ? createMapSettings(gig.venue.latitude, gig.venue.longitude)
+    : null;
   // todo: validate that gigs actually have venues before accessing venue details
   return {
     ...gig,
     // todo : use genres and informationTags separately
     informationTags,
     genreTags,
-    mapSettings: createMapSettings(gig.venue.latitude, gig.venue.longitude),
-    mapVenues: [
-      { ...gig.venue, selected: true, selectedGigCount: 1, showAsActive: true },
-    ],
+    mapSettings,
+    mapVenues,
   };
 };
 
