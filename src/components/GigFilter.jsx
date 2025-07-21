@@ -2,9 +2,10 @@ import { useState, useRef } from "react";
 import tw from "tailwind-styled-components";
 import dayjs from "dayjs";
 import {
-  useGigFilterOptions,
-  useActiveGigFilterOptions,
-} from "../hooks/filters";
+  useGigSearchResults,
+  useCurrentGigFilterSummary,
+} from "../hooks/api_v2";
+
 import { Form, useSubmit } from "react-router";
 
 const FilterContainer = tw.div`
@@ -102,10 +103,13 @@ text-xs
 `;
 
 const GigFiltersSummary = ({ showFilterForm }) => {
-  const filters = useActiveGigFilterOptions();
+  const { data: activeFilters, isLoading } = useCurrentGigFilterSummary();
+  if (isLoading || !activeFilters) {
+    return null;
+  }
   return (
     <div className="flex flex-wrap" style={{ maxHeight: "24px" }}>
-      {filters.map(({ id, caption, count }) => {
+      {activeFilters.map(({ id, caption, count }) => {
         let description = caption;
         if (count) {
           description = `${caption} (${count})`;
@@ -126,11 +130,25 @@ const GigFiltersSummary = ({ showFilterForm }) => {
 };
 
 const GigFiltersForm = () => {
-  const { dateRanges, tagCategories, customDate, allVenues, allLocations } =
-    useGigFilterOptions();
-  const selectedLocation = allLocations.find((location) => location.selected);
+  const { data, dataLoaded } = useGigSearchResults();
   const submit = useSubmit();
 
+  const {
+    filters: {
+      dateRanges,
+      informationTags,
+      genreTags,
+      customDate,
+      venues,
+      locations,
+    },
+  } = data || { filters: { locations: [] } };
+  // port to tag data structure we using here
+  const tagCategories = [
+    // id used for input name so pretty crucial to keep this string the same
+    { id: "information", caption: "Information", values: informationTags },
+    { id: "genre", caption: "Genres", values: genreTags },
+  ];
   const customDateInput = useRef();
   const onDateRangeSelected = (e) => {
     if (!customDateInput.current) {
@@ -144,6 +162,11 @@ const GigFiltersForm = () => {
       customDateInput.current.disabled = true;
     }
   };
+  if (!dataLoaded) {
+    // spin? or error?
+    return null;
+  }
+  const selectedLocation = locations.find((location) => location.selected);
 
   return (
     <>
@@ -161,7 +184,7 @@ const GigFiltersForm = () => {
           }}
         >
           <div className="flex flex-col ">
-            {allLocations && allLocations.length > 0 && (
+            {locations && locations.length > 0 && (
               <>
                 <h3 className="text-sm font-medium">Where</h3>
                 <div className="flex flex-row items-baseline  flex-wrap justify-start gap-1">
@@ -170,7 +193,7 @@ const GigFiltersForm = () => {
                     defaultValue={selectedLocation?.id}
                     className="text-xs p-1 text-center rounded-full transition-colors bg-indigo-200 text-indigo-700 hover:bg-indigo-300 font-medium "
                   >
-                    {allLocations.map(({ caption, id }) => {
+                    {locations.map(({ caption, id }) => {
                       return (
                         <option value={id} key={`gig-filter-location${id}`}>
                           {caption}
@@ -184,42 +207,40 @@ const GigFiltersForm = () => {
 
             <h3 className="text-sm font-medium">When</h3>
             <div className="flex flex-row items-baseline flex-wrap justify-start gap-1">
-              {Object.values(dateRanges).map(
-                ({ id, caption, selected, ui }) => (
-                  <BadgeControl
-                    key={id}
-                    groupName="dateRange"
-                    inputType="radio"
-                    value={id}
-                    defaultChecked={selected}
-                    onChange={onDateRangeSelected}
-                    caption={caption}
-                  >
-                    {ui == "datetime" && (
-                      <DateInput
-                        type="date"
-                        key={id}
-                        ref={customDateInput}
-                        required={true}
-                        className="peer datetime"
-                        id="customDate"
-                        disabled={!selected}
-                        name="customDate"
-                        onFocus={(e) => {
-                          e.target.showPicker();
-                        }}
-                        defaultValue={
-                          (customDate || dayjs())?.format("YYYY-MM-DD") || ""
-                        }
-                      />
-                    )}
-                    {/**  todo: this better.  */}
-                    <span className="px-4 text-nowrap peer-[.datetime]:hidden peer-[.datetime]:peer-disabled:inline">
-                      {caption}
-                    </span>
-                  </BadgeControl>
-                ),
-              )}
+              {dateRanges.map(({ id, caption, selected, ui }) => (
+                <BadgeControl
+                  key={id}
+                  groupName="dateRange"
+                  inputType="radio"
+                  value={id}
+                  defaultChecked={selected}
+                  onChange={onDateRangeSelected}
+                  caption={caption}
+                >
+                  {ui == "datetime" && (
+                    <DateInput
+                      type="date"
+                      key={id}
+                      ref={customDateInput}
+                      required={true}
+                      className="peer datetime"
+                      id="customDate"
+                      disabled={!selected}
+                      name="customDate"
+                      onFocus={(e) => {
+                        e.target.showPicker();
+                      }}
+                      defaultValue={
+                        (customDate || dayjs())?.format("YYYY-MM-DD") || ""
+                      }
+                    />
+                  )}
+                  {/**  todo: this better.  */}
+                  <span className="px-4 text-nowrap peer-[.datetime]:hidden peer-[.datetime]:peer-disabled:inline">
+                    {caption}
+                  </span>
+                </BadgeControl>
+              ))}
             </div>
             {tagCategories.map(({ id: tagCategory, caption, values }) => (
               <>
@@ -230,7 +251,7 @@ const GigFiltersForm = () => {
                   key={`div-${tagCategory}`}
                   className="flex flex-row items-baseline  flex-wrap justify-start gap-1"
                 >
-                  {values.map(({ value, id, selected, count }) => {
+                  {values.map(({ value, id, selected, gigCount }) => {
                     return (
                       <BadgeControl
                         key={id}
@@ -240,7 +261,7 @@ const GigFiltersForm = () => {
                         inputType="checkbox"
                       >
                         <span className="px-4 text-nowrap">
-                          {value} ({count})
+                          {value} ({gigCount})
                         </span>
                       </BadgeControl>
                     );
@@ -249,11 +270,11 @@ const GigFiltersForm = () => {
               </>
             ))}
 
-            {allVenues && allVenues.length > 0 && (
+            {venues && venues.length > 0 && (
               <>
                 <h3 className="text-sm font-medium">Venues</h3>
                 <div className="flex flex-row items-baseline  flex-wrap justify-start gap-1">
-                  {allVenues.map(({ name, id, selected, count }) => {
+                  {venues.map(({ name, id, selected, gigCount }) => {
                     return (
                       <BadgeControl
                         key={id}
@@ -263,7 +284,7 @@ const GigFiltersForm = () => {
                         inputType="checkbox"
                       >
                         <span className="px-4 text-nowrap">
-                          {name} ({count})
+                          {name} ({gigCount})
                         </span>
                       </BadgeControl>
                     );
