@@ -1,7 +1,17 @@
 #!/usr/bin/env bash
 
 set -euo pipefail
+bold=$(tput bold)$(tput setaf 160)$(tput smul)
+normal=$(tput sgr0)
 
+echo  -e "${bold}THIS IS AN EX-DEPLOYMENT SCRIPT ${normal}"
+
+
+echo "This deployment script has shuffled off his mortal coil, run down the curtain and joined the bleedin' choir invisible"
+
+echo "You may wish to check out ./deploy_firebase"
+
+exit -1
 projects=(
   "livemusiclocator.github.io"
   "brisbanelivemusiclocator.github.io"
