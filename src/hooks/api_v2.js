@@ -139,14 +139,8 @@ const useCurrentDatasource = (expectedType = null) => {
   } else if (routeType === "singleGig") {
     return singleGigResult;
   }
-
-  return {
-    data: null,
-    isLoading: false,
-    isValidating: false,
-    dataLoaded: false,
-    error: null,
-  };
+  // return the first that is available - prioritise single gig results
+  return singleGigResult || gigListResult;
 };
 
 export const useGig = () => {
