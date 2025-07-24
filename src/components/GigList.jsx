@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, Link } from "react-router";
 import tw from "tailwind-styled-components";
 import {
   MapPinIcon,
@@ -14,8 +14,9 @@ import { LoadingSpinner } from "./loading/LoadingOverlay";
 import lbmfLogo from "../assets/lbmf2024logo.png";
 import skLogo from "../assets/skf_blacklogo.svg";
 import { uniqBy } from "lodash-es";
-const ExternalLink = tw.a`text-blue-600 hover:underline visited:text-purple-600 inline-flex items-baseline`;
+
 const Aside = tw.aside`flex flex-col`;
+import { filteredGigListPath } from "../searchParams";
 const TicketStatus = tw.div`
 text-xs
 font-medium
@@ -41,7 +42,7 @@ const GigHeader = ({ gig, showDate = true }) => {
         <h3 className="flex text-xl font-bold items-center">
           {lbmf && <img src={lbmfLogo} className="m-2 shrink w-10" />}
           {sk && <img src={skLogo} className="m-2 shrink w-10" />}
-          {gig.name}
+          <Link to={`gigs/${gig.id}`}>{gig.name}</Link>
           {gig.status === "cancelled" && "(CANCELLED)"}
           {gig.ticket_status === "selling_fast" && (
             <TicketStatus>SELLING FAST</TicketStatus>
@@ -59,22 +60,27 @@ const GigHeader = ({ gig, showDate = true }) => {
 const GigRow = ({ gig }) => {
   const navigate = useNavigate();
   return (
-    <article className="flex flex-col snap-start p-4">
+    <article className="flex flex-col snap-start p-4 text-sm">
       <GigHeader gig={gig} showDate={false} />
       <Aside>
         <div className="flex gap-x-1 pb-2 items-start text-sm">
           <MapPinIcon className="text-gray-500 size-4 shrink-0 m-1" />
           <div aria-label="Venue">
-            <p className="font-semibold leading-6">{gig.venue.name}</p>
+            <p className="font-semibold leading-6">
+              <Link to={filteredGigListPath({ venueIds: [gig.venue.id] })}>
+                {gig.venue.name}
+              </Link>
+            </p>
             <p className="text-gray-500" aria-label="Venue address">
-              {gig.venue.address}
+              <Link to={filteredGigListPath({ venueIds: gig.venue.id })}>
+                {gig.venue.address}
+              </Link>
             </p>
             {gig.venue.location_url && (
               <p>
-                <ExternalLink href={gig.venue.location_url}>
-                  Get directions{" "}
-                  <ExternalLinkIcon className="size-4 self-center" />
-                </ExternalLink>
+                <a href={gig.venue.location_url} className="external-link">
+                  Get directions <ExternalLinkIcon />
+                </a>
               </p>
             )}
           </div>
@@ -94,27 +100,21 @@ const GigRow = ({ gig }) => {
         )}
       </Aside>
       {gig.genreTags && (
-        <div className="flex gap-2 flex-wrap p-4">
+        <div className="">
           {uniqBy(gig.genreTags, "id").map(({ id, value }) => (
-            <span
+            <Link
+              to={filteredGigListPath({ genreTagIds: value })}
               key={id}
-              className="bg-lmlpink text-white text-xs font-medium p-2"
+              className="tag"
             >
               {value}
-            </span>
+            </Link>
           ))}
         </div>
       )}
-      <ExternalLink
-        className="p-1 items-start text-sm"
-        href="/"
-        onClick={(e) => {
-          e.preventDefault();
-          navigate(`gigs/${gig.id}`);
-        }}
-      >
-        ... more information
-      </ExternalLink>
+      <Link className="internal-link" to={`gigs/${gig.id}`}>
+        more information ...
+      </Link>
     </article>
   );
 };
