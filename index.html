@@ -18,11 +18,23 @@
       window.APP_CONFIG = {
         default_location: "anywhere",
         allow_select_location: true,
+        render_app_layout: false,
       };
     </script>
   </head>
   <body style="margin: 0">
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <div class="flex flex-col h-dvh relative">
+      <header
+        class="w-full bg-lmlpink-950 border-4 border-slate-900 text-white sticky top-0 z-50"
+      >
+        <div
+          class="flex justify-center items-center flex-wrap mx-auto py-1 px-5"
+        >
+          <h1 class="text-4xl">LML Gig Explorer (dev)</h1>
+        </div>
+      </header>
+      <div id="root"></div>
+      <script type="module" src="/src/main.jsx"></script>
+    </div>
   </body>
 </html>
