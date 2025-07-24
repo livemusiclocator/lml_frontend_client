@@ -1,4 +1,3 @@
-import { FilterWrapper } from "./FilterOverlay";
 import {
   Outlet,
   Link,
@@ -27,13 +26,18 @@ export default function Explorer() {
     setListMaximised(true);
   }, [location]);
   return (
-    <main className="relative z-40 flex-1">
+    <main className="explorer">
       <Map />
       {/**  overlay to the map - for small screens, just use whole width for big screens (not primary usecase) max out at 2xl, but try and keep to a proportion of the screen so you get a lot of map as well */}
-      <FilterWrapper $listMaximised={listMaximised}>
-        <nav
-          className={`flex items-center border-b border-gray-200 w-full p-2`}
-        >
+      <div
+        className={
+          "gig-list-panel " +
+          (listMaximised
+            ? "is-minimised gig-list-panel-legacy-maximised"
+            : "gig-list-panel-legacy-minimised")
+        }
+      >
+        <nav>
           {showBackButton && (
             <Link to={backButtonLocation}>
               <ChevronLeftIcon className="size-6" />
@@ -41,7 +45,7 @@ export default function Explorer() {
           )}
 
           <button
-            className="w-full"
+            className="overlay-expand-button"
             onClick={() => setListMaximised(!listMaximised)}
             id="overlay-expand-button"
           >
@@ -54,7 +58,7 @@ export default function Explorer() {
           </button>
         </nav>
         <Outlet context={{ listMaximised }} />
-      </FilterWrapper>
+      </div>
     </main>
   );
 }

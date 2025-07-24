@@ -70,3 +70,29 @@ a.external-link {
   p-2
   m-1;
 }
+
+.explorer {
+  @apply relative z-40 flex-1;
+  .gig-list-panel {
+    @apply z-20 absolute bottom-0 left-0 w-full max-w-2xl p-0 h-full md:max-h-full
+  flex flex-col py-2 overflow-hidden bg-white
+  md:rounded-3xl
+  md:shadow-xl
+  ease-in-out
+  duration-150
+  transition-[height]
+  m-0 md:m-2;
+    nav {
+      @apply flex items-center border-b border-gray-200 w-full p-2;
+      .overlay-expand-button {
+        @apply w-full;
+      }
+    }
+  }
+  .gig-list-panel-legacy-maximised {
+    @apply h-full md:h-220;
+  }
+  .gig-list-panel-legacy-minimised {
+    @apply border border-gray-200 rounded-t-3xl h-40;
+  }
+}
