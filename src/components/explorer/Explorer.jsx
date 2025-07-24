@@ -4,12 +4,15 @@ import {
   useMatches,
   useLocation,
   useNavigationType,
+  useSearchParams,
 } from "react-router";
 import { ChevronLeftIcon } from "@heroicons/react/24/solid";
 import { useState, useEffect } from "react";
 import Map from "../Map";
 
 export default function Explorer() {
+  const [searchParams] = useSearchParams();
+
   const [listMaximised, setListMaximised] = useState(true);
   let location = useLocation();
   const matches = useMatches();
@@ -17,7 +20,7 @@ export default function Explorer() {
   const navigationType = useNavigationType();
 
   const showBackButton = matches.filter((match) =>
-    Boolean(match.handle?.showBackButton)
+    Boolean(match.handle?.showBackButton),
   )[0];
   const backButtonLocation = navigationType === "PUSH" ? -1 : ".";
 
@@ -25,16 +28,18 @@ export default function Explorer() {
     // reset the list maximised if we changed location
     setListMaximised(true);
   }, [location]);
+  const explorerClass =
+    "explorer-common " +
+    (searchParams.get("newLayout") == "true"
+      ? "explorer-new"
+      : "explorer-legacy");
   return (
-    <main className="explorer">
+    <main className={explorerClass}>
       <Map />
       {/**  overlay to the map - for small screens, just use whole width for big screens (not primary usecase) max out at 2xl, but try and keep to a proportion of the screen so you get a lot of map as well */}
       <div
         className={
-          "gig-list-panel " +
-          (listMaximised
-            ? "is-minimised gig-list-panel-legacy-maximised"
-            : "gig-list-panel-legacy-minimised")
+          "gig-list-panel " + (listMaximised ? "is-maximised" : "is-minimised")
         }
       >
         <nav>

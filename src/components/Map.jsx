@@ -109,17 +109,7 @@ const Map = () => {
 
   // todo : avoid hardcoded styles ?
   return (
-    <MapContainer
-      ref={mapRef}
-      style={{
-        height: "100%",
-        width: "100%",
-        zIndex: 0,
-        top: 0,
-        left: 0,
-        position: "absolute",
-      }}
-    >
+    <MapContainer ref={mapRef} className="map-container">
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
