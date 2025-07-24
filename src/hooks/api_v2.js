@@ -1,5 +1,5 @@
 import useSWR from "swr";
-import { parseSearchParams } from "./searchParams_v2";
+import { parseSearchParams } from "../searchParams";
 import getConfig from "../config";
 import { useParams, useMatches, useSearchParams } from "react-router";
 import {
@@ -33,7 +33,8 @@ const buildSingleGigEndpoint = (id) => {
 
 const singleGigLoader = async ({ id }) => {
   const url = buildSingleGigEndpoint(id);
-  return url && (await loadData(url));
+  const response = url && (await loadData(url));
+  return gigFromApiResponse(response);
 };
 
 const gigListLoader = async (requestKey) => {

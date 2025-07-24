@@ -1,8 +1,7 @@
 import dayjs from "dayjs";
-import { useSearchParams, useNavigate, createSearchParams } from "react-router";
-import { todaysDate } from "../timeStuff";
-import getConfig from "../config";
-import { datesForDateRange } from "../timeStuff";
+import { createSearchParams } from "react-router";
+import getConfig from "./config";
+import { datesForDateRange, todaysDate } from "./timeStuff";
 
 // todo: this file is very messy - it's basically just transform between the query string params on the filter page and
 // the internal model of those params. plus a bonus hook for doinng navigation etc.
@@ -25,53 +24,19 @@ const venuesToSearchParams = ({ venueIds }) => {
 };
 
 const locationToSearchParams = ({ locationId }) => {
-  const { allow_select_location, default_location } = getConfig();
+  const { allow_select_location } = getConfig();
 
-  if (!allow_select_location) {
-    return { location: default_location };
+  if (!allow_select_location || !locationId) {
+    return {};
   }
 
-  return { location: locationId || default_location || "anywhere" };
-};
-
-// todo: inline me
-const useGigFilterSearchParams = () => {
-  let [params] = useSearchParams();
-  return parseSearchParams(params);
-};
-
-// TODO: This is not really a hook but it's code that kind of gets shared between here and the data loading code...
-export const parseSearchParams = (params) => {
-  return {
-    ...searchParamsToTagFilters(params),
-    ...searchParamsToDateFilters(params),
-    ...searchParamsToVenuesFilters(params),
-    ...searchParamsToLocationFilter(params),
-  };
-};
-
-export const useNavigateToGigList = () => {
-  let params = useGigFilterSearchParams();
-  let navigate = useNavigate();
-  return (newGigFilters, replaceExistingFilters = false) => {
-    const gigFilters = replaceExistingFilters
-      ? newGigFilters
-      : { ...params, ...newGigFilters };
-    const newParams = {
-      ...tagsToSearchParams(gigFilters),
-      ...dateParamsToSearchParams(gigFilters),
-      ...venuesToSearchParams(gigFilters),
-      ...locationToSearchParams(gigFilters),
-    };
-    const search = "?" + createSearchParams(newParams).toString();
-    return navigate({ pathname: "/", search });
-  };
+  return { location: locationId };
 };
 
 /**
  * Converts tag parameters to search params format
  */
-const tagsToSearchParams = ({ informationTagIds, genreTagIds }) => {
+const tagsToSearchParams = ({ informationTagIds = [], genreTagIds = [] }) => {
   // using this style because we have to agree with rails
   // and rails is harder to change (on this point anyway)
   return { "information[]": informationTagIds, "genre[]": genreTagIds };
@@ -114,5 +79,24 @@ const searchParamsToLocationFilter = (params) => {
   }
   return {
     locationId: params.get("location") || default_location,
+  };
+};
+
+export const filteredGigListPath = (gigFilters = {}) => {
+  const newParams = {
+    ...tagsToSearchParams(gigFilters),
+    ...dateParamsToSearchParams(gigFilters),
+    ...venuesToSearchParams(gigFilters),
+    ...locationToSearchParams(gigFilters),
+  };
+  const search = "?" + createSearchParams(newParams).toString();
+  return { pathname: "/", search };
+};
+export const parseSearchParams = (params) => {
+  return {
+    ...searchParamsToTagFilters(params),
+    ...searchParamsToDateFilters(params),
+    ...searchParamsToVenuesFilters(params),
+    ...searchParamsToLocationFilter(params),
   };
 };

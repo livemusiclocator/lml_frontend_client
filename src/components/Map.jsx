@@ -4,8 +4,10 @@ import { useMap } from "react-leaflet/hooks";
 import { Icon } from "leaflet";
 import { getTheme } from "../getLocation";
 import "leaflet/dist/leaflet.css";
+import { useNavigate } from "react-router";
 
-import { useNavigateToGigList } from "../hooks/searchParams_v2";
+import { filteredGigListPath } from "../searchParams";
+
 import { stkTheme } from "../themes";
 import { useCurrentLocationSettings, useMapVenues } from "../hooks/api_v2";
 
@@ -13,12 +15,12 @@ const VenueMarkers = () => {
   const { data: venues } = useMapVenues();
 
   const theme = getTheme() ?? {};
-  const navigateToGigList = useNavigateToGigList();
+  const navigate = useNavigate();
 
   const handleMarkerClick = async (venue) => {
     // todo: Perhaps we should clear the tag filters here as more likely to get no results - maybe keep location and that's it
     const newVenueFilters = venue.selected ? [] : [venue.id];
-    await navigateToGigList({ venueIds: newVenueFilters });
+    await navigate(filteredGigListPath({ venueIds: newVenueFilters }));
   };
   const customIcon = ({ hasSavedGigs, seriesGigCount, showAsActive }) => {
     const { savedMapPin, defaultMapPin } =
