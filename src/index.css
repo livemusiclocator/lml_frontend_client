@@ -1,10 +1,24 @@
 @import "tailwindcss";
 @theme {
-  --color-lmlpink: rgb(235 0 139);
+  --color-lmlpink-50: oklch(97.6% 0.012 11.15);
+  --color-lmlpink-100: oklch(95.88% 0.021 10.3);
+  --color-lmlpink-200: oklch(91.85% 0.043 9.04);
+  --color-lmlpink-300: oklch(87.96% 0.066 7.97);
+  --color-lmlpink-400: oklch(83.11% 0.098 5.85);
+  --color-lmlpink-500: oklch(79.14% 0.127 4.31);
+  --color-lmlpink-600: oklch(75.39% 0.158 2.67);
+  --color-lmlpink-700: oklch(71.48% 0.194 0.88);
+  --color-lmlpink-800: oklch(67.75% 0.233 359.11);
+  --color-lmlpink-900: oklch(63.74% 0.26 356.84);
+  --color-lmlpink-950: oklch(61.36% 0.252 355.28);
+
+  --color-lmlpink: var(--color-lmlpink-950);
+
   --color-custom-blue: #1da1f2;
 
-  --font-sans: "Montserrat", ui-sans-serif, system-ui, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-sans:
+    "Montserrat", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
   --animate-spinner-grow: spinner-grow 1s linear infinite;
   --animate-delayed-entrance: delayed-entrance 0.5s linear;
@@ -30,4 +44,29 @@
   100% {
     opacity: 1;
   }
+}
+
+a.internal-link {
+  @apply text-indigo-700 underline;
+}
+a.external-link {
+  @apply text-indigo-700 hover:underline inline-flex items-baseline;
+
+  svg {
+    @apply size-4 self-center ms-1;
+  }
+}
+
+.tag {
+  @apply bg-lmlpink-950
+  text-white
+  text-xs
+  font-medium
+  hover:scale-102
+  hover:shadow-md
+  transition-all
+  duration-100
+  inline-block
+  p-2
+  m-1;
 }
