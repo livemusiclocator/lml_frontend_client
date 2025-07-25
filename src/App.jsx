@@ -13,7 +13,7 @@ import GigList from "./components/GigList";
 import About from "./components/About";
 import Events from "./components/Events";
 import getConfig from "./config";
-
+import { SWRConfig } from "swr";
 const APP_CONFIG = getConfig();
 if (APP_CONFIG.ga_project) {
   ReactGA.initialize(APP_CONFIG.ga_project);
@@ -68,17 +68,30 @@ const router = createBrowserRouter(
 const App = () => {
   return (
     <ThemeProvider theme={getTheme()}>
-      <RouterProvider
-        router={router}
-        future={{
-          v7_relativeSplatPath: true,
-          v7_partialHydration: true,
-          v7_startTransition: true,
-          v7_fetcherPersist: true,
-          v7_normalizeFormMethod: true,
-          v7_skipActionErrorRevalidation: true,
+      <SWRConfig
+        value={{
+          onError: (error, key) => {
+            ReactGA.event({
+              category: "api",
+              action: "fetch",
+              value: key, // optional, must be a number
+              transport: "xhr", // optional, beacon/xhr/image
+            });
+          },
         }}
-      />
+      >
+        <RouterProvider
+          router={router}
+          future={{
+            v7_relativeSplatPath: true,
+            v7_partialHydration: true,
+            v7_startTransition: true,
+            v7_fetcherPersist: true,
+            v7_normalizeFormMethod: true,
+            v7_skipActionErrorRevalidation: true,
+          }}
+        />
+      </SWRConfig>
     </ThemeProvider>
   );
 };

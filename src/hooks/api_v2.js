@@ -16,6 +16,13 @@ const GIGS_ENDPOINT = getConfig().gigs_endpoint;
 
 const loadData = async (url) => {
   const response = await fetch(url);
+  if (!response.ok) {
+    const error = new Error("An error occurred while fetching the data.");
+    // Attach extra info to the error object.
+    error.info = await response.json();
+    error.status = response.status;
+    throw error;
+  }
   return await response.json();
 };
 
@@ -33,14 +40,12 @@ const buildSingleGigEndpoint = (id) => {
 
 const singleGigLoader = async ({ id }) => {
   const url = buildSingleGigEndpoint(id);
-  const response = url && (await loadData(url));
-  return gigFromApiResponse(response);
+  return url && (await loadData(url));
 };
 
 const gigListLoader = async (requestKey) => {
   const url = buildGigsEndpoint(requestKey);
-  const rawResult = url && (await loadData(url));
-  return transformGigData(rawResult, requestKey);
+  return url && (await loadData(url));
 };
 
 // Gig list specific functions
@@ -68,7 +73,12 @@ const useGigListData = () => {
     revalidateOnFocus: false, // dont refetch on focus (if you wait too long with tab open the dates will change anyway  I guess)
   });
 
-  const result = !error ? applyFilters(rawResult, params) : null;
+  // could separate these two steps really (or mush them together )
+  //
+  const unfilteredResult =
+    rawResult && !error && transformGigData(rawResult, requestKey);
+
+  const result = unfilteredResult && applyFilters(unfilteredResult, params);
 
   return {
     data: result,
@@ -96,7 +106,7 @@ const useSingleGigData = () => {
     revalidateOnFocus: false, // dont refetch on focus (will do so the next time the gig page is mounted or page refreshed)
   });
 
-  const result = !error ? rawResult : null;
+  const result = !error ? gigFromApiResponse(rawResult) : null;
 
   return {
     data: result,
@@ -123,7 +133,6 @@ const useCurrentDatasource = (expectedType = null) => {
   // Always call both hooks to avoid conditional hook calls
   const gigListResult = useGigListData();
   const singleGigResult = useSingleGigData();
-
   if (expectedType && routeType !== expectedType) {
     return {
       data: null,
@@ -152,16 +161,12 @@ export const useGigSearchResults = () => {
 };
 
 export const useCurrentGigFilterSummary = () => {
-  const {
-    data: { filters },
-    isLoading,
-    dataLoaded,
-  } = useGigSearchResults();
-
+  const { data, isLoading, dataLoaded, error } = useGigSearchResults();
+  const filters = data?.filters;
   return {
     isLoading,
     dataLoaded,
-
+    error,
     data: toFilterSummary(filters),
   };
 };
