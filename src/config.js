@@ -12,7 +12,7 @@ const getLocationKeyFromViteEnv = () => import.meta.env.VITE_LML_LOCATION;
 const STANDALONE_CONFIG = {
   root_path: import.meta.env.VITE_LML_ROOT_PATH || "/",
   gigs_endpoint: "https://api.lml.live/gigs",
-  ga_project: "GT-WRFXTBL7",
+  ga_project: "G-8TKSCK99CN",
   render_app_layout: true,
   default_location: getLocationKeyFromViteEnv() ?? getLocationKeyFromHost(),
 };
