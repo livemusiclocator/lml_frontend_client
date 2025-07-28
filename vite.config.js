@@ -2,16 +2,21 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import svgr from "vite-plugin-svgr";
 import tailwindcss from "@tailwindcss/vite";
-function manualChunks(id) {
-  if (id.includes(".css")) {
-    return "styles";
-  }
+import { visualizer } from "rollup-plugin-visualizer";
 
   return null;
 }
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), svgr(), tailwindcss()],
+  plugins: [
+    react(),
+    svgr(),
+    tailwindcss(),
+    visualizer({
+      filename: "tmp/bundle-analysis.html",
+      open: false,
+    }),
+  ],
   build: {
     rollupOptions: {
       output: {
