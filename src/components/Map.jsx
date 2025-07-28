@@ -3,7 +3,6 @@ import { MapContainer, TileLayer, Marker, Tooltip } from "react-leaflet";
 import { useMap } from "react-leaflet/hooks";
 import { Icon } from "leaflet";
 import { getTheme } from "../getLocation";
-import "leaflet/dist/leaflet.css";
 import { useNavigate } from "react-router";
 
 import { filteredGigListPath } from "../searchParams";
