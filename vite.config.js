@@ -14,31 +14,20 @@ export default defineConfig({
       open: false,
     }),
   ],
+  resolve: {
+    alias: {
+      "react-router": "node_modules/react-router/dist/production/index.mjs",
+    },
+  },
   build: {
     rollupOptions: {
-      external: ["leaflet"],
       output: {
-        globals: {
-          leaflet: "L",
-        },
-        entryFileNames: (entry) => {
-          // todo: this can be configured way simpler I think
-          if (entry.name == "lml_gig_explorer") {
-            return "lml_gig_explorer.js";
-          }
-          return entry.name;
-        },
+        entryFileNames: "lml_gig_explorer.js",
         assetFileNames: (assetInfo) => {
-          if (assetInfo.name == "styles.css") return "lml_gig_explorer.css";
+          if (assetInfo.name == "index.css") return "lml_gig_explorer.css";
           // use original file names for everything else
           return assetInfo.name;
         },
-      },
-      input: {
-        // todo: define entrypoint properly - dont use the indx.html as this is dev only
-        lml_gig_explorer: "index.html",
-        "leaflet.js": "node_modules/leaflet/dist/leaflet.js",
-        leaflet: "node_modules/leaflet/dist/leaflet.css",
       },
     },
   },
