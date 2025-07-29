@@ -111,7 +111,11 @@ const GigRow = ({ gig }) => {
 };
 
 const NoGigsMessage = () => {
-  return <p className="italic">No gigs found</p>;
+  return (
+    <div className="p-4 self-center">
+      <h2 className="font-semibold text-slate-600 text-xl">No gigs found</h2>
+    </div>
+  );
 };
 const Content = () => {
   const { data, isLoading, dataLoaded } = useGigSearchResults();
