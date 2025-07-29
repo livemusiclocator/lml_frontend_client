@@ -4,7 +4,6 @@ import { useGig } from "../../hooks/api_v2";
 import { LoadingSpinner } from "../loading/LoadingOverlay";
 import DateTimeDisplay from "../DateTimeDisplay";
 import tw from "tailwind-styled-components";
-import Markdown from "react-markdown";
 import DateTime from "./details/DateTime";
 import Genres from "./details/Genres";
 import Venue from "./details/Venue";
@@ -137,49 +136,6 @@ export default function SingleGigDetails({ className }) {
             <Prices prices={gig.prices || []} />
             <InfoTags infoTags={gig.informationTags || []} />
           </Aside>
-          <section className="px-4 prose">
-            {/*
-             * todo: use prose-invert when we have darkmode working
-             * using prose tailwind plugin here to style the content blocks
-             * Starting off by being restrictive of what elements to show.
-             * total set is :
-             * a, blockquote, br, code, em, h1, h2, h3, h4, h5, h6, hr, img, li, ol, p, pre, strong, and ul
-             *
-             * Also remap heading levels to fit in with our use of h2 for gig name.
-             * */}
-            <Markdown
-              unwrapDisallowed={true}
-              skipHtml={true}
-              allowedElements={[
-                "a",
-                "blockquote",
-                "br",
-                "em",
-                "h1",
-                "h2",
-                "h3",
-                "h4",
-                "h5",
-                "h6",
-                "hr",
-                "li",
-                "ol",
-                "p",
-                "strong",
-                "ul",
-              ]}
-              components={{
-                h1: "h3",
-                h2: "h4",
-                h3: "h5",
-                h4: "h6",
-                h5: "h6",
-                h6: "h6",
-              }}
-            >
-              {gig.description}
-            </Markdown>
-          </section>
           <Genres genres={gig.genreTags} />
           <Tickets url={gig.ticketing_url} />
         </>
