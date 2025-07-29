@@ -4,8 +4,6 @@ import ReactGA from "react-ga4";
 import DefaultLayout from "./layouts/default";
 import NoLayout from "./layouts/nolayout";
 import "./index.css";
-import { ThemeProvider } from "styled-components";
-import { getTheme } from "./getLocation";
 import { createBrowserRouter, RouterProvider } from "react-router";
 import SingleGigDetails from "./components/explorer/SingleGigDetails";
 import Explorer from "./components/explorer/Explorer";
@@ -67,32 +65,30 @@ const router = createBrowserRouter(
 
 const App = () => {
   return (
-    <ThemeProvider theme={getTheme()}>
-      <SWRConfig
-        value={{
-          onError: (error, key) => {
-            ReactGA.event({
-              category: "api",
-              action: "fetch",
-              value: key, // optional, must be a number
-              transport: "xhr", // optional, beacon/xhr/image
-            });
-          },
+    <SWRConfig
+      value={{
+        onError: (error, key) => {
+          ReactGA.event({
+            category: "api",
+            action: "fetch",
+            value: key, // optional, must be a number
+            transport: "xhr", // optional, beacon/xhr/image
+          });
+        },
+      }}
+    >
+      <RouterProvider
+        router={router}
+        future={{
+          v7_relativeSplatPath: true,
+          v7_partialHydration: true,
+          v7_startTransition: true,
+          v7_fetcherPersist: true,
+          v7_normalizeFormMethod: true,
+          v7_skipActionErrorRevalidation: true,
         }}
-      >
-        <RouterProvider
-          router={router}
-          future={{
-            v7_relativeSplatPath: true,
-            v7_partialHydration: true,
-            v7_startTransition: true,
-            v7_fetcherPersist: true,
-            v7_normalizeFormMethod: true,
-            v7_skipActionErrorRevalidation: true,
-          }}
-        />
-      </SWRConfig>
-    </ThemeProvider>
+      />
+    </SWRConfig>
   );
 };
 
