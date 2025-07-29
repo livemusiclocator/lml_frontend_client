@@ -3,7 +3,6 @@ import SaveGigButton from "../SaveGigButton";
 import { useGig } from "../../hooks/api_v2";
 import { LoadingSpinner } from "../loading/LoadingOverlay";
 import DateTimeDisplay from "../DateTimeDisplay";
-import tw from "tailwind-styled-components";
 import DateTime from "./details/DateTime";
 import Genres from "./details/Genres";
 import Venue from "./details/Venue";
@@ -14,16 +13,6 @@ import Sets from "./details/Sets";
 import lbmfLogo from "../../assets/lbmf2024logo.png";
 import skLogo from "../../assets/skf_blacklogo.svg";
 import { filteredGigListPath } from "../../searchParams";
-const Aside = tw.aside`
-mx-4
-p-4
-flex
-flex-wrap
-gap-4
-justify-start
-
-*:shrink
-`;
 
 const GigHeroImageBanner = () => {
   // probably a case for some actual css here .
@@ -129,13 +118,13 @@ export default function SingleGigDetails({ className }) {
       {gig && (
         <>
           <GigHeader gig={gig} className="grow shrink-0" />
-          <Aside className="bg-gray-200">
+          <aside className="bg-gray-200 mx-4 p-4 flex flex-wrap gap-4 justify-start *:shrink">
             <DateTime gig={gig} />
             <Venue venue={gig.venue} />
             <Sets sets={gig.sets || []} />
             <Prices prices={gig.prices || []} />
             <InfoTags infoTags={gig.informationTags || []} />
-          </Aside>
+          </aside>
           <Genres genres={gig.genreTags} />
           <Tickets url={gig.ticketing_url} />
         </>

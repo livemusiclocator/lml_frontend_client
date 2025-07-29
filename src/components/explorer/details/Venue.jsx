@@ -1,4 +1,3 @@
-import tw from "tailwind-styled-components";
 import {
   MapPinIcon,
   ArrowTopRightOnSquareIcon as ExternalLinkIcon,

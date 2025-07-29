@@ -102,3 +102,13 @@ a.external-link {
     @apply h-full w-full z-0 top-0 left-0 absolute;
   }
 }
+
+/*  migrations from tw-styled comps */
+.ticket-status {
+  @apply text-xs
+font-medium
+rounded-full
+bg-red-200
+p-2
+m-2;
+}

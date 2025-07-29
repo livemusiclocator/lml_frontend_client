@@ -1,5 +1,4 @@
 import { useState, useRef } from "react";
-import tw from "tailwind-styled-components";
 import dayjs from "dayjs";
 import {
   useGigSearchResults,
@@ -8,7 +7,9 @@ import {
 
 import { Form, useSubmit } from "react-router";
 
-const FilterContainer = tw.div`
+// todo: put all these  into css file and also simplify the classes on here
+//
+const filterContainerClasses = (expanded) => `
   w-full
   min-width-sm
   border
@@ -18,12 +19,12 @@ const FilterContainer = tw.div`
   transition-[max-height]
   flex
   flex-col
-  ${(p) => (p.$expanded ? "" : "max-h-12")}
+  ${expanded ? "" : "max-h-12"}
   bg-white
   overflow-none
 `;
 
-const DateInput = tw.input`
+const dateInputClasses = `
 peer
   items-center
   disabled:hidden
@@ -42,7 +43,8 @@ invalid:ring-offset-2
   focus:ring-indigo-500
 `;
 
-const Badge = tw.div`
+const badgeClasses = (selected) =>
+  `
 inline-flex
 justify-center
 min-w-min
@@ -55,8 +57,10 @@ rounded-full
 text-gray-700
 bg-gray-200
 transition-colors
-${(p) =>
-  p.$selected ? "bg-indigo-200 text-indigo-700" : "bg-gray-200 text-gray-700"}
+bg-gray-200
+text-gray-700
+has-[:checked]:bg-indigo-200
+has-[:checked]:text-indigo-700"
 has-checked:bg-indigo-200
 has-checked:text-indigo-700
 has-checked:hover:bg-indigo-300
@@ -73,10 +77,9 @@ const BadgeControl = ({
   onClick,
 }) => {
   return (
-    <Badge
+    <label
       htmlFor={`toggle-${value}`}
-      className={`${className} relative overflow-hidden`}
-      $as="label"
+      className={`${badgeClasses()} relative overflow-hidden ${className || ""} `}
       onClick={onClick}
     >
       <input
@@ -89,12 +92,11 @@ const BadgeControl = ({
         onChange={onChange}
       />
       {children}
-    </Badge>
+    </label>
   );
 };
 
-const FilterToggleButton = tw.button`
-bg-gray-800
+const filterToggleButtonClasses = `bg-gray-800
 hover:bg-gray-900
 text-white
 font-medium p-1
@@ -115,14 +117,13 @@ const GigFiltersSummary = ({ showFilterForm }) => {
           description = `${caption} (${count})`;
         }
         return (
-          <Badge
-            className="text-xs"
-            $selected={true}
+          <div
+            className={`${badgeClasses(true)} text-xs  bg-indigo-200 text-indigo-700 hover:bg-indigo-300`}
             onClick={() => showFilterForm()}
             key={id}
           >
             <span className="px-4 text-nowrap">{description}</span>
-          </Badge>
+          </div>
         );
       })}
     </div>
@@ -218,12 +219,12 @@ const GigFiltersForm = () => {
                   caption={caption}
                 >
                   {ui == "datetime" && (
-                    <DateInput
+                    <input
                       type="date"
                       key={id}
                       ref={customDateInput}
                       required={true}
-                      className="peer datetime"
+                      className={`${dateInputClasses}peer datetime`}
                       id="customDate"
                       disabled={!selected}
                       name="customDate"
@@ -302,7 +303,7 @@ const GigFiltersForm = () => {
 const GigFilters = () => {
   const [showFilters, setShowFilters] = useState(false);
   return (
-    <FilterContainer $expanded={showFilters}>
+    <div className={filterContainerClasses(showFilters)}>
       {showFilters && <GigFiltersForm />}
       <div className="flex justify-between items-start p-1">
         <div style={{ overflow: "hidden" }}>
@@ -310,14 +311,15 @@ const GigFilters = () => {
             <GigFiltersSummary showFilterForm={() => setShowFilters(true)} />
           )}
         </div>
-        <FilterToggleButton
+        <button
+          className={filterToggleButtonClasses}
           onClick={() => setShowFilters(!showFilters)}
           style={{ marginLeft: "1rem" }}
         >
           {showFilters ? "close" : "filters"}
-        </FilterToggleButton>
+        </button>
       </div>
-    </FilterContainer>
+    </div>
   );
 };
 

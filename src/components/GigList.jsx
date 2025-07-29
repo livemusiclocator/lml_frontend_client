@@ -1,6 +1,5 @@
 import React, { useRef } from "react";
 import { useNavigate, Link } from "react-router";
-import tw from "tailwind-styled-components";
 import {
   MapPinIcon,
   ClockIcon,
@@ -15,16 +14,8 @@ import lbmfLogo from "../assets/lbmf2024logo.png";
 import skLogo from "../assets/skf_blacklogo.svg";
 import { uniqBy } from "lodash-es";
 
-const Aside = tw.aside`flex flex-col`;
 import { filteredGigListPath } from "../searchParams";
-const TicketStatus = tw.div`
-text-xs
-font-medium
-rounded-full
-bg-red-200
-p-2
-m-2
-`;
+
 import { groupBy } from "lodash-es";
 
 const GigHeader = ({ gig, showDate = true }) => {
@@ -45,10 +36,10 @@ const GigHeader = ({ gig, showDate = true }) => {
           <Link to={`gigs/${gig.id}`}>{gig.name}</Link>
           {gig.status === "cancelled" && "(CANCELLED)"}
           {gig.ticket_status === "selling_fast" && (
-            <TicketStatus>SELLING FAST</TicketStatus>
+            <div className="ticket-status">SELLING FAST</div>
           )}
           {gig.ticket_status === "sold_out" && (
-            <TicketStatus>SOLD OUT</TicketStatus>
+            <div className="ticket-status">SOLD OUT</div>
           )}
         </h3>
       </hgroup>
@@ -62,7 +53,7 @@ const GigRow = ({ gig }) => {
   return (
     <article className="flex flex-col snap-start p-4 text-sm">
       <GigHeader gig={gig} showDate={false} />
-      <Aside>
+      <aside className="flex flex-col">
         <div className="flex gap-x-1 pb-2 items-start text-sm">
           <MapPinIcon className="text-gray-500 size-4 shrink-0 m-1" />
           <div aria-label="Venue">
@@ -98,7 +89,7 @@ const GigRow = ({ gig }) => {
             </ul>
           </div>
         )}
-      </Aside>
+      </aside>
       {gig.genreTags && (
         <div className="">
           {uniqBy(gig.genreTags, "id").map(({ id, value }) => (
