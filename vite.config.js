@@ -14,11 +14,6 @@ export default defineConfig({
       open: false,
     }),
   ],
-  resolve: {
-    alias: {
-      "react-router": "node_modules/react-router/dist/production/index.mjs",
-    },
-  },
   build: {
     rollupOptions: {
       output: {
