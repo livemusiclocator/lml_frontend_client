@@ -72,11 +72,22 @@ a.external-link {
 }
 
 .explorer-common {
-  .gig-list-panel {
-    nav {
-      @apply flex items-center border-b border-gray-200 w-full p-2;
-      .overlay-expand-button {
-        @apply w-full;
+  @apply: h-full;
+  .gig-list-panel nav {
+    @apply border-b border-gray-200 p-2;
+    /* todo: rework all of this with a bit more tw vs css approach coherence ! */
+    width: 100%;
+    display: grid;
+    grid-template-columns: 2em 1fr 2em;
+    gap: 1em 0px;
+    grid-auto-flow: column dense;
+    justify-content: space-between;
+    grid-template-areas: ". middle-button .";
+    .overlay-expand-button {
+      @apply cursor-pointer;
+      grid-area: middle-button;
+      svg {
+        @apply mx-auto;
       }
     }
   }
@@ -93,10 +104,10 @@ a.external-link {
   m-0 md:m-2;
   }
   .gig-list-panel.is-maximised {
-    @apply h-full md:h-220;
+    height: 98%;
   }
   .gig-list-panel.is-minimised {
-    @apply border border-gray-200 rounded-t-3xl h-40;
+    @apply border border-gray-200 rounded-t-3xl h-38;
   }
   .map-container {
     @apply h-full w-full z-0 top-0 left-0 absolute;

@@ -6,7 +6,7 @@ import {
   useNavigationType,
   useSearchParams,
 } from "react-router";
-import { ChevronLeftIcon } from "@heroicons/react/24/solid";
+import { BackButton, MapShowButton, MapHideButton } from "./Icons";
 import { useState, useEffect } from "react";
 import Map from "../Map";
 
@@ -45,7 +45,7 @@ export default function Explorer() {
         <nav>
           {showBackButton && (
             <Link to={backButtonLocation}>
-              <ChevronLeftIcon className="size-6" />
+              <BackButton />
             </Link>
           )}
 
@@ -54,12 +54,7 @@ export default function Explorer() {
             onClick={() => setListMaximised(!listMaximised)}
             id="overlay-expand-button"
           >
-            {/**  todo: can we replace with hero icons here? no immediate equivalents as far as i can see (bundle size might reduce then)! */}
-            {listMaximised ? (
-              <i className="bi bi-pin-map-fill"></i>
-            ) : (
-              <i className="bi bi-caret-up-fill"></i>
-            )}
+            {listMaximised ? <MapShowButton /> : <MapHideButton />}
           </button>
         </nav>
         <Outlet context={{ listMaximised }} />
