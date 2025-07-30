@@ -1,4 +1,3 @@
-import "bootstrap-icons/font/bootstrap-icons.css";
 import ReactGA from "react-ga4";
 // todo:  deprecate DefaultLayout and the render_app_layout flag
 import DefaultLayout from "./layouts/default";
