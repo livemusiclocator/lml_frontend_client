@@ -12,7 +12,7 @@
         ]
       },
       {
-        "source": "/lml_gig_explorer_www/**/*.*",
+        "source": "/lml_gig_explorer_live/**/*.*",
         "headers": [
           {
             "key": "Access-Control-Allow-Origin",
