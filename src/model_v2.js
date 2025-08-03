@@ -305,8 +305,7 @@ export const applyFilters = (transformedData, searchParams) => {
   const mapVenues = updatedVenues.map((venue) => ({
     ...venue,
     showAsActive:
-      filterCriteria.venueIds.length == 0 ||
-      filterCriteria.venueIds.includes(venue.id),
+      venue.selectedGigCount > 0 || filterCriteria.venueIds.includes(venue.id),
   }));
 
   return {
