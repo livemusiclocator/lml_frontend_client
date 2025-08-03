@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 @theme {
   --color-lmlpink-50: oklch(97.6% 0.012 11.15);
   --color-lmlpink-100: oklch(95.88% 0.021 10.3);

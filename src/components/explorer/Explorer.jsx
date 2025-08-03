@@ -9,6 +9,7 @@ import {
 import { BackButton, MapShowButton, MapHideButton } from "./Icons";
 import { useState, useEffect } from "react";
 import Map from "../Map";
+import Announcements from "./Announcements";
 
 export default function Explorer() {
   const [searchParams] = useSearchParams();
@@ -35,6 +36,7 @@ export default function Explorer() {
       : "explorer-legacy");
   return (
     <main className={explorerClass}>
+      <Announcements />
       <Map />
       {/**  overlay to the map - for small screens, just use whole width for big screens (not primary usecase) max out at 2xl, but try and keep to a proportion of the screen so you get a lot of map as well */}
       <div
