@@ -63,6 +63,13 @@ export const ALL_LOCATIONS = [
     zoom: 15,
     selectable: true,
   },
+  {
+    caption: "Geelong",
+    id: "geelong",
+    mapCenter: [-38.12908505319935, 144.25186157226565],
+    zoom: 15,
+    selectable: false,
+  },
 ];
 // TODO : We could make this configurable perhaps
 export const getSelectableLocations = () => {
