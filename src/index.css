@@ -124,3 +124,37 @@ bg-red-200
 p-2
 m-2;
 }
+
+/** grid layout for announcements modal */
+
+.announcements-modal {
+  display: grid;
+  grid-auto-flow: column dense;
+  grid-auto-columns: 4em 1fr 4em;
+  grid-auto-rows: 1fr;
+  grid-template-columns: 1fr 2em;
+  grid-template-rows: 2em 1fr max-content;
+  gap: 0px 0px;
+  grid-template-areas:
+    "title-bar title-buttons"
+    "content-start content-end"
+    "action-area action-area-2";
+  justify-items: center;
+  width: 100%;
+
+  .announcement-body {
+    grid-area: content-start;
+    grid-row-start: title-bar-start;
+  }
+
+  .announcement-title {
+    grid-area: title-bar;
+  }
+  .announcement-close-button {
+    grid-area: title-buttons;
+  }
+  .announcement-action-area {
+    grid-area: action-area;
+    grid-column-end: action-area-2-end;
+  }
+}

@@ -1,6 +1,13 @@
-import { ChevronLeftIcon } from "@heroicons/react/24/solid";
+import {
+  ChevronLeftIcon,
+  XMarkIcon,
+  SparklesIcon,
+} from "@heroicons/react/24/solid";
 
 export const BackButton = () => <ChevronLeftIcon className="size-6" />;
+
+export const CloseIcon = () => <XMarkIcon className="size-4" />;
+export const Sparkles = () => <SparklesIcon className="size-4" />;
 
 // bootstrap 'chevron-up'
 export const MapHideButton = () => {

@@ -3,8 +3,10 @@ import React, {
   useEffect,
   useImperativeHandle,
   forwardRef,
+  useCallback,
 } from "react";
 
+import { CloseIcon } from "./icons";
 // Announcement configuration - easy to modify or extend
 const ANNOUNCEMENT_CONFIG = {
   id: "lml-gig-explorer-launch-aug-2025",
@@ -79,15 +81,17 @@ const useTransitionEnd = (callback, dependencies = []) => {
 };
 
 // Custom hook for announcement logic
+//
+// todo: this is all a bit messy and probably a bit overkill. simplify with library perhaps?
 const useAnnouncementState = (config) => {
   const [isVisible, setIsVisible] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const storage = useLocalStorage();
 
-  const isExpired = () => {
+  const isExpired = useCallback(() => {
     const now = new Date();
     return now > config.expiryDate;
-  };
+  }, [config]);
 
   const hasBeenSeen = () => {
     // If localStorage isn't available, assume it's been seen to avoid annoying users
@@ -127,7 +131,7 @@ const useAnnouncementState = (config) => {
     if (!isExpired() && !hasBeenSeen()) {
       show();
     }
-  }, []);
+  }, [hasBeenSeen, isExpired, show]);
 
   return {
     isVisible,
@@ -141,14 +145,14 @@ const useAnnouncementState = (config) => {
 // Content component for the announcement markup
 const AnnouncementContent = ({ config, onClose }) => {
   return (
-    <div className="px-6 py-4 mx-auto max-w-[85vw]">
-      <div className="prose prose-sm prose-slate prose-invert max-w-none">
+    <div className="announcements-modal mx-auto p-4">
+      <div className="announcement-body prose prose-sm prose-slate prose-invert max-w-none">
         <h3>{config.title}</h3>
         {config.message()}
       </div>
 
       {/* Action area */}
-      <div className="mt-3 flex justify-center space-x-4">
+      <div className="announcement-action-area">
         <button
           onClick={onClose}
           className="tag !font-bold rounded-xs hover:!scale-110"
@@ -156,6 +160,16 @@ const AnnouncementContent = ({ config, onClose }) => {
           {config.dismissText}
         </button>
       </div>
+
+      <button
+        type="button"
+        onClick={onClose}
+        aria-label="Close"
+        title="Close"
+        className="announcement-close-button p-2 text-xs text-white ring-1 ring-slate-400  rounded-lg hover:bg-slate-600 focus:ring-2 focus:outline-none"
+      >
+        <CloseIcon />
+      </button>
     </div>
   );
 };
@@ -181,7 +195,7 @@ const AnnouncementNotification = forwardRef(({ config }, ref) => {
         ref={notificationRef}
         className={`bg-gray-700 text-white shadow-lg transition-all duration-300 ease-out overflow-hidden ${
           announcement.isExpanded
-            ? "max-h-64 opacity-100 translate-y-0"
+            ? "max-h-dvh opacity-100 translate-y-0"
             : "max-h-0 opacity-0 -translate-y-full"
         }`}
       >
