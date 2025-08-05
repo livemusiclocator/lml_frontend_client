@@ -63,6 +63,19 @@ const VenueMarkers = () => {
 // the map it does not randomly wiggle it back to where it was
 const MapPositioner = () => {
   const map = useMap();
+  useEffect(() => {
+    if (!map.getContainer()) return;
+
+    const observer = new ResizeObserver(() => {
+      map.invalidateSize();
+    });
+
+    observer.observe(map.getContainer());
+
+    return () => {
+      observer.disconnect(); // Clean up on unmount
+    };
+  }, [map]);
   const {
     data: mapSettings,
     dataLoaded,
