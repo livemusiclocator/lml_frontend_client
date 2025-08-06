@@ -3,7 +3,7 @@ import {
   ArrowTopRightOnSquareIcon as ExternalLinkIcon,
 } from "@heroicons/react/24/solid";
 import { Link } from "react-router";
-import { filteredGigListPath } from "../../../searchParams";
+import { filteredGigListPath } from "../../searchParams";
 
 export default function Venue({ venue }) {
   return (

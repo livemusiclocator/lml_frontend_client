@@ -1,10 +1,8 @@
-import {
-  InformationCircleIcon,
-} from "@heroicons/react/24/solid";
+import { InformationCircleIcon } from "@heroicons/react/24/solid";
 
 export default function InfoTags({ infoTags }) {
   if (infoTags.length > 0) {
-    return(
+    return (
       <div className="flex gap-x-2">
         <InformationCircleIcon className="size-6 shrink-0" />
 

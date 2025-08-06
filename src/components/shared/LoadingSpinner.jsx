@@ -8,7 +8,7 @@ const LoadingSpinnerCircle = () => {
     </div>
   );
 };
-export const LoadingSpinner = () => {
+const LoadingSpinner = () => {
   return (
     <div className="flex justify-center mt-4 gap-2 delay-500 animate-delayed-entrance">
       <LoadingSpinnerCircle />
@@ -17,3 +17,5 @@ export const LoadingSpinner = () => {
     </div>
   );
 };
+
+export default LoadingSpinner;

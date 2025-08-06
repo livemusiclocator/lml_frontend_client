@@ -1,6 +1,6 @@
 export default function Tickets({ url }) {
   if (url) {
-    return(
+    return (
       <section className="p-4">
         <a
           href={url}

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { gigIsSaved, saveGig, unsaveGig } from "../savedGigs";
+import { gigIsSaved, saveGig, unsaveGig } from "@/savedGigs";
 import { StarIcon as StarIconOutline } from "@heroicons/react/24/outline";
 import { StarIcon as StarIconSolid } from "@heroicons/react/24/solid";
 const SaveGigButton = ({ gig }) => {

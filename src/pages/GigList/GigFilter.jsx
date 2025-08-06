@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 import {
   useGigSearchResults,
   useCurrentGigFilterSummary,
-} from "../hooks/api_v2";
+} from "@/hooks/api_v2";
 
 import { Form, useSubmit } from "react-router";
 

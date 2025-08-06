@@ -1,18 +1,18 @@
 import { useParams, useSearchParams, Link } from "react-router";
-import SaveGigButton from "../SaveGigButton";
-import { useGig } from "../../hooks/api_v2";
-import { LoadingSpinner } from "../loading/LoadingOverlay";
-import DateTimeDisplay from "../DateTimeDisplay";
-import DateTime from "./details/DateTime";
-import Genres from "./details/Genres";
-import Venue from "./details/Venue";
-import Prices from "./details/Prices";
-import InfoTags from "./details/InfoTags";
-import Tickets from "./details/Tickets";
-import Sets from "./details/Sets";
-import lbmfLogo from "../../assets/lbmf2024logo.png";
-import skLogo from "../../assets/skf_blacklogo.svg";
-import { filteredGigListPath } from "../../searchParams";
+import SaveGigButton from "@/components/shared/SaveGigButton";
+import { useGig } from "@/hooks/api_v2";
+import LoadingSpinner from "@/components/shared/LoadingSpinner";
+import DateTimeDisplay from "@/components/shared/DateTimeDisplay";
+import DateTime from "./DateTime";
+import Genres from "./Genres";
+import Venue from "./Venue";
+import Prices from "./Prices";
+import InfoTags from "./InfoTags";
+import Tickets from "./Tickets";
+import Sets from "./Sets";
+import lbmfLogo from "@/assets/lbmf2024logo.png";
+import skLogo from "@/assets/skf_blacklogo.svg";
+import { filteredGigListPath } from "@/searchParams";
 
 const GigHeroImageBanner = () => {
   // probably a case for some actual css here .

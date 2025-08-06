@@ -8,7 +8,7 @@ import {
 } from "react-router";
 import { BackButton, MapShowButton, MapHideButton } from "./Icons";
 import { useState, useEffect } from "react";
-import Map from "../Map";
+import Map from "./Map";
 import Announcements from "./Announcements";
 
 export default function Explorer() {

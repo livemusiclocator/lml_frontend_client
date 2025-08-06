@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { filteredGigListPath } from "../../../searchParams";
+import { filteredGigListPath } from "../../searchParams";
 
 export default function Genres({ genres }) {
   return (

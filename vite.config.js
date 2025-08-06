@@ -14,6 +14,11 @@ export default defineConfig({
       open: false,
     }),
   ],
+  resolve: {
+    alias: {
+      "@": "/src",
+    },
+  },
   build: {
     rollupOptions: {
       output: {

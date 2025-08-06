@@ -5,16 +5,16 @@ import {
   ClockIcon,
   ArrowTopRightOnSquareIcon as ExternalLinkIcon,
 } from "@heroicons/react/24/solid";
-import DateTimeDisplay from "./DateTimeDisplay";
-import SaveGigButton from "./SaveGigButton";
-import { useGigSearchResults } from "../hooks/api_v2";
+import DateTimeDisplay from "@/components/shared/DateTimeDisplay";
+import SaveGigButton from "@/components/shared//SaveGigButton";
+import { useGigSearchResults } from "@/hooks/api_v2";
 import GigFilter from "./GigFilter";
-import { LoadingSpinner } from "./loading/LoadingOverlay";
-import lbmfLogo from "../assets/lbmf2024logo.png";
-import skLogo from "../assets/skf_blacklogo.svg";
+import LoadingSpinner from "@/components/shared/LoadingSpinner";
+import lbmfLogo from "@/assets/lbmf2024logo.png";
+import skLogo from "@/assets/skf_blacklogo.svg";
 import { uniqBy } from "lodash-es";
 
-import { filteredGigListPath } from "../searchParams";
+import { filteredGigListPath } from "@/searchParams";
 
 import { groupBy } from "lodash-es";
 

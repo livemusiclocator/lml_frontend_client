@@ -4,11 +4,9 @@ import DefaultLayout from "./layouts/default";
 import NoLayout from "./layouts/nolayout";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router";
-import SingleGigDetails from "./components/explorer/SingleGigDetails";
-import Explorer from "./components/explorer/Explorer";
-import GigList from "./components/GigList";
-import About from "./components/About";
-import Events from "./components/Events";
+import SingleGigDetails from "./pages/GigDetails/GigDetails";
+import Explorer from "./layouts/Explorer/Explorer";
+import GigList from "./pages/GigList/GigList";
 import getConfig from "./config";
 import { SWRConfig } from "swr";
 const APP_CONFIG = getConfig();
@@ -23,14 +21,6 @@ const router = createBrowserRouter(
     {
       element: <LayoutComponent />,
       children: [
-        {
-          path: "about",
-          element: <About />,
-        },
-        {
-          path: "events",
-          element: <Events />,
-        },
         {
           element: <Explorer />,
           handle: {

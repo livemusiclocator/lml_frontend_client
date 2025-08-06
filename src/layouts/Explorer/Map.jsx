@@ -2,14 +2,14 @@ import { useRef, useEffect, useState, useLayoutEffect } from "react";
 import { MapContainer, TileLayer, Marker, Tooltip } from "react-leaflet";
 import { useMap } from "react-leaflet/hooks";
 import { Icon } from "leaflet";
-import { getTheme } from "../getLocation";
+import { getTheme } from "@/getLocation";
 import "leaflet/dist/leaflet.css";
 import { useNavigate } from "react-router";
 
-import { filteredGigListPath } from "../searchParams";
+import { filteredGigListPath } from "@/searchParams";
 
-import { stkTheme } from "../themes";
-import { useCurrentLocationSettings, useMapVenues } from "../hooks/api_v2";
+import { stkTheme } from "@/themes";
+import { useCurrentLocationSettings, useMapVenues } from "@/hooks/api_v2";
 
 const VenueMarkers = () => {
   const { data: venues } = useMapVenues();

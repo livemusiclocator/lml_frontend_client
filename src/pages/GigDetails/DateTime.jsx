@@ -1,10 +1,9 @@
-import DateTimeDisplay from "../../DateTimeDisplay";
-import {
-  CalendarIcon,
-} from "@heroicons/react/24/solid";
+import DateTimeDisplay from "/src/components/shared/DateTimeDisplay";
+
+import { CalendarIcon } from "@heroicons/react/24/solid";
 
 export default function DateTime({ gig }) {
-  return(
+  return (
     <div className="flex gap-x-2">
       <CalendarIcon className="size-6 shrink-0" />
       <ul className="font-semibold text-lg">
