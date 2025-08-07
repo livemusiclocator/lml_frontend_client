@@ -1,5 +1,5 @@
 import ReactGA from "react-ga4";
-// todo:  deprecate DefaultLayout and the render_app_layout flag
+// todo:  deprecate DefaultLayout - can just use explorer component
 import DefaultLayout from "./layouts/default";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router";
@@ -9,8 +9,8 @@ import GigList from "./pages/GigList/GigList";
 import getConfig from "./config";
 import { SWRConfig } from "swr";
 const APP_CONFIG = getConfig();
-if (APP_CONFIG.ga_project) {
-  ReactGA.initialize(APP_CONFIG.ga_project);
+if (APP_CONFIG.gaProject) {
+  ReactGA.initialize(APP_CONFIG.gaProject);
 }
 
 const router = createBrowserRouter(
@@ -45,7 +45,7 @@ const router = createBrowserRouter(
     },
   ],
   {
-    basename: getConfig().root_path,
+    basename: getConfig().rootPath,
   },
 );
 

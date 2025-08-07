@@ -12,7 +12,7 @@ import { compact } from "lodash-es";
 
 import { datesForDateRange } from "../timeStuff";
 
-const GIGS_ENDPOINT = getConfig().gigs_endpoint;
+const GIGS_ENDPOINT = getConfig().gigsEndpoint;
 
 const loadData = async (url) => {
   const response = await fetch(url);

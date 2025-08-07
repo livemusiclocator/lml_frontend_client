@@ -29,17 +29,28 @@ const testMapPinTheme = makeMapPinTheme({
   savedMapPin: "testseries-saved-pin.svg",
 });
 
-// this allows us to bake in the location at build time -
-// but we expect most of the time to use the location from app config
-const getLocationKeyFromViteEnv = () => import.meta.env.VITE_LML_LOCATION;
-
-const STANDALONE_CONFIG = {
-  root_path: import.meta.env.VITE_LML_ROOT_PATH || "/",
-  gigs_endpoint: "https://api.lml.live/gigs",
-  ga_project: "G-8TKSCK99CN",
-  render_app_layout: true,
-  default_location: getLocationKeyFromViteEnv(),
+const BASE_CONFIG = {
+  rootPath: import.meta.env.VITE_LML_ROOT_PATH || "/",
+  gigsEndpoint: "https://api.lml.live/gigs",
+  gaProject: "G-8TKSCK99CN",
+  defaultLocation: "anywhere",
+  allowSelectLocation: false,
 };
+
+function adaptLegacyConfigKeys(obj) {
+  const result = {};
+
+  for (const key in obj) {
+    const newKey = key.includes("_")
+      ? key.replace(/_([a-z])/g, (match, letter) => letter.toUpperCase())
+      : key;
+
+    result[newKey] = obj[key];
+  }
+
+  return result;
+}
+
 const ALL_LOCATIONS = [
   {
     id: "anywhere",
@@ -114,8 +125,7 @@ export default () => {
   // also use javascript upperCamel not ruby style
   // also worth memoising somehow?
   return {
-    ...STANDALONE_CONFIG,
-    ...window.APP_CONFIG,
+    ...BASE_CONFIG,
     allLocations: ALL_LOCATIONS,
     gigImageThemes: {
       default: null,
@@ -132,5 +142,7 @@ export default () => {
         testSeries: testMapPinTheme,
       },
     },
+
+    ...adaptLegacyConfigKeys(window.APP_CONFIG),
   };
 };

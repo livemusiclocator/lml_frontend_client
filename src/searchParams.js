@@ -24,9 +24,9 @@ const venuesToSearchParams = ({ venueIds }) => {
 };
 
 const locationToSearchParams = ({ locationId }) => {
-  const { allow_select_location } = getConfig();
+  const { allowSelectLocation } = getConfig();
 
-  if (!allow_select_location || !locationId) {
+  if (!allowSelectLocation || !locationId) {
     return {};
   }
 
@@ -73,12 +73,12 @@ const searchParamsToVenuesFilters = (params) => {
 };
 
 const searchParamsToLocationFilter = (params) => {
-  const { allow_select_location, default_location } = getConfig();
-  if (!allow_select_location) {
-    return { locationId: default_location };
+  const { allowSelectLocation, defaultLocation } = getConfig();
+  if (!allowSelectLocation) {
+    return { locationId: defaultLocation };
   }
   return {
-    locationId: params.get("location") || default_location,
+    locationId: params.get("location") || defaultLocation,
   };
 };
 

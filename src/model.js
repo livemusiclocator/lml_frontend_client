@@ -93,8 +93,7 @@ export const gigFromApiResponse = (gig) => {
 };
 
 const createLocationData = (locationId) => {
-  const { allow_select_location: allowSelectLocation, allLocations } =
-    getConfig();
+  const { allowSelectLocation, allLocations } = getConfig();
 
   const locations = allLocations
     .map((location) => {
