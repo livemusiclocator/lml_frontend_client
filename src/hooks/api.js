@@ -7,7 +7,7 @@ import {
   applyFilters,
   gigFromApiResponse,
   toFilterSummary,
-} from "../model_v2";
+} from "../model";
 import { compact } from "lodash-es";
 
 import { datesForDateRange } from "../timeStuff";

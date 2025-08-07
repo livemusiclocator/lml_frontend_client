@@ -1,6 +1,6 @@
 import { useParams, useSearchParams, Link } from "react-router";
 import SaveGigButton from "@/components/shared/SaveGigButton";
-import { useGig } from "@/hooks/api_v2";
+import { useGig } from "@/hooks/api";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import DateTimeDisplay from "@/components/shared/DateTimeDisplay";
 import DateTime from "./DateTime";

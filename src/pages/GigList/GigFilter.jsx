@@ -1,9 +1,6 @@
 import { useState, useRef } from "react";
 import dayjs from "dayjs";
-import {
-  useGigSearchResults,
-  useCurrentGigFilterSummary,
-} from "@/hooks/api_v2";
+import { useGigSearchResults, useCurrentGigFilterSummary } from "@/hooks/api";
 
 import { Form, useSubmit } from "react-router";
 

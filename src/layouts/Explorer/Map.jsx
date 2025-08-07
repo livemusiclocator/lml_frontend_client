@@ -9,7 +9,7 @@ import { useNavigate } from "react-router";
 import { filteredGigListPath } from "@/searchParams";
 
 import { stkTheme } from "@/themes";
-import { useCurrentLocationSettings, useMapVenues } from "@/hooks/api_v2";
+import { useCurrentLocationSettings, useMapVenues } from "@/hooks/api";
 
 const VenueMarkers = () => {
   const { data: venues } = useMapVenues();

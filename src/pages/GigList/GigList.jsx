@@ -7,7 +7,7 @@ import {
 } from "@heroicons/react/24/solid";
 import DateTimeDisplay from "@/components/shared/DateTimeDisplay";
 import SaveGigButton from "@/components/shared//SaveGigButton";
-import { useGigSearchResults } from "@/hooks/api_v2";
+import { useGigSearchResults } from "@/hooks/api";
 import GigFilter from "./GigFilter";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import lbmfLogo from "@/assets/lbmf2024logo.png";
