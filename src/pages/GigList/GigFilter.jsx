@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import dayjs from "dayjs";
 import { useGigSearchResults, useCurrentGigFilterSummary } from "@/hooks/api";
 
@@ -241,14 +241,11 @@ const GigFiltersForm = () => {
               ))}
             </div>
             {tagCategories.map(({ id: tagCategory, caption, values }) => (
-              <>
+              <React.Fragment key={tagCategory}>
                 <h3 key={tagCategory} className="text-sm font-medium">
                   {caption}
                 </h3>
-                <div
-                  key={`div-${tagCategory}`}
-                  className="flex flex-row items-baseline  flex-wrap justify-start gap-1"
-                >
+                <div className="flex flex-row items-baseline  flex-wrap justify-start gap-1">
                   {values.map(({ value, id, selected, gigCount }) => {
                     return (
                       <BadgeControl
@@ -265,7 +262,7 @@ const GigFiltersForm = () => {
                     );
                   })}
                 </div>
-              </>
+              </React.Fragment>
             ))}
 
             {venues && venues.length > 0 && (
