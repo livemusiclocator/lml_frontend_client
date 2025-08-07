@@ -52,7 +52,21 @@ export const gigFromApiResponse = (gig) => {
     "information",
   );
   const genreTags = createTagsFromStrings(gig?.genre_tags || [], "genre");
-
+  // testing the icon configuration
+  if (import.meta.env.MODE == "development") {
+    const config = getConfig();
+    if (config.shuffleSeriesAssignments) {
+      gig.series = [
+        "testSeries",
+        "lbmf",
+        "stkildafestival2025",
+        "anotherFestival",
+        null,
+        null,
+        null,
+      ][gig.id.charCodeAt(0) % 5];
+    }
+  }
   const mapVenues = gig.venue
     ? [
         {
