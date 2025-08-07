@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { useNavigate, Link } from "react-router";
+import { Link } from "react-router";
 import {
   MapPinIcon,
   ClockIcon,
@@ -49,7 +49,6 @@ const GigHeader = ({ gig, showDate = true }) => {
 };
 
 const GigRow = ({ gig }) => {
-  const navigate = useNavigate();
   return (
     <article className="flex flex-col snap-start p-4 text-sm">
       <GigHeader gig={gig} showDate={false} />

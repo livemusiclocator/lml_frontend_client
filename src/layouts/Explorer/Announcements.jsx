@@ -22,8 +22,9 @@ const ANNOUNCEMENT_CONFIG = {
         </a>
       </p>
       <p>
-        If you're looking for content from the old site, don't worry - it's all
-        here. You will find it all in the <a href="/about">about menu</a>.
+        If you&apos;re looking for content from the old site, don&apos;t worry -
+        it&apos;s all here. You will find it all in the{" "}
+        <a href="/about">about menu</a>.
       </p>
       <p>
         Oh, and the URL <a href="https://lml.live">lml.live</a> still works just
@@ -204,6 +205,8 @@ const AnnouncementNotification = forwardRef(({ config }, ref) => {
     </div>
   );
 });
+
+AnnouncementNotification.displayName = AnnouncementNotification;
 
 // Main Announcements component that manages everything
 const Announcements = () => {

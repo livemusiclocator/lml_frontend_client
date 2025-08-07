@@ -74,7 +74,7 @@ const GigError = ({ error }) => {
       {error.status == 404 && (
         <>
           <div>
-            <p>We don't seem to know about this gig.</p>
+            <p>We don&apos;t seem to know about this gig.</p>
             <p>
               Maybe you could try{" "}
               <Link to={filteredGigListPath()} className="internal-link">

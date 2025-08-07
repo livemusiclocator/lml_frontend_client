@@ -43,7 +43,7 @@ invalid:ring-offset-2
   focus:ring-indigo-500
 `;
 
-const badgeClasses = (selected) =>
+const badgeClasses = () =>
   `
 inline-flex
 justify-center
