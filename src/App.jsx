@@ -1,7 +1,6 @@
 import ReactGA from "react-ga4";
 // todo:  deprecate DefaultLayout and the render_app_layout flag
 import DefaultLayout from "./layouts/default";
-import NoLayout from "./layouts/nolayout";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router";
 import SingleGigDetails from "./pages/GigDetails/GigDetails";
@@ -14,12 +13,10 @@ if (APP_CONFIG.ga_project) {
   ReactGA.initialize(APP_CONFIG.ga_project);
 }
 
-const LayoutComponent = APP_CONFIG.render_app_layout ? DefaultLayout : NoLayout;
-
 const router = createBrowserRouter(
   [
     {
-      element: <LayoutComponent />,
+      element: <DefaultLayout />,
       children: [
         {
           element: <Explorer />,
