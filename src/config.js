@@ -1,12 +1,36 @@
-// Old way of doing it - using the first part of the hostname
-const getLocationKeyFromHost = () => {
-  const result = window.location.host.split(".")[0];
-  if (result == "lml") {
-    return "melbourne";
-  }
+// resolves the image 'names' relative to the assets dir to cope with non root level deploys (e.g. /lml or /whatever)
+const getImageUrl = (name) => {
+  return new URL(`./assets/${name}`, import.meta.url);
 };
 
-// New way of doing it - vite env var (but really ultimately it should just be in the app_config on the page)
+const stKildaFestivalGigImage = getImageUrl("skf_blacklogo.svg");
+const lbmfGigImage = getImageUrl("lbmf2024logo.svg");
+const testSeriesGigImage = getImageUrl("testseries-logo.svg");
+
+const makeMapPinTheme = ({ defaultMapPin, savedMapPin }) => {
+  return {
+    defaultMapPin: getImageUrl(defaultMapPin),
+    savedMapPin: getImageUrl(savedMapPin),
+  };
+};
+
+const defaultMapPinTheme = makeMapPinTheme({
+  defaultMapPin: "lml-marker-pink-midnite-outline.png",
+  savedMapPin: "lml-marker-pink-saved.png",
+});
+
+const stKildaFestivalMapPinTheme = makeMapPinTheme({
+  defaultMapPin: "stk.png",
+  savedMapPin: "stk-fav.png",
+});
+
+const testMapPinTheme = makeMapPinTheme({
+  defaultMapPin: "testseries-pin.svg",
+  savedMapPin: "testseries-saved-pin.svg",
+});
+
+// this allows us to bake in the location at build time -
+// but we expect most of the time to use the location from app config
 const getLocationKeyFromViteEnv = () => import.meta.env.VITE_LML_LOCATION;
 
 const STANDALONE_CONFIG = {
@@ -14,7 +38,7 @@ const STANDALONE_CONFIG = {
   gigs_endpoint: "https://api.lml.live/gigs",
   ga_project: "G-8TKSCK99CN",
   render_app_layout: true,
-  default_location: getLocationKeyFromViteEnv() ?? getLocationKeyFromHost(),
+  default_location: getLocationKeyFromViteEnv(),
 };
 const ALL_LOCATIONS = [
   {
@@ -88,9 +112,25 @@ const ALL_LOCATIONS = [
 export default () => {
   // todo: pass in locations in settings ?
   // also use javascript upperCamel not ruby style
+  // also worth memoising somehow?
   return {
     ...STANDALONE_CONFIG,
     ...window.APP_CONFIG,
     allLocations: ALL_LOCATIONS,
+    gigImageThemes: {
+      default: null,
+      series: {
+        stkildafestival2025: stKildaFestivalGigImage,
+        lbmf2024: lbmfGigImage,
+        testSeries: testSeriesGigImage,
+      },
+    },
+    mapPinThemes: {
+      default: defaultMapPinTheme,
+      series: {
+        stkildafestival2025: stKildaFestivalMapPinTheme,
+        testSeries: testMapPinTheme,
+      },
+    },
   };
 };

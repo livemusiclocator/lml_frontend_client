@@ -10,18 +10,19 @@ import SaveGigButton from "@/components/shared//SaveGigButton";
 import { useGigSearchResults } from "@/hooks/api";
 import GigFilter from "./GigFilter";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
-import lbmfLogo from "@/assets/lbmf2024logo.png";
-import skLogo from "@/assets/skf_blacklogo.svg";
 import { uniqBy } from "lodash-es";
+import getConfig from "@/config";
 
 import { filteredGigListPath } from "@/searchParams";
 
 import { groupBy } from "lodash-es";
 
 const GigHeader = ({ gig, showDate = true }) => {
-  const lbmf = gig.series === "lbmf";
-  const sk = gig.series === "stkildafestival2025";
-
+  // todo: Memoize or make it really ok to load this statically
+  const {
+    gigImageThemes: { default: defaultGigImage, series: seriesGigImages = {} },
+  } = getConfig();
+  const gigImage = seriesGigImages[gig.series] ?? defaultGigImage;
   return (
     <header className={`flex justify-between flex-row pb-2`}>
       <hgroup className="break-words text-pretty leading-loose">
@@ -31,8 +32,7 @@ const GigHeader = ({ gig, showDate = true }) => {
           </p>
         )}
         <h3 className="flex text-xl font-bold items-center">
-          {lbmf && <img src={lbmfLogo} className="m-2 shrink w-10" />}
-          {sk && <img src={skLogo} className="m-2 shrink w-10" />}
+          {gigImage && <img src={gigImage} className="m-2 shrink w-10" />}
           <Link to={`gigs/${gig.id}`}>{gig.name}</Link>
           {gig.status === "cancelled" && "(CANCELLED)"}
           {gig.ticket_status === "selling_fast" && (

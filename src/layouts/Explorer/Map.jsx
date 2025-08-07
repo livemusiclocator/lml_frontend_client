@@ -2,19 +2,26 @@ import { useRef, useEffect, useState, useLayoutEffect } from "react";
 import { MapContainer, TileLayer, Marker, Tooltip } from "react-leaflet";
 import { useMap } from "react-leaflet/hooks";
 import { Icon } from "leaflet";
-import { getTheme } from "@/getLocation";
+import getConfig from "@/config";
 import "leaflet/dist/leaflet.css";
 import { useNavigate } from "react-router";
 
 import { filteredGigListPath } from "@/searchParams";
 
-import { stkTheme } from "@/themes";
 import { useCurrentLocationSettings, useMapVenues } from "@/hooks/api";
 
+const mapPinThemeForVenue = (venue) => {
+  const {
+    mapPinThemes: { default: defaultTheme, series: seriesThemes },
+  } = getConfig();
+  const themeableSeries = venue.gigSeries?.find(
+    (series) => seriesThemes[series],
+  );
+  return seriesThemes[themeableSeries] ?? defaultTheme;
+};
 const VenueMarkers = () => {
   const { data: venues } = useMapVenues();
 
-  const theme = getTheme() ?? {};
   const navigate = useNavigate();
 
   const handleMarkerClick = async (venue) => {
@@ -22,11 +29,10 @@ const VenueMarkers = () => {
     const newVenueFilters = venue.selected ? [] : [venue.id];
     await navigate(filteredGigListPath({ venueIds: newVenueFilters }));
   };
-  const customIcon = ({ hasSavedGigs, seriesGigCount, showAsActive }) => {
-    const { savedMapPin, defaultMapPin } =
-      seriesGigCount > 0 ? stkTheme : theme;
-    const iconUrl = hasSavedGigs ? savedMapPin : defaultMapPin;
-    const className = showAsActive > 0 ? "" : "grayscale opacity-60";
+  const customIcon = (venue) => {
+    const { savedMapPin, defaultMapPin } = mapPinThemeForVenue(venue);
+    const iconUrl = venue.hasSavedGigs ? savedMapPin : defaultMapPin;
+    const className = venue.showAsActive > 0 ? "" : "grayscale opacity-60";
     return new Icon({
       iconUrl,
       className,

@@ -7,9 +7,10 @@ import {
   flatMap,
   reverse,
   sortBy,
+  groupBy,
 } from "lodash-es";
 import getConfig from "./config";
-
+import { gigIsSaved } from "@/savedGigs";
 import { DATE_RANGES } from "./timeStuff";
 
 const createTag = (category, value) => {
@@ -140,11 +141,10 @@ const extractTagsWithCounts = (transformedGigs, category, tagField) => {
 export const transformGigData = (rawGigs = [], requestKey) => {
   const transformedGigs = rawGigs.map(gigFromApiResponse);
   // Extract unique venues with gig counts
-  const venueGigCounts = countBy(transformedGigs, (gig) => gig.venue.id);
-  const seriesGigCounts = countBy(
-    transformedGigs.filter((gig) => gig.series),
-    (gig) => gig.venue.id,
-  );
+
+  // todo: having venues in returned feed here would help us and make feed smaller.
+
+  const gigsByVenue = groupBy(transformedGigs, (gig) => gig.venue.id);
 
   const venues = sortFilterOptionsByCounts(
     uniqBy(
@@ -152,12 +152,13 @@ export const transformGigData = (rawGigs = [], requestKey) => {
       "id",
     ).map((venue) => {
       const mapSettings = createMapSettings(venue.latitude, venue.longitude);
-
+      const gigs = gigsByVenue[venue.id] || [];
       return {
         ...venue,
         caption: venue.name,
-        gigCount: venueGigCounts[venue.id] || 0,
-        seriesGigCount: seriesGigCounts[venue.id] || 0,
+        gigCount: gigs.length,
+        hasSavedGigs: gigs.filter(gigIsSaved).length > 0,
+        gigSeries: gigs.map((gig) => gig.series),
         ...(mapSettings && { mapSettings }),
       };
     }),
