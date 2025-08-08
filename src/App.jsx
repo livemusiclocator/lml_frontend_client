@@ -9,7 +9,7 @@ import GigList from "./pages/GigList/GigList";
 import getConfig from "./config";
 import { SWRConfig } from "swr";
 const APP_CONFIG = getConfig();
-if (APP_CONFIG.gaProject) {
+if (APP_CONFIG.gaProject && !APP_CONFIG.disableAnalytics) {
   ReactGA.initialize(APP_CONFIG.gaProject);
 }
 
