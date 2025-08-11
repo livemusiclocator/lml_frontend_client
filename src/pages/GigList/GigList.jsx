@@ -20,9 +20,15 @@ import { groupBy } from "lodash-es";
 const GigHeader = ({ gig, showDate = true }) => {
   // todo: Memoize or make it really ok to load this statically
   const {
-    gigImageThemes: { default: defaultGigImage, series: seriesGigImages = {} },
+    themes: {
+      default: defaultGigImageTheme,
+      series: seriesGigImageThemes = {},
+    },
   } = getConfig();
-  const gigImage = seriesGigImages[gig.series] ?? defaultGigImage;
+  // todo: dupe with Map.jsx code right now  -
+  // (will need change to change both if we want different selection logic for themes)
+  const theme = seriesGigImageThemes[gig.series] ?? defaultGigImageTheme;
+
   return (
     <header className={`flex justify-between flex-row pb-2`}>
       <hgroup className="break-words text-pretty leading-loose">
@@ -32,7 +38,9 @@ const GigHeader = ({ gig, showDate = true }) => {
           </p>
         )}
         <h3 className="flex text-xl font-bold items-center">
-          {gigImage && <img src={gigImage} className="m-2 shrink w-10" />}
+          {theme.searchResult && (
+            <img src={theme.searchResult} className="m-2 shrink w-10" />
+          )}
           <Link to={`gigs/${gig.id}`}>{gig.name}</Link>
           {gig.status === "cancelled" && "(CANCELLED)"}
           {gig.ticket_status === "selling_fast" && (

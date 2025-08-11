@@ -12,7 +12,7 @@ import { useCurrentLocationSettings, useMapVenues } from "@/hooks/api";
 
 const mapPinThemeForVenue = (venue) => {
   const {
-    mapPinThemes: { default: defaultTheme, series: seriesThemes },
+    themes: { default: defaultTheme, series: seriesThemes },
   } = getConfig();
   const themeableSeries = venue.gigSeries?.find(
     (series) => seriesThemes[series],

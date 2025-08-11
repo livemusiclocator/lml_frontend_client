@@ -1,43 +1,30 @@
+import { mapValues, merge } from "lodash-es";
+
 // resolves the image 'names' relative to the assets dir to cope with non root level deploys (e.g. /lml or /whatever)
 const getImageUrl = (name) => {
+  if (!name) {
+    return null;
+  }
   return new URL(`./assets/${name}`, import.meta.url);
 };
 
-const stKildaFestivalGigImage = getImageUrl("skf_blacklogo.svg");
-const lbmfGigImage = getImageUrl("lbmf2024logo.svg");
-const testSeriesGigImage = getImageUrl("testseries-logo.svg");
+// Convert {"blah": "file.svg"} to {"blah": "/assets--whatever/file.svg"}
+const resolveImageAssets = (imageNames) => {
+  return mapValues(imageNames, getImageUrl);
+};
 
-const makeMapPinTheme = ({ defaultMapPin, savedMapPin }) => {
+const resolveThemeImages = ({
+  default: defaults,
+  series: seriesCustomised,
+}) => {
   return {
-    defaultMapPin: getImageUrl(defaultMapPin),
-    savedMapPin: getImageUrl(savedMapPin),
+    default: resolveImageAssets(defaults),
+    series: mapValues(seriesCustomised, resolveImageAssets),
   };
 };
 
-const defaultMapPinTheme = makeMapPinTheme({
-  defaultMapPin: "lml-marker-pink-midnite-outline.png",
-  savedMapPin: "lml-marker-pink-saved.png",
-});
-
-const stKildaFestivalMapPinTheme = makeMapPinTheme({
-  defaultMapPin: "stk.png",
-  savedMapPin: "stk-fav.png",
-});
-
-const testMapPinTheme = makeMapPinTheme({
-  defaultMapPin: "testseries-pin.svg",
-  savedMapPin: "testseries-saved-pin.svg",
-});
-
-const BASE_CONFIG = {
-  rootPath: import.meta.env.VITE_LML_ROOT_PATH || "/",
-  gigsEndpoint: "https://api.lml.live/gigs",
-  gaProject: "G-8TKSCK99CN",
-  defaultLocation: "anywhere",
-  allowSelectLocation: false,
-};
-
-function adaptLegacyConfigKeys(obj) {
+// wind back some less than useful naming conventions to use js-friendly ones
+const adaptLegacyConfigKeys = (obj) => {
   const result = {};
 
   for (const key in obj) {
@@ -47,9 +34,8 @@ function adaptLegacyConfigKeys(obj) {
 
     result[newKey] = obj[key];
   }
-
   return result;
-}
+};
 
 const ALL_LOCATIONS = [
   {
@@ -119,30 +105,31 @@ const ALL_LOCATIONS = [
     selectable: false,
   },
 ];
+const BASE_CONFIG = {
+  rootPath: import.meta.env.VITE_LML_ROOT_PATH || "/",
+  gigsEndpoint: "https://api.lml.live/gigs",
+  gaProject: "G-8TKSCK99CN",
+  defaultLocation: "anywhere",
+  allowSelectLocation: false,
+  themes: {
+    default: {
+      defaultMapPin: "lml-marker-pink-midnite-outline.png",
+      savedMapPin: "lml-marker-pink-saved.png",
+    },
+    series: {}, // no map pin customisations by default for series gigs
+  },
+  allLocations: ALL_LOCATIONS,
+};
 
-export default () => {
+const createAppConfig = () => {
   // todo: pass in locations in settings ?
-  // also use javascript upperCamel not ruby style
-  // also worth memoising somehow?
-  return {
-    ...BASE_CONFIG,
-    allLocations: ALL_LOCATIONS,
-    gigImageThemes: {
-      default: null,
-      series: {
-        stkildafestival2025: stKildaFestivalGigImage,
-        lbmf2024: lbmfGigImage,
-        testSeries: testSeriesGigImage,
-      },
-    },
-    mapPinThemes: {
-      default: defaultMapPinTheme,
-      series: {
-        stkildafestival2025: stKildaFestivalMapPinTheme,
-        testSeries: testMapPinTheme,
-      },
-    },
+  const merged = merge(BASE_CONFIG, adaptLegacyConfigKeys(window.APP_CONFIG));
+  merged.themes = resolveThemeImages(merged.themes);
+  return merged;
+};
 
-    ...adaptLegacyConfigKeys(window.APP_CONFIG),
-  };
+// this config is loaded once - still global mutable tho so careful...
+const APP_CONFIG = createAppConfig();
+export default () => {
+  return APP_CONFIG;
 };
