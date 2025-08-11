@@ -6,7 +6,7 @@ import React, {
   useCallback,
 } from "react";
 
-import { CloseIcon } from "./icons";
+import { CloseIcon } from "./Icons";
 // Announcement configuration - easy to modify or extend
 const ANNOUNCEMENT_CONFIG = {
   id: "lml-gig-explorer-launch-aug-2025",

@@ -10,8 +10,6 @@ import {
 } from "../model";
 import { compact } from "lodash-es";
 
-import { datesForDateRange } from "../timeStuff";
-
 const GIGS_ENDPOINT = getConfig().gigsEndpoint;
 
 const loadData = async (url) => {
@@ -59,7 +57,7 @@ const useGigListData = () => {
       ? {
           locationId: params.locationId,
           dateRangeId: params.dateRangeId,
-          dates: datesForDateRange(params.dateRangeId, params.customDate),
+          dates: params.dates,
         }
       : null;
 

@@ -22,7 +22,3 @@ export const gigIsSaved = (gig) => {
   const savedGigs = JSON.parse(localStorage.getItem("savedGigs")) || [];
   return savedGigs.some((savedGig) => savedGig.id === gig.id);
 };
-
-export const getSavedGigIds = () => {
-  return JSON.parse(localStorage.getItem("savedGigs")) || [];
-};
