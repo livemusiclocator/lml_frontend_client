@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="" height="144" viewBox="0 0 256 144" xmlns="http://www.w3.org/2000/svg">
+  
+    <defs>
+      <filter id="logoShadow" x="-20%" y="-20%" width="140%" height="140%">
+        <feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="#44A6FF" flood-opacity="0.3"/>
+        <feColorMatrix type="saturate" values="1.5"/>
+      </filter>
+    </defs>
+
+  <!-- Large Icon 1 -->
+  <g transform="translate(40, 40) scale(6.4)">
+    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" 
+          stroke="#0088FF" 
+          stroke-width="2" 
+          fill="none" 
+          opacity="0.9" 
+          filter="url(#logoShadow)"/>
+  </g>
+  
+  <!-- Large Icon 2 (overlapped) -->
+  <g transform="translate(64, 50) scale(4.6)">
+    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" 
+          stroke="#44A6FF" 
+          stroke-width="3" 
+          fill="#0088FF" 
+          opacity="0.8" 
+          filter="url(#logoShadow)"/>
+  </g>
+  
+  <!-- Text -->
+  <text x="10" y="50"
+        font-family="Arial Black, Arial" 
+        font-size="27" 
+        font-weight="bold" 
+        fill="#0088FF" 
+        opacity="0.95" 
+        filter="url(#logoShadow)">FAKEFESTIVAL</text>
+  
+  <text x="10" y="90"
+        font-family="Arial, sans-serif" 
+        font-size="24" 
+        font-weight="normal" 
+        fill="#44A6FF" 
+        opacity="0.8" 
+        filter="url(#logoShadow)">SOUND</text>
+        
+  <!-- Decorative elements -->
+  <circle cx="210" cy="30" r="6" fill="#0088FF" opacity="0.6"/>
+  <circle cx="220" cy="50" r="4" fill="#44A6FF" opacity="0.4"/>
+  <circle cx="230" cy="70" r="3" fill="#0088FF" opacity="0.8"/>
+</svg>
