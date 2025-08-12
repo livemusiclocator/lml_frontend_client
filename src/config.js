@@ -113,8 +113,8 @@ const BASE_CONFIG = {
   allowSelectLocation: false,
   themes: {
     default: {
-      defaultMapPin: "lml-marker-pink-midnite-outline.png",
-      savedMapPin: "lml-marker-pink-saved.png",
+      defaultMapPin: "mapPins/default-pin.png",
+      savedMapPin: "mapPins/default-pin-saved.png",
     },
     series: {}, // no map pin customisations by default for series gigs
   },
