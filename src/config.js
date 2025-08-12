@@ -1,11 +1,15 @@
 import { mapValues, merge } from "lodash-es";
+// using vite's glob function to dyamically load all the asset images in src/assets
+const imageModules = import.meta.glob("./assets/**/*.{png,jpg,jpeg,svg,gif}", {
+  eager: true,
+  query: "?url",
+  import: "default",
+});
 
-// resolves the image 'names' relative to the assets dir to cope with non root level deploys (e.g. /lml or /whatever)
-const getImageUrl = (name) => {
-  if (!name) {
-    return null;
-  }
-  return new URL(`./assets/${name}`, import.meta.url);
+// path is path relative to src/assets
+const getImageUrl = (relativeImagePath) => {
+  const path = `./assets/${relativeImagePath}`;
+  return imageModules[path] || null;
 };
 
 // Convert {"blah": "file.svg"} to {"blah": "/assets--whatever/file.svg"}
