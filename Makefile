@@ -23,6 +23,7 @@ BETA_DIR = $(FIREBASE_ROOT)/lml_gig_explorer_beta
 LIVE_DIR = $(FIREBASE_ROOT)/lml_gig_explorer_live
 DEV_DIR = $(FIREBASE_ROOT)/lml_gig_explorer_dev
 BUILD_CMD = npm run build -- --base="./" --manifest=manifest.json --outDir
+BUILD_DEV_CMD = npm run build -- --base="./" --mode development --manifest=manifest.json --outDir
 
 .PHONY: build clean
 
@@ -39,7 +40,7 @@ $(LIVE_DIR):
 
 $(DEV_DIR):
 	@mkdir -p $@
-	$(BUILD_CMD) $@
+	$(BUILD_DEV_CMD) $@
 
 clean:
 	rm -rf dists
