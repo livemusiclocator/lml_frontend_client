@@ -10,9 +10,8 @@ import Prices from "./Prices";
 import InfoTags from "./InfoTags";
 import Tickets from "./Tickets";
 import Sets from "./Sets";
-import lbmfLogo from "@/assets/lbmf2024logo.png";
-import skLogo from "@/assets/skf_blacklogo.svg";
 import { filteredGigListPath } from "@/searchParams";
+import getConfig from "@/config";
 
 const GigHeroImageBanner = () => {
   // probably a case for some actual css here .
@@ -42,8 +41,16 @@ const GigHeroImageBanner = () => {
 };
 
 const GigHeader = ({ gig, className }) => {
-  const lbmf = gig.series === "lbmf";
-  const sk = gig.series === "stkildafestival2025";
+  const {
+    themes: {
+      default: defaultGigImageTheme,
+      series: seriesGigImageThemes = {},
+    },
+  } = getConfig();
+  const theme = seriesGigImageThemes[gig.series] ?? defaultGigImageTheme;
+  // todo: change the config to call this 'gigImage' or something
+  const seriesImage = theme?.searchResult;
+
   return (
     <header
       className={`flex items-start justify-between flex-row ${className || ""} p-4`}
@@ -53,8 +60,7 @@ const GigHeader = ({ gig, className }) => {
           <DateTimeDisplay value={gig.date} type="briefDate" />
         </p>
         <h2 className="flex text-4xl font-bold items-center">
-          {lbmf && <img src={lbmfLogo} className="m-2 shrink w-10" />}
-          {sk && <img src={skLogo} className="m-2 shrink w-10" />}
+          {seriesImage && <img src={seriesImage} className="m-2 shrink w-10" />}
           {gig.name}
           {gig.status === "cancelled" && " (CANCELLED)"}
         </h2>
