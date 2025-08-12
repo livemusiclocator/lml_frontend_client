@@ -20,6 +20,14 @@ export default defineConfig({
     },
   },
   build: {
+    assetsInlineLimit: (filePath, content) => {
+      // these paths should never be inlined into bundle as are rarely used and edition-specific
+      if (filePath.includes("/gigSeriesCustom/")) {
+        return false;
+      }
+      // Default behavior for other files (inline if < 4KB)
+      return content.length < 4096;
+    },
     rollupOptions: {
       output: {
         entryFileNames: "lml_gig_explorer.js",
