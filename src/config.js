@@ -122,13 +122,16 @@ const BASE_CONFIG = {
     },
     series: {}, // no map pin customisations by default for series gigs
   },
-  allLocations: ALL_LOCATIONS,
 };
 
 const createAppConfig = () => {
   // todo: pass in locations in settings ?
   const merged = merge(BASE_CONFIG, adaptLegacyConfigKeys(window.APP_CONFIG));
   merged.themes = resolveThemeImages(merged.themes);
+  // temp until we update backend to send locations we default to all locs:
+  if (!merged.allLocations) {
+    merged.allLocations = ALL_LOCATIONS;
+  }
   return merged;
 };
 
