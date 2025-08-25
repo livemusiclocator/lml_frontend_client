@@ -8,7 +8,11 @@ import { useNavigate } from "react-router";
 
 import { filteredGigListPath } from "@/searchParams";
 
-import { useCurrentLocationSettings, useMapVenues } from "@/hooks/api";
+import {
+  useCurrentLocationSettings,
+  useMapVenues,
+  useGigSearchParams,
+} from "@/hooks/api";
 
 const mapPinThemeForVenue = (venue) => {
   const {
@@ -21,13 +25,15 @@ const mapPinThemeForVenue = (venue) => {
 };
 const VenueMarkers = () => {
   const { data: venues } = useMapVenues();
-
+  const { locationId } = useGigSearchParams();
   const navigate = useNavigate();
 
   const handleMarkerClick = async (venue) => {
-    // todo: Perhaps we should clear the tag filters here as more likely to get no results - maybe keep location and that's it
     const newVenueFilters = venue.selected ? [] : [venue.id];
-    await navigate(filteredGigListPath({ venueIds: newVenueFilters }));
+    // use the venue's location attribute to filter the venues too
+    await navigate(
+      filteredGigListPath({ venueIds: newVenueFilters, locationId }),
+    );
   };
   const customIcon = (venue) => {
     const { savedMapPin, defaultMapPin } = mapPinThemeForVenue(venue);

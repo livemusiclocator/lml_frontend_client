@@ -46,12 +46,15 @@ const gigListLoader = async (requestKey) => {
   return url && (await loadData(url));
 };
 
+export const useGigSearchParams = () => {
+  const [searchParams] = useSearchParams();
+
+  return parseSearchParams(searchParams);
+};
 // Gig list specific functions
 const useGigListData = () => {
   const routeType = useCurrentRouteType();
-  const [searchParams] = useSearchParams();
-
-  const params = parseSearchParams(searchParams);
+  const params = useGigSearchParams();
   const requestKey =
     routeType == "gigList"
       ? {
