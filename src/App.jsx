@@ -8,6 +8,7 @@ import Explorer from "./layouts/Explorer/Explorer";
 import GigList from "./pages/GigList/GigList";
 import getConfig from "./config";
 import { SWRConfig } from "swr";
+import ActDetails from "@/pages/ActDetails/ActDetails.jsx";
 const APP_CONFIG = getConfig();
 if (APP_CONFIG.gaProject && !APP_CONFIG.disableAnalytics) {
   ReactGA.initialize(APP_CONFIG.gaProject);
@@ -37,6 +38,14 @@ const router = createBrowserRouter(
               handle: {
                 showBackButton: true,
                 datasourceKey: "singleGig",
+              },
+            },
+            {
+              path: "acts/:id",
+              element: <ActDetails />,
+              handle: {
+                showBackButton: true,
+                datasourceKey: "singleAct",
               },
             },
           ],

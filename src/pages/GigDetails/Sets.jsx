@@ -1,4 +1,5 @@
 import { MusicalNoteIcon } from "@heroicons/react/24/solid";
+import { Link } from "react-router";
 
 export default function Sets({ sets }) {
   if (sets.length > 0) {
@@ -17,9 +18,11 @@ export default function Sets({ sets }) {
               description = `${description} (${set.duration} min)`;
             }
             return (
-              <li key={set.id} aria-label="Artist Set">
-                {description}
-              </li>
+              <Link key={set.act.id} to={`/acts/${set.act.id}`}>
+                <li key={set.act.id} aria-label="Artist Set">
+                  {description}
+                </li>
+              </Link>
             );
           })}
         </ul>

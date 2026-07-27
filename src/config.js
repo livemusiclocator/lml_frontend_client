@@ -112,6 +112,7 @@ const ALL_LOCATIONS = [
 const BASE_CONFIG = {
   rootPath: import.meta.env.VITE_LML_ROOT_PATH || "/",
   gigsEndpoint: "https://api.lml.live/gigs",
+  actsEndpoint: "https://api.lml.live/acts",
   gaProject: "G-8TKSCK99CN",
   defaultLocation: "anywhere",
   allowSelectLocation: false,

@@ -86,6 +86,17 @@ export const gigFromApiResponse = (gig) => {
   };
 };
 
+export const actFromApiResponse = (act) => {
+  if (!act) {
+    return null;
+  }
+  const genreTags = createTagsFromStrings(act?.genres || [], "genre");
+  return {
+    ...act,
+    genreTags,
+  };
+};
+
 const createLocationData = (locationId) => {
   const { allowSelectLocation, allLocations } = getConfig();
 
