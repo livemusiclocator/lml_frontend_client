@@ -2,7 +2,6 @@ import { useEffect, useState, useLayoutEffect } from "react";
 import {
   Map as MapLibreMap,
   Marker,
-  Popup,
   NavigationControl,
   useMap,
 } from "@vis.gl/react-maplibre";
@@ -41,10 +40,6 @@ const VenueMarkers = () => {
   const { data: venues } = useMapVenues();
   const { locationId } = useGigSearchParams();
   const navigate = useNavigate();
-  // maplibre has no equivalent of leaflet's hover Tooltip, so the marker
-  // tracks its own hover state and we render a popup for whichever one is under
-  // the pointer
-  const [hoveredVenue, setHoveredVenue] = useState(null);
 
   const handleMarkerClick = async (venue) => {
     const newVenueFilters = venue.selected ? [] : [venue.id];
@@ -73,35 +68,66 @@ const VenueMarkers = () => {
             key={index}
             longitude={longitude}
             latitude={latitude}
+            // the pin art is a teardrop whose point is at the bottom, so the
+            // point belongs on the coordinate. leaflet centred it, which put
+            // the tip about 22px below the venue it was pointing at
+            anchor="bottom"
             onClick={() => handleMarkerClick(venue)}
           >
-            <img
-              src={iconUrl}
-              alt={venue.name}
-              width={45}
-              height={45}
-              className={`cursor-pointer ${dimmed}`}
-              onMouseEnter={() =>
-                setHoveredVenue({ name: venue.name, longitude, latitude })
-              }
-              onMouseLeave={() => setHoveredVenue(null)}
-            />
+            <div className="group relative">
+              <img
+                src={iconUrl}
+                alt={venue.name}
+                width={45}
+                height={45}
+                className={`cursor-pointer ${dimmed}`}
+              />
+              {/* a Popup here would flicker: it opens over the pin, so the
+                  pointer leaves the pin, which closes it, which puts the
+                  pointer back on the pin. this label lives inside the marker
+                  and is pure css, so there is no state to race, and
+                  pointer-events-none stops it ever taking the pointer from the
+                  pin underneath. note tailwind gates group-hover behind
+                  @media (hover: hover), so this is desktop only - on touch,
+                  tapping a pin filters the list instead */}
+              <span className="pointer-events-none absolute bottom-full left-1/2 mb-1 hidden -translate-x-1/2 whitespace-nowrap rounded bg-white/95 px-2 py-1 text-xs font-medium text-gray-900 shadow-md group-hover:block">
+                {venue.name}
+              </span>
+            </div>
           </Marker>
         );
       })}
-      {hoveredVenue && (
-        <Popup
-          longitude={hoveredVenue.longitude}
-          latitude={hoveredVenue.latitude}
-          closeButton={false}
-          closeOnClick={false}
-          offset={26}
-        >
-          {hoveredVenue.name}
-        </Popup>
-      )}
     </>
   );
+};
+
+// the liberty style labels pubs, bars and restaurants itself, a few metres off
+// from our own coordinates, so the same place shows up twice and reads as a data
+// error. we own this style, so those layers can just be switched off - the same
+// thing on google needs cloud styling attached to a billable map id.
+//
+// transit poi are deliberately kept: they help someone work out how to get to a
+// gig, and they do not duplicate anything we draw.
+const hideBasemapVenuePoi = (map) => {
+  for (const layer of map.getStyle()?.layers ?? []) {
+    if (layer["source-layer"] === "poi" && layer.id !== "poi_transit") {
+      map.setLayoutProperty(layer.id, "visibility", "none");
+    }
+  }
+};
+
+const BasemapPoiSuppressor = () => {
+  const { current: mapRef } = useMap();
+  useEffect(() => {
+    if (!mapRef) return;
+    const map = mapRef.getMap();
+    // the style may not have arrived yet, and can be swapped later on
+    if (map.isStyleLoaded()) hideBasemapVenuePoi(map);
+    const onStyleLoad = () => hideBasemapVenuePoi(map);
+    map.on("style.load", onStyleLoad);
+    return () => map.off("style.load", onStyleLoad);
+  }, [mapRef]);
+  return null;
 };
 
 // todo: map positioner could be a bit more smart - it should update the position only if it really needs to - so if i move
@@ -171,6 +197,7 @@ const Map = () => {
       >
         <NavigationControl position="top-left" />
         <VenueMarkers />
+        <BasemapPoiSuppressor />
         <MapPositioner />
       </MapLibreMap>
     </div>
