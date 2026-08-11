@@ -24,3 +24,6 @@ dist-ssr
 *.sw?
 dists
 .firebase/
+
+# build output: the rollup visualizer report
+tmp/

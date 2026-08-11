@@ -7,6 +7,8 @@ usage:
 	@echo "       Run the tests"
 	@echo "make build"
 	@echo "       Build for deployment"
+	@echo "make watch"
+	@echo "       Rebuild the dev bundle on change, for a local rails to consume"
 
 install:
 	npm install
@@ -25,9 +27,14 @@ DEV_DIR = $(FIREBASE_ROOT)/lml_gig_explorer_dev
 BUILD_CMD = npm run build -- --base="./" --manifest=manifest.json --outDir
 BUILD_DEV_CMD = npm run build -- --base="./" --mode development --manifest=manifest.json --outDir
 
-.PHONY: build clean
+.PHONY: build clean watch
 
 build: $(BETA_DIR) $(LIVE_DIR) ${DEV_DIR}
+
+# rebuild the dev bundle on every change, for serving to a local rails via
+# assets.lml.test (see the caddy target in the lml repo)
+watch:
+	$(BUILD_DEV_CMD) $(DEV_DIR) --watch
 
 # we could just build this once but it does not take long and maybe we want to use in future to manage releases?
 $(BETA_DIR):
