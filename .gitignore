@@ -10,7 +10,9 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+# also covers .env.local and .env.*.local, where the google maps api key goes
 *.local
+.env
 
 # Editor directories and files
 .vscode/*

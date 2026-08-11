@@ -17,12 +17,35 @@
     <title>Live Music Locator</title>
     <script>
       window.APP_CONFIG = {
-                rootPath: "/",
-                defaultLocation: "anywhere",
-                allowSelectLocation: true,
-                disableAnalytics: true
-            };
-        </script>
+        // the string below is vite's base url placeholder, substituted at
+        // serve/build time - absolute for the dev server ("/", or "/melbourne"
+        // for the per edition targets) and relative ("./") for `make build`, so
+        // resolving it against the document url covers both. that also lets
+        // this page work from any subdirectory it gets deployed into, eg the
+        // /lml_gig_explorer_beta/ copy on firebase, which react-router
+        // otherwise 404s on because the basename does not match the url it was
+        // served from. do not write that placeholder anywhere else in this
+        // comment - vite would substitute it there too.
+        rootPath: new URL("%BASE_URL%", window.location.href).pathname,
+        defaultLocation: "anywhere",
+        allowSelectLocation: true,
+        disableAnalytics: true,
+      };
+
+      // react-router matches the url in the address bar against rootPath above,
+      // so landing on .../index.html leaves it holding "index.html" as the route
+      // and it 404s. normalise to the directory form before the app boots - this
+      // runs in head, ahead of the module script that mounts the router.
+      if (window.location.pathname.endsWith("/index.html")) {
+        window.history.replaceState(
+          {},
+          "",
+          window.location.pathname.slice(0, -"index.html".length) +
+            window.location.search +
+            window.location.hash,
+        );
+      }
+    </script>
   </head>
   <body style="margin: 0">
     <div class="flex flex-col h-dvh relative">
@@ -32,37 +55,63 @@
         <div
           class="flex justify-between items-center flex-wrap mx-auto p-5 font-bold"
         >
-                    <div>
-
-                        <h1 class="text-4xl">LML Gig Explorer</h1>
-          <h2>Standalone dev edition</h2>
-                    </div>
-                    <div>
-            <button onclick="window.announcements?.show()"
-                class='button p-2 bg-blue-500 border-2 border-zinc-200 rounded-full cursor-pointer hover:bg-blue-300 hover:bg-blue-200'>
-
-          <svg
-                xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="size-7">
-                <path d="m11 7.601-5.994 8.19a1 1 0 0 0 .1 1.298l.817.818a1 1 0 0 0 1.314.087L15.09 12" />
-                <path d="M16.5 21.174C15.5 20.5 14.372 20 13 20c-2.058 0-3.928 2.356-6 2-2.072-.356-2.775-3.369-1.5-4.5" />
+          <div>
+            <h1 class="text-4xl">LML Gig Explorer</h1>
+            <h2>Standalone dev edition</h2>
+          </div>
+          <div>
+            <button
+              onclick="window.announcements?.show()"
+              class="button p-2 bg-blue-500 border-2 border-zinc-200 rounded-full cursor-pointer hover:bg-blue-300 hover:bg-blue-200"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="size-7"
+              >
+                <path
+                  d="m11 7.601-5.994 8.19a1 1 0 0 0 .1 1.298l.817.818a1 1 0 0 0 1.314.087L15.09 12"
+                />
+                <path
+                  d="M16.5 21.174C15.5 20.5 14.372 20 13 20c-2.058 0-3.928 2.356-6 2-2.072-.356-2.775-3.369-1.5-4.5"
+                />
                 <circle cx="16" cy="7" r="5" />
-            </svg>
-        </button>
-        <button onclick="window.APP_CONFIG.shuffleSeriesAssignments=true"
-            class='button p-2 bg-blue-500 border-2 border-zinc-200 rounded-full cursor-pointer hover:bg-blue-300 hover:bg-blue-200 text-xs' title="shuffle series assignments">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="size-7">
+              </svg>
+            </button>
+            <button
+              onclick="window.APP_CONFIG.shuffleSeriesAssignments=true"
+              class="button p-2 bg-blue-500 border-2 border-zinc-200 rounded-full cursor-pointer hover:bg-blue-300 hover:bg-blue-200 text-xs"
+              title="shuffle series assignments"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="size-7"
+              >
                 <circle cx="11" cy="4" r="2" />
                 <circle cx="18" cy="8" r="2" />
                 <circle cx="20" cy="16" r="2" />
-                <path d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z" />
-            </svg>
+                <path
+                  d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
-            </div>
-
       </header>
 
       <div

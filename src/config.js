@@ -112,6 +112,15 @@ const ALL_LOCATIONS = [
 const BASE_CONFIG = {
   rootPath: import.meta.env.VITE_LML_ROOT_PATH || "/",
   gigsEndpoint: "https://api.lml.live/gigs",
+  // google maps will not load without a key. it is a client side key so it ends
+  // up readable in the bundle either way - what keeps it from being abused is the
+  // http referrer restriction on the key itself, which has to list every host
+  // the explorer is embedded on. put it in .env.local locally (gitignored) and
+  // have the hosting page pass googleMapsApiKey for deployed builds.
+  googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || null,
+  // advanced markers only render on a map that has a map id. google's
+  // DEMO_MAP_ID works for development without creating one
+  googleMapsMapId: import.meta.env.VITE_GOOGLE_MAPS_MAP_ID || "DEMO_MAP_ID",
   gaProject: "G-8TKSCK99CN",
   defaultLocation: "anywhere",
   allowSelectLocation: false,
