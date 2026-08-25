@@ -86,6 +86,75 @@ export const gigFromApiResponse = (gig) => {
   };
 };
 
+// The map behind the act page, since an act has no location of its own: the
+// venues it is playing at soon.
+//
+// Leaflet halves the span the map covers at every zoom step, and this one is
+// roughly 800px of tiles wide, so this is the zoom whose visible span is about
+// twice the spread of the pins - near enough to fitting them without teaching
+// MapPositioner about bounds. One venue has no spread and lands on 15, the same
+// close in view a gig page gets.
+const zoomForSpread = (spread) =>
+  spread > 0
+    ? Math.min(15, Math.max(9, Math.floor(Math.log2(562 / spread))))
+    : 15;
+
+const createMapSettingsForVenues = (venues) => {
+  const coordinates = venues
+    .map((venue) => [Number(venue.latitude), Number(venue.longitude)])
+    .filter(([latitude, longitude]) => latitude && longitude);
+  if (coordinates.length === 0) {
+    return null;
+  }
+  const latitudes = coordinates.map(([latitude]) => latitude);
+  const longitudes = coordinates.map(([, longitude]) => longitude);
+  const middle = (values) => (Math.min(...values) + Math.max(...values)) / 2;
+  const span = (values) => Math.max(...values) - Math.min(...values);
+  const mapCenter = [middle(latitudes), middle(longitudes)];
+  // a degree of longitude is narrower than a degree of latitude this far south
+  const spread = Math.max(
+    span(latitudes),
+    span(longitudes) * Math.cos((mapCenter[0] * Math.PI) / 180),
+  );
+
+  return { zoom: zoomForSpread(spread), mapCenter };
+};
+
+// An act as /acts/:id returns it: the act's own fields, plus the gigs it has
+// coming up. Genres arrive as plain strings here rather than the gig endpoint's
+// genre_tags, so they get tagged the same way to keep the two shapes alike.
+export const actFromApiResponse = (act) => {
+  if (!act) {
+    return null;
+  }
+  const genreTags = createTagsFromStrings(act.genres || [], "genre");
+  const upcomingGigs = act.upcoming_gigs || [];
+  // a gig without a venue is not a map pin, and there is nothing else useful to
+  // do with it - the list below still shows it
+  const gigsByVenue = groupBy(
+    upcomingGigs.filter((gig) => gig.venue),
+    (gig) => gig.venue.id,
+  );
+  const mapVenues = uniqBy(
+    upcomingGigs.map((gig) => gig.venue).filter(Boolean),
+    "id",
+  ).map((venue) => ({
+    ...venue,
+    // not selected, so clicking the pin filters the gig list down to this venue
+    // rather than clearing the filter the way it does from a gig page
+    selected: false,
+    selectedGigCount: gigsByVenue[venue.id].length,
+    showAsActive: true,
+  }));
+
+  return {
+    ...act,
+    genreTags,
+    mapSettings: createMapSettingsForVenues(mapVenues),
+    mapVenues,
+  };
+};
+
 const createLocationData = (locationId) => {
   const { allowSelectLocation, allLocations } = getConfig();
 

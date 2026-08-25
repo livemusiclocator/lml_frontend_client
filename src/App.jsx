@@ -4,6 +4,7 @@ import DefaultLayout from "./layouts/default";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router";
 import SingleGigDetails from "./pages/GigDetails/GigDetails";
+import ActDetails from "./pages/ActDetails/ActDetails";
 import Explorer from "./layouts/Explorer/Explorer";
 import GigList from "./pages/GigList/GigList";
 import getConfig from "./config";
@@ -37,6 +38,16 @@ const router = createBrowserRouter(
               handle: {
                 showBackButton: true,
                 datasourceKey: "singleGig",
+              },
+            },
+            // rails serves an html page at this url too, so a cold load or a
+            // shared link lands somewhere real - see Web::ActsController
+            {
+              path: "acts/:id",
+              element: <ActDetails />,
+              handle: {
+                showBackButton: true,
+                datasourceKey: "singleAct",
               },
             },
           ],

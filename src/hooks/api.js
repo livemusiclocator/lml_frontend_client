@@ -6,11 +6,13 @@ import {
   transformGigData,
   applyFilters,
   gigFromApiResponse,
+  actFromApiResponse,
   toFilterSummary,
 } from "../model";
 import { compact } from "lodash-es";
 
 const GIGS_ENDPOINT = getConfig().gigsEndpoint;
+const ACTS_ENDPOINT = getConfig().actsEndpoint;
 
 const loadData = async (url) => {
   const response = await fetch(url);
@@ -38,6 +40,15 @@ const buildSingleGigEndpoint = (id) => {
 
 const singleGigLoader = async ({ id }) => {
   const url = buildSingleGigEndpoint(id);
+  return url && (await loadData(url));
+};
+
+const buildSingleActEndpoint = (id) => {
+  return id ? `${ACTS_ENDPOINT}/${id}` : null;
+};
+
+const singleActLoader = async ({ id }) => {
+  const url = buildSingleActEndpoint(id);
   return url && (await loadData(url));
 };
 
@@ -118,6 +129,34 @@ const useSingleGigData = () => {
   };
 };
 
+// Single act specific functions
+const useSingleActData = () => {
+  const routeType = useCurrentRouteType();
+  const routeParams = useParams();
+
+  const requestKey = routeType == "singleAct" ? { id: routeParams.id } : null;
+
+  const {
+    data: rawResult,
+    error,
+    isLoading,
+    isValidating,
+  } = useSWR(requestKey, (requestKey) => singleActLoader(requestKey), {
+    keepPreviousData: true,
+    revalidateOnFocus: false, // as for a single gig - the act page refetches on mount or refresh
+  });
+
+  const result = !error ? actFromApiResponse(rawResult) : null;
+
+  return {
+    data: result,
+    isLoading,
+    isValidating,
+    dataLoaded: !!rawResult,
+    error,
+  };
+};
+
 // Helper function to determine current route type
 const useCurrentRouteType = () => {
   const matches = useMatches();
@@ -131,9 +170,10 @@ const useCurrentRouteType = () => {
 const useCurrentDatasource = (expectedType = null) => {
   const routeType = useCurrentRouteType();
 
-  // Always call both hooks to avoid conditional hook calls
+  // Always call every hook to avoid conditional hook calls
   const gigListResult = useGigListData();
   const singleGigResult = useSingleGigData();
+  const singleActResult = useSingleActData();
   if (expectedType && routeType !== expectedType) {
     return {
       data: null,
@@ -148,9 +188,15 @@ const useCurrentDatasource = (expectedType = null) => {
     return gigListResult;
   } else if (routeType === "singleGig") {
     return singleGigResult;
+  } else if (routeType === "singleAct") {
+    return singleActResult;
   }
   // return the first that is available - prioritise single gig results
   return singleGigResult || gigListResult;
+};
+
+export const useAct = () => {
+  return useCurrentDatasource("singleAct");
 };
 
 export const useGig = () => {
