@@ -22,7 +22,7 @@ const ANNOUNCEMENT_CONFIG = {
         Election on Saturday 28 November 2026
       </p>
       <p>
-        <a href="https://votevicmusic.com.au" target="_blank" rel="noreferrer">
+        <a href="https://votevicmusic.com.au" target="_blank" rel="noopener">
           <img src={voteVicMusicImage} alt="Vote Vic Music" />
         </a>
       </p>
