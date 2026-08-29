@@ -7,33 +7,30 @@ import React, {
 } from "react";
 
 import { CloseIcon } from "./Icons";
+import { useGigSearchParams } from "../../hooks/api";
+import voteVicMusicImage from "../../assets/votevicmusic.png";
+
 // Announcement configuration - easy to modify or extend
 const ANNOUNCEMENT_CONFIG = {
-  id: "lml-gig-explorer-launch-aug-2025",
-  storageKey: "lml-gig-explorer-launch-aug-2025-seen",
-  title: "Hi there!",
+  id: "lml-vote-vic-music-2026",
+  storageKey: "lml-vote-vic-music-2026-seen",
+  title: "Vote Vic Music",
   message: () => (
     <>
       <p>
-        If you have visited us before, you may notice that the site has changed.
-        We have put the gig guide front and centre of{" "}
-        <a href="https://www.livemusiclocator.com.au">
-          LiveMusicLocator.com.au
-        </a>
+        Add your voice to the future of Victorian music ahead of the Victorian
+        Election on Saturday 28 November 2026
       </p>
       <p>
-        If you&apos;re looking for content from the old site, don&apos;t worry -
-        it&apos;s all here. You will find it all in the{" "}
-        <a href="/about">about menu</a>.
-      </p>
-      <p>
-        Oh, and the URL <a href="https://lml.live">lml.live</a> still works just
-        as it did before, natch.
+        <img src={voteVicMusicImage} alt="Vote Vic Music" />
       </p>
     </>
   ),
   dismissText: "Got it!",
-  expiryDate: new Date("2025-08-18"), // 2 weeks from now
+  // a Victorian election announcement is pointless once the election is over
+  expiryDate: new Date("2026-11-29"),
+  // this is a Victorian campaign - no interest to our Brisbane audience
+  hiddenLocationIds: ["brisbane"],
 };
 
 // Custom hook for localStorage functionality
@@ -84,7 +81,7 @@ const useTransitionEnd = (callback, dependencies = []) => {
 // Custom hook for announcement logic
 //
 // todo: this is all a bit messy and probably a bit overkill. simplify with library perhaps?
-const useAnnouncementState = (config) => {
+const useAnnouncementState = (config, enabled = true) => {
   const [isVisible, setIsVisible] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const storage = useLocalStorage();
@@ -107,7 +104,7 @@ const useAnnouncementState = (config) => {
   };
 
   const show = () => {
-    if (isExpired()) return;
+    if (isExpired() || !enabled) return;
     setIsVisible(true);
     requestAnimationFrame(() => setIsExpanded(true));
   };
@@ -129,10 +126,10 @@ const useAnnouncementState = (config) => {
 
   // Auto-show on first visit
   useEffect(() => {
-    if (!isExpired() && !hasBeenSeen()) {
+    if (enabled && !isExpired() && !hasBeenSeen()) {
       show();
     }
-  }, [hasBeenSeen, isExpired, show]);
+  }, [enabled, hasBeenSeen, isExpired, show]);
 
   return {
     isVisible,
@@ -175,8 +172,8 @@ const AnnouncementContent = ({ config, onClose }) => {
   );
 };
 
-const AnnouncementNotification = forwardRef(({ config }, ref) => {
-  const announcement = useAnnouncementState(config);
+const AnnouncementNotification = forwardRef(({ config, enabled }, ref) => {
+  const announcement = useAnnouncementState(config, enabled);
   const notificationRef = useTransitionEnd(announcement.handleTransitionEnd, [
     announcement.isExpanded,
   ]);
@@ -211,6 +208,10 @@ AnnouncementNotification.displayName = AnnouncementNotification;
 // Main Announcements component that manages everything
 const Announcements = () => {
   const notificationRef = React.useRef(null);
+  const { locationId } = useGigSearchParams();
+  const enabled = !(ANNOUNCEMENT_CONFIG.hiddenLocationIds || []).includes(
+    locationId,
+  );
 
   React.useEffect(() => {
     // Expose announcement controls to global window object for external apps
@@ -232,6 +233,7 @@ const Announcements = () => {
     <AnnouncementNotification
       ref={notificationRef}
       config={ANNOUNCEMENT_CONFIG}
+      enabled={enabled}
     />
   );
 };
