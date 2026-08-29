@@ -78,6 +78,9 @@ export const gigFromApiResponse = (gig) => {
   // todo: validate that gigs actually have venues before accessing venue details
   return {
     ...gig,
+    // the api sends "" as well as null for a gig belonging to no series, so
+    // everything downstream can just check whether there is one
+    series: gig.series || null,
     // todo : use genres and informationTags separately
     informationTags,
     genreTags,

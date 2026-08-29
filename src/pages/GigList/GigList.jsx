@@ -7,6 +7,7 @@ import {
 } from "@heroicons/react/24/solid";
 import DateTimeDisplay from "@/components/shared/DateTimeDisplay";
 import SaveGigButton from "@/components/shared//SaveGigButton";
+import SeriesBadge from "@/components/shared/SeriesBadge";
 import { useGigSearchResults } from "@/hooks/api";
 import GigFilter from "./GigFilter";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
@@ -35,6 +36,11 @@ const GigHeader = ({ gig, showDate = true }) => {
         {showDate && (
           <p className="text-sm">
             <DateTimeDisplay value={gig.start_timestamp} type="time" />
+          </p>
+        )}
+        {gig.series && (
+          <p>
+            <SeriesBadge series={gig.series} />
           </p>
         )}
         <h3 className="flex text-xl font-bold items-center">

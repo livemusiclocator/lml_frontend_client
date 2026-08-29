@@ -115,6 +115,21 @@ a.external-link {
   }
 }
 
+/* gigs in a series - a festival like BIGSOUND, a residency - are named, so a
+   run of them reads as one thing in a long list */
+.series-badge {
+  @apply bg-amber-200
+  text-amber-950
+  text-xs
+  font-semibold
+  uppercase
+  tracking-wide
+  rounded-full
+  inline-block
+  px-2
+  py-1;
+}
+
 /*  migrations from tw-styled comps */
 .ticket-status {
   @apply text-xs

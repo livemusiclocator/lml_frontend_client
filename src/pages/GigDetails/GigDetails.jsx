@@ -1,5 +1,6 @@
 import { useParams, useSearchParams, Link } from "react-router";
 import SaveGigButton from "@/components/shared/SaveGigButton";
+import SeriesBadge from "@/components/shared/SeriesBadge";
 import { useGig } from "@/hooks/api";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import DateTimeDisplay from "@/components/shared/DateTimeDisplay";
@@ -59,6 +60,11 @@ const GigHeader = ({ gig, className }) => {
         <p className="font-semibold">
           <DateTimeDisplay value={gig.date} type="briefDate" />
         </p>
+        {gig.series && (
+          <p className="py-1">
+            <SeriesBadge series={gig.series} />
+          </p>
+        )}
         <h2 className="flex text-4xl font-bold items-center">
           {seriesImage && <img src={seriesImage} className="m-2 shrink w-10" />}
           {gig.name}
