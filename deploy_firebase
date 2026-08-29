@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-
-set -euo pipefail
-
-export CI=yup
-
-make clean build
-
-npx firebase deploy --only hosting

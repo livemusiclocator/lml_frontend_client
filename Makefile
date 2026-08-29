@@ -7,6 +7,8 @@ usage:
 	@echo "       Run the tests"
 	@echo "make build"
 	@echo "       Build for deployment"
+	@echo "make deploy"
+	@echo "       Build and publish every bundle to firebase hosting"
 	@echo "make watch"
 	@echo "       Rebuild the dev bundle on change, for a local rails to consume"
 
@@ -27,7 +29,7 @@ DEV_DIR = $(FIREBASE_ROOT)/lml_gig_explorer_dev
 BUILD_CMD = npm run build -- --base="./" --manifest=manifest.json --outDir
 BUILD_DEV_CMD = npm run build -- --base="./" --mode development --manifest=manifest.json --outDir
 
-.PHONY: build clean watch
+.PHONY: build clean watch deploy
 
 build: $(BETA_DIR) $(LIVE_DIR) ${DEV_DIR}
 
@@ -48,6 +50,14 @@ $(LIVE_DIR):
 $(DEV_DIR):
 	@mkdir -p $@
 	$(BUILD_DEV_CMD) $@
+
+# publishes all three bundles at once, production included - see README. the
+# bundle directories are the build targets, so a stale one would never rebuild
+# and we would quietly ship yesterday's code: clean first, always.
+deploy:
+	$(MAKE) clean
+	$(MAKE) build
+	firebase deploy --only hosting
 
 clean:
 	rm -rf dists

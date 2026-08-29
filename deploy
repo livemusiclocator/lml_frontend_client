@@ -9,7 +9,7 @@ echo  -e "${bold}THIS IS AN EX-DEPLOYMENT SCRIPT ${normal}"
 
 echo "This deployment script has shuffled off his mortal coil, run down the curtain and joined the bleedin' choir invisible"
 
-echo "You may wish to check out ./deploy_firebase"
+echo "You may wish to check out \`make deploy\`"
 
 exit -1
 projects=(

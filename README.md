@@ -76,12 +76,19 @@ Manual, and not gated by CI. You need write access to the `lml-seo` firebase
 project (pinned in `.firebaserc`) and to be logged in:
 
 ```bash
-npx firebase login       # once
+firebase login           # once
 make install             # `make build` does not install for you
-./deploy_firebase
+make deploy
 ```
 
-`deploy_firebase` runs `make clean build` and then `firebase deploy --only hosting`.
+`make deploy` runs `make clean`, `make build` and then
+`firebase deploy --only hosting`. The clean is not optional - the bundle
+directories are the build targets, so without it make would leave a stale one
+in place and the deploy would ship it.
+
+The firebase CLI is not an npm dependency of this repo; install it however you
+like (`brew install firebase-cli`, or `npm i -g firebase-tools`) as long as
+`firebase` is on your PATH.
 
 `make build` produces **three** bundles under `dists/firebase_root/`, and the
 deploy publishes all of them at once:
@@ -108,7 +115,8 @@ Two things to keep in mind:
 
 ### The old github pages deploy
 
-`./deploy` is dead and exits immediately. It used to push builds into a set of
+`./deploy` is dead and exits immediately (it points at `deploy_firebase`, which
+is gone too - use `make deploy`). It used to push builds into a set of
 `*.github.io` repos, one per city, before everything moved to firebase. Likewise
 `caddyfile` and `caddy_up.sh` in this repo predate the shared caddy config in the
 `lml` repo and cover the `lml-development.live` domains rather than `.lml.test`.
