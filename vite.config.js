@@ -42,9 +42,14 @@ export default defineConfig({
     },
     rollupOptions: {
       output: {
-        entryFileNames: "lml_gig_explorer.js",
+        // the hash is what lets these be cached forever: a new build is a new
+        // url, so nothing has to expire for a deploy to be seen. Rails resolves
+        // the current names out of manifest.json rather than being told them,
+        // which is what keeps a frontend deploy from needing a rails one.
+        entryFileNames: "lml_gig_explorer.[hash].js",
         assetFileNames: (assetInfo) => {
-          if (assetInfo.name == "index.css") return "lml_gig_explorer.css";
+          if (assetInfo.name == "index.css")
+            return "lml_gig_explorer.[hash].css";
           // use original file names for everything else
           return assetInfo.name;
         },

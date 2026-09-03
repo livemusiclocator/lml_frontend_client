@@ -110,33 +110,35 @@ Two things to keep in mind:
 - **Promoting to production is a deploy from this repo**, not a rails release.
   There is no separate promotion step - `live` is built from your working tree.
 
-`rollupOptions` in `vite.config.js` pins the entrypoint names to
-`lml_gig_explorer.js` / `.css` so the URLs stay stable across deploys.
+`rollupOptions` in `vite.config.js` hashes the entrypoint names, so a build
+publishes `lml_gig_explorer.<hash>.js` / `.css`. Nothing needs telling what the
+hash is: rails reads `manifest.json`, published beside every bundle, at request
+time (`SpaAssets` in `lml_rb`). That is what lets a frontend deploy land without
+a rails deploy.
 
 ### Caching
 
-`firebase.json` sets two cache policies on top of firebase's one hour default:
+`firebase.json` sets three policies on top of firebase's one hour default:
 
 | Path | `Cache-Control` | Why |
 | --- | --- | --- |
-| `**/lml_gig_explorer.*` | `public, max-age=60` | the entry bundle |
-| `**/manifest.json` | `no-cache` | rails reads this at request time |
+| `**/lml_gig_explorer.*.js` / `.css` | `max-age=31536000, immutable` | the name changes whenever the content does |
+| `**/lml_gig_explorer.js` / `.css` | `public, max-age=60` | transitional, and its content changes every deploy |
+| `**/manifest.json` | `no-cache` | rails reads it at request time |
 
-The entry file names are stable, so there is no hash in the URL to bust: whatever
-`max-age` we set is how long a visitor can keep running the previous release
-after a deploy. It was an hour, which is a long time to wonder whether your
-deploy worked. Sixty seconds is the stopgap.
+A deploy is visible as soon as it lands, because the urls in the page change,
+and repeat visitors stop refetching the bundle at all rather than every hour.
+It also means the `data-turbo-track="reload"` already on those tags finally does
+something - the url it watches now actually changes.
 
-The fix is to let vite hash the names again by dropping the `rollupOptions`
-pinning above, and then serve the hashed files `immutable` - repeat visitors stop
-refetching 164KB every minute, and `data-turbo-track="reload"` finally does
-something, because the url it tracks would actually change.
+**The unhashed copies are transitional.** `make build` also copies each hashed
+file to its old stable name, so a rails that has not been deployed since - still
+carrying the old urls in its checked in `config/spa_assets.yml` - keeps working.
+That matters because `make deploy` publishes live, beta and dev in one go, so
+there is no way to try a change on one of them first and no room for a flag day.
 
-**That change has an order to it.** Rails resolves these urls through
-`manifest.json` at request time (`SpaAssets` in `lml_rb`) rather than from the
-checked in `config/spa_assets.yml`, which is what lets a frontend deploy land
-without a rails deploy. Hashing the file names before that is live in production
-would point rails at a bundle that no longer exists. Ship the rails side first.
+Once production rails is reading the manifest, delete `STABLE_COPIES` from the
+`Makefile` and the `max-age=60` rule from `firebase.json`.
 
 ### The old github pages deploy
 
