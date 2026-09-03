@@ -15,6 +15,8 @@ import { uniqBy } from "lodash-es";
 import getConfig from "@/config";
 
 import { filteredGigListPath } from "@/searchParams";
+import { useNewLayout } from "@/hooks/useNewLayout";
+import GigListNew from "./GigListNew";
 
 import { groupBy } from "lodash-es";
 
@@ -157,7 +159,7 @@ const Content = () => {
   );
 };
 
-const GigList = () => {
+const GigListLegacy = () => {
   return (
     <main className="flex-1 overflow-hidden flex flex-col w-full items-stretch max-w-3xl mx-auto">
       <GigFilter />
@@ -165,5 +167,7 @@ const GigList = () => {
     </main>
   );
 };
+
+const GigList = () => (useNewLayout() ? <GigListNew /> : <GigListLegacy />);
 
 export default GigList;

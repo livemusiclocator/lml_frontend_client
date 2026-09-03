@@ -13,6 +13,8 @@ import Tickets from "./Tickets";
 import Sets from "./Sets";
 import { filteredGigListPath } from "@/searchParams";
 import getConfig from "@/config";
+import { useNewLayout } from "@/hooks/useNewLayout";
+import GigDetailsNew from "./GigDetailsNew";
 
 const GigHeroImageBanner = () => {
   // probably a case for some actual css here .
@@ -110,7 +112,7 @@ const GigError = ({ error }) => {
     </div>
   );
 };
-export default function SingleGigDetails({ className }) {
+function SingleGigDetailsLegacy({ className }) {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
   const { data: gig, isLoading, error } = useGig(id);
@@ -142,5 +144,13 @@ export default function SingleGigDetails({ className }) {
         </>
       )}
     </article>
+  );
+}
+
+export default function SingleGigDetails(props) {
+  return useNewLayout() ? (
+    <GigDetailsNew />
+  ) : (
+    <SingleGigDetailsLegacy {...props} />
   );
 }

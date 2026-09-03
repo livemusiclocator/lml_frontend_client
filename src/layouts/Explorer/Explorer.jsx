@@ -4,16 +4,15 @@ import {
   useMatches,
   useLocation,
   useNavigationType,
-  useSearchParams,
 } from "react-router";
 import { BackButton, MapShowButton, MapHideButton } from "./Icons";
 import { useState, useEffect } from "react";
 import Map from "./Map";
 import Announcements from "./Announcements";
+import { useNewLayout } from "@/hooks/useNewLayout";
+import ExplorerNew from "@/layouts/ExplorerNew/ExplorerNew";
 
-export default function Explorer() {
-  const [searchParams] = useSearchParams();
-
+function ExplorerLegacy() {
   const [listMaximised, setListMaximised] = useState(true);
   let location = useLocation();
   const matches = useMatches();
@@ -29,11 +28,7 @@ export default function Explorer() {
     // reset the list maximised if we changed location
     setListMaximised(true);
   }, [location]);
-  const explorerClass =
-    "explorer-common " +
-    (searchParams.get("newLayout") == "true"
-      ? "explorer-new"
-      : "explorer-legacy");
+  const explorerClass = "explorer-common explorer-legacy";
   return (
     <main className={explorerClass}>
       <Announcements />
@@ -63,4 +58,8 @@ export default function Explorer() {
       </div>
     </main>
   );
+}
+
+export default function Explorer() {
+  return useNewLayout() ? <ExplorerNew /> : <ExplorerLegacy />;
 }

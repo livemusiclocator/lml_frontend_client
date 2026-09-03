@@ -12,6 +12,12 @@ const DateTimeDisplay = ({ value, start, end, type = "date" }) => {
       month: "long",
       day: "numeric",
     }),
+    // "Fri 4 Sept" - short enough for a date divider in a dense list
+    weekdayDate: new Intl.DateTimeFormat(undefined, {
+      weekday: "short",
+      day: "numeric",
+      month: "short",
+    }),
     numericDate: new Intl.DateTimeFormat(undefined, {
       month: "numeric",
       year: "numeric",

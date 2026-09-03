@@ -14,8 +14,39 @@
   --color-lmlpink-950: oklch(61.36% 0.252 355.28);
 
   --color-lmlpink: var(--color-lmlpink-950);
+  /* the pink is unreadable on a dark ground at full chroma, so the new layout
+     uses this lighter step of the same hue for text and icons */
+  --color-lmlpink-light: oklch(78% 0.16 355.28);
 
   --color-custom-blue: #1da1f2;
+
+  /* Dark surfaces for the new explorer layout (?newLayout=true). Named by role
+     rather than by number, because there are only ever these six. */
+  --color-night: #0b0b0f;
+  --color-night-raised: #14141c;
+  --color-night-chip: #1b1b24;
+  --color-night-line: #1e1e26;
+  --color-night-hairline: #17171f;
+  --color-ink: #f4f2f0;
+  --color-ink-muted: #8c8c9a;
+  --color-ink-dim: #4a4a5a;
+  --color-ink-chip: #c9c7d2;
+
+  /* One ramp for the new layout. The mockups drifted into 10.5/11/11.5/12/13/
+     13.5/14.5/15px with no step between them; these are the six sizes it
+     actually needed. */
+  --text-micro: 0.6875rem; /* 11px - mono date dividers, overline labels */
+  --text-mini: 0.75rem; /* 12px - chips, secondary meta */
+  --text-meta: 0.8125rem; /* 13px - set times, venue lines */
+  --text-item: 0.9375rem; /* 15px - gig names, row titles */
+  --text-lead: 1.125rem; /* 18px - sheet venue header */
+  --text-title: 1.5rem; /* 24px - gig detail title */
+
+  /* Times are set in mono so they align down the left of the list. A webfont
+     would cost every visitor a request on the legacy layout too, so this uses
+     what the device already has. */
+  --font-mono:
+    ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
 
   --font-sans:
     "Montserrat", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
@@ -112,6 +143,97 @@ a.external-link {
   }
   .map-container {
     @apply h-full w-full z-0 top-0 left-0 absolute;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   The new explorer layout, behind ?newLayout=true. Dark, dense, map-first.
+   Everything below is scoped to .explorer-new, and .explorer-new deliberately
+   does not carry .explorer-common, so none of the legacy panel rules reach it.
+   --------------------------------------------------------------------------- */
+.explorer-new {
+  @apply relative z-40 flex flex-1 min-h-0 flex-col overflow-hidden bg-night text-ink;
+
+  /* the header is in flow above this, so the map and the sheet are bounded by
+     what is left rather than sliding up underneath it */
+  .stage {
+    @apply relative min-h-0 grow overflow-hidden;
+  }
+
+  /* so the native location picker, the date picker and the scrollbars come up
+     dark rather than white-on-dark */
+  color-scheme: dark;
+
+  /* the filter chips scroll sideways; a scrollbar across them looks broken */
+  .chip-scroller {
+    scrollbar-width: none;
+  }
+  .chip-scroller::-webkit-scrollbar {
+    display: none;
+  }
+
+  .map-pane {
+    @apply absolute top-0 left-0 z-0 w-full transition-[height] duration-200 ease-in-out;
+  }
+  /* the map is the whole screen on the list, and the hero image on a gig page */
+  .map-pane.is-full {
+    @apply h-full;
+  }
+  .map-pane.is-hero {
+    @apply h-[170px];
+  }
+  .map-container {
+    @apply h-full w-full;
+  }
+
+  /* OpenStreetMap only ships light tiles. Inverting them is a stand-in so the
+     map does not glare out of a dark UI - a real dark tile set is a separate
+     decision, since it means another tile provider and its attribution. */
+  .leaflet-tile-pane {
+    filter: invert(1) hue-rotate(180deg) brightness(0.92) contrast(0.88)
+      saturate(0.55);
+  }
+  /* leaflet's own stylesheet lands after this one in the bundle and matches at
+     the same specificity, so these have to be marked important to win */
+  .leaflet-control-attribution {
+    @apply bg-night/75! text-ink-muted!;
+
+    a {
+      @apply text-ink-muted!;
+    }
+  }
+  /* leaflet's zoom buttons sit at the map's top left, which is exactly the strip
+     still showing when the sheet is all the way up, and they collide with the
+     back control on a gig page. Pinch and scroll zoom still work, and the map
+     keeps leaflet's keyboard zoom once focused. */
+  .leaflet-control-zoom {
+    @apply hidden;
+  }
+
+  .sheet {
+    @apply absolute bottom-0 left-0 z-20 flex w-full flex-col overflow-hidden
+      rounded-t-[20px] border-t border-night-line bg-night-raised;
+
+    box-shadow: 0 -14px 44px rgb(0 0 0 / 0.55);
+  }
+  /* no transition mid-drag, or the sheet lags behind the finger */
+  .sheet:not(.is-dragging) {
+    @apply transition-[height] duration-200 ease-out;
+  }
+  .sheet-handle {
+    @apply flex w-full cursor-grab touch-none justify-center py-2.5;
+  }
+  .sheet-handle span {
+    @apply block h-1 w-9 rounded-full bg-[#3a3a46];
+  }
+
+  .panel {
+    @apply absolute inset-0 z-20 overflow-y-auto overscroll-contain;
+  }
+  /* act pages have not been redesigned yet, so they keep their light styling
+     inside the dark shell rather than rendering dark text on a dark ground */
+  .panel.is-legacy-content {
+    @apply bg-white text-gray-900;
   }
 }
 

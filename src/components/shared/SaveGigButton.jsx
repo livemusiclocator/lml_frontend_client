@@ -2,7 +2,13 @@ import { useState } from "react";
 import { gigIsSaved, saveGig, unsaveGig } from "@/savedGigs";
 import { StarIcon as StarIconOutline } from "@heroicons/react/24/outline";
 import { StarIcon as StarIconSolid } from "@heroicons/react/24/solid";
-const SaveGigButton = ({ gig }) => {
+// className/iconClassName default to what the legacy layout has always used, so
+// the new layout can size and colour the star without forking the component
+const SaveGigButton = ({
+  gig,
+  className = "text-yellow-300",
+  iconClassName = "size-6",
+}) => {
   const [gigSaved, setGigSaved] = useState(gigIsSaved(gig));
 
   const toggleGigSaved = (e) => {
@@ -18,15 +24,11 @@ const SaveGigButton = ({ gig }) => {
   };
   const buttonTitle = gigSaved ? "Remove from favourites" : "Add to favourites";
   return (
-    <button
-      onClick={toggleGigSaved}
-      className="text-yellow-300"
-      title={buttonTitle}
-    >
+    <button onClick={toggleGigSaved} className={className} title={buttonTitle}>
       {gigSaved ? (
-        <StarIconSolid className="size-6" />
+        <StarIconSolid className={iconClassName} />
       ) : (
-        <StarIconOutline className="size-6" />
+        <StarIconOutline className={iconClassName} />
       )}
     </button>
   );
