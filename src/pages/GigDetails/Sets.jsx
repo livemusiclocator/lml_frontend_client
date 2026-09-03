@@ -8,7 +8,7 @@ export default function Sets({ sets }) {
 
         <ul>
           <li className="font-semibold text-lg">Sets</li>
-          {sets.map((set) => {
+          {sets.map((set, index) => {
             let description = set.act.name;
             if (set.start_time) {
               description = `${set.start_time} - ${description}`;
@@ -16,8 +16,12 @@ export default function Sets({ sets }) {
             if (set.duration) {
               description = `${description} (${set.duration} min)`;
             }
+            // the api sends no id for a set, and neither field can stand in for
+            // one: start_time is missing on most of them and an act can play
+            // twice at one gig. These rows carry no state and the whole list is
+            // replaced on every fetch, so position is the honest key.
             return (
-              <li key={set.id} aria-label="Artist Set">
+              <li key={index} aria-label="Artist Set">
                 {description}
               </li>
             );

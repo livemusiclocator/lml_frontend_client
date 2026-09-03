@@ -8,8 +8,10 @@ export default function Prices({ prices }) {
 
         <ul>
           <li className="font-semibold text-lg">Ticket Information</li>
-          {prices.map((price) => (
-            <li key={price.id} aria-label="Ticket Price">
+          {/* no id on a price either, and description is optional, so amount and
+              description cannot be relied on to tell two apart */}
+          {prices.map((price, index) => (
+            <li key={index} aria-label="Ticket Price">
               {price.amount} {price.description}
             </li>
           ))}
