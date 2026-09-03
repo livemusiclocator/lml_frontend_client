@@ -118,27 +118,20 @@ a rails deploy.
 
 ### Caching
 
-`firebase.json` sets three policies on top of firebase's one hour default:
+`firebase.json` sets two policies on top of firebase's one hour default:
 
 | Path | `Cache-Control` | Why |
 | --- | --- | --- |
 | `**/lml_gig_explorer.*.js` / `.css` | `max-age=31536000, immutable` | the name changes whenever the content does |
-| `**/lml_gig_explorer.js` / `.css` | `public, max-age=60` | transitional, and its content changes every deploy |
-| `**/manifest.json` | `no-cache` | rails reads it at request time |
+| `**/manifest.json` | `no-cache` | rails reads it on every deploy's first request |
 
 A deploy is visible as soon as it lands, because the urls in the page change,
-and repeat visitors stop refetching the bundle at all rather than every hour.
-It also means the `data-turbo-track="reload"` already on those tags finally does
-something - the url it watches now actually changes.
+and a repeat visitor never refetches a bundle it already has. It also means the
+`data-turbo-track="reload"` already on those tags does something - the url it
+watches now changes when the build does.
 
-**The unhashed copies are transitional.** `make build` also copies each hashed
-file to its old stable name, so a rails that has not been deployed since - still
-carrying the old urls in its checked in `config/spa_assets.yml` - keeps working.
-That matters because `make deploy` publishes live, beta and dev in one go, so
-there is no way to try a change on one of them first and no room for a flag day.
-
-Once production rails is reading the manifest, delete `STABLE_COPIES` from the
-`Makefile` and the `max-age=60` rule from `firebase.json`.
+Nothing here has to agree with rails about a file name, which is the point: the
+only fixed url between the two is `manifest.json`.
 
 ### The old github pages deploy
 

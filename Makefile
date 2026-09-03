@@ -29,16 +29,6 @@ DEV_DIR = $(FIREBASE_ROOT)/lml_gig_explorer_dev
 BUILD_CMD = npm run build -- --base="./" --manifest=manifest.json --outDir
 BUILD_DEV_CMD = npm run build -- --base="./" --mode development --manifest=manifest.json --outDir
 
-# Transitional. The entry files are hashed, and rails resolves the current names
-# out of manifest.json, but a rails that has not been deployed since still has
-# the old unhashed urls baked into its checked in config. Publishing both names
-# means neither release can break the other, so there is no flag day - which
-# matters here because `make deploy` publishes live, beta and dev together and
-# there is no way to try this on one of them first.
-#
-# Delete this once production rails is reading the manifest.
-STABLE_COPIES = cp $@/lml_gig_explorer.*.js $@/lml_gig_explorer.js && \
-	cp $@/lml_gig_explorer.*.css $@/lml_gig_explorer.css
 
 .PHONY: build clean watch deploy
 
@@ -53,17 +43,14 @@ watch:
 $(BETA_DIR):
 	@mkdir -p $@
 	$(BUILD_CMD) $@
-	$(STABLE_COPIES)
 
 $(LIVE_DIR):
 	@mkdir -p $@
 	$(BUILD_CMD) $@
-	$(STABLE_COPIES)
 
 $(DEV_DIR):
 	@mkdir -p $@
 	$(BUILD_DEV_CMD) $@
-	$(STABLE_COPIES)
 
 # publishes all three bundles at once, production included - see README. the
 # bundle directories are the build targets, so a stale one would never rebuild

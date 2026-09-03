@@ -39,15 +39,6 @@
         ]
       },
       {
-        "source": "**/lml_gig_explorer.*",
-        "headers": [
-          {
-            "key": "Cache-Control",
-            "value": "public, max-age=60"
-          }
-        ]
-      },
-      {
         "source": "**/lml_gig_explorer.*.js",
         "headers": [
           {
