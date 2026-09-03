@@ -113,6 +113,31 @@ Two things to keep in mind:
 `rollupOptions` in `vite.config.js` pins the entrypoint names to
 `lml_gig_explorer.js` / `.css` so the URLs stay stable across deploys.
 
+### Caching
+
+`firebase.json` sets two cache policies on top of firebase's one hour default:
+
+| Path | `Cache-Control` | Why |
+| --- | --- | --- |
+| `**/lml_gig_explorer.*` | `public, max-age=60` | the entry bundle |
+| `**/manifest.json` | `no-cache` | rails reads this at request time |
+
+The entry file names are stable, so there is no hash in the URL to bust: whatever
+`max-age` we set is how long a visitor can keep running the previous release
+after a deploy. It was an hour, which is a long time to wonder whether your
+deploy worked. Sixty seconds is the stopgap.
+
+The fix is to let vite hash the names again by dropping the `rollupOptions`
+pinning above, and then serve the hashed files `immutable` - repeat visitors stop
+refetching 164KB every minute, and `data-turbo-track="reload"` finally does
+something, because the url it tracks would actually change.
+
+**That change has an order to it.** Rails resolves these urls through
+`manifest.json` at request time (`SpaAssets` in `lml_rb`) rather than from the
+checked in `config/spa_assets.yml`, which is what lets a frontend deploy land
+without a rails deploy. Hashing the file names before that is live in production
+would point rails at a bundle that no longer exists. Ship the rails side first.
+
 ### The old github pages deploy
 
 `./deploy` is dead and exits immediately (it points at `deploy_firebase`, which

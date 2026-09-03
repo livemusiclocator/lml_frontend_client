@@ -28,6 +28,24 @@
             "value": "*"
           }
         ]
+      },
+      {
+        "source": "**/manifest.json",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache"
+          }
+        ]
+      },
+      {
+        "source": "**/lml_gig_explorer.*",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=60"
+          }
+        ]
       }
     ],
     "rewrites": [
