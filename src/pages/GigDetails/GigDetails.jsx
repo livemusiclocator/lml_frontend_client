@@ -11,7 +11,7 @@ import Prices from "./Prices";
 import InfoTags from "./InfoTags";
 import Tickets from "./Tickets";
 import Sets from "./Sets";
-import { filteredGigListPath } from "@/searchParams";
+import { useFilteredGigListPath } from "@/searchParams";
 import getConfig from "@/config";
 import { useNewLayout } from "@/hooks/useNewLayout";
 import GigDetailsNew from "./GigDetailsNew";
@@ -82,6 +82,7 @@ const GigHeader = ({ gig, className }) => {
   );
 };
 const GigError = ({ error }) => {
+  const gigListPath = useFilteredGigListPath();
   return (
     <div className="p-8 m-8 flex flex-col items-center gap-8">
       <h2 className="text-4xl font-bold">Gig not found</h2>
@@ -91,7 +92,7 @@ const GigError = ({ error }) => {
             <p>We don&apos;t seem to know about this gig.</p>
             <p>
               Maybe you could try{" "}
-              <Link to={filteredGigListPath()} className="internal-link">
+              <Link to={gigListPath()} className="internal-link">
                 looking for it here
               </Link>
               .

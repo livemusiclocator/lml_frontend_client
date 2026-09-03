@@ -14,7 +14,7 @@ import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import { uniqBy } from "lodash-es";
 import getConfig from "@/config";
 
-import { filteredGigListPath } from "@/searchParams";
+import { useFilteredGigListPath } from "@/searchParams";
 import { useNewLayout } from "@/hooks/useNewLayout";
 import GigListNew from "./GigListNew";
 
@@ -65,6 +65,7 @@ const GigHeader = ({ gig, showDate = true }) => {
 };
 
 const GigRow = ({ gig }) => {
+  const gigListPath = useFilteredGigListPath();
   return (
     <article className="flex flex-col snap-start p-4 text-sm">
       <GigHeader gig={gig} showDate={false} />
@@ -73,12 +74,12 @@ const GigRow = ({ gig }) => {
           <MapPinIcon className="text-gray-500 size-4 shrink-0 m-1" />
           <div aria-label="Venue">
             <p className="font-semibold leading-6">
-              <Link to={filteredGigListPath({ venueIds: [gig.venue.id] })}>
+              <Link to={gigListPath({ venueIds: [gig.venue.id] })}>
                 {gig.venue.name}
               </Link>
             </p>
             <p className="text-gray-500" aria-label="Venue address">
-              <Link to={filteredGigListPath({ venueIds: gig.venue.id })}>
+              <Link to={gigListPath({ venueIds: gig.venue.id })}>
                 {gig.venue.address}
               </Link>
             </p>
@@ -109,7 +110,7 @@ const GigRow = ({ gig }) => {
         <div className="">
           {uniqBy(gig.genreTags, "id").map(({ id, value }) => (
             <Link
-              to={filteredGigListPath({ genreTagIds: value })}
+              to={gigListPath({ genreTagIds: value })}
               key={id}
               className="tag"
             >

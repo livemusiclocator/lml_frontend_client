@@ -3,17 +3,16 @@ import {
   ArrowTopRightOnSquareIcon as ExternalLinkIcon,
 } from "@heroicons/react/24/solid";
 import { Link } from "react-router";
-import { filteredGigListPath } from "../../searchParams";
+import { useFilteredGigListPath } from "../../searchParams";
 
 export default function Venue({ venue }) {
+  const gigListPath = useFilteredGigListPath();
   return (
     <div className="flex gap-x-2">
       <MapPinIcon className="size-6 shrink-0" />
       <ul>
         <li aria-label="Venue" className="font-semibold text-lg">
-          <Link to={filteredGigListPath({ venueIds: venue.id })}>
-            {venue.name}
-          </Link>
+          <Link to={gigListPath({ venueIds: venue.id })}>{venue.name}</Link>
         </li>
         <li aria-label="Venue address">{venue.address}</li>
         {venue.location_url && (

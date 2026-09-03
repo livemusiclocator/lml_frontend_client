@@ -1,11 +1,12 @@
 import { Link } from "react-router";
 import { ClockIcon, MapPinIcon } from "@heroicons/react/24/solid";
 import DateTimeDisplay from "@/components/shared/DateTimeDisplay";
-import { filteredGigListPath } from "@/searchParams";
+import { useFilteredGigListPath } from "@/searchParams";
 
 // The api renders the act's gigs in date order and only the ones still to come,
 // so there is no sorting or filtering to do here.
 const UpcomingGig = ({ gig }) => {
+  const gigListPath = useFilteredGigListPath();
   return (
     <li className="py-2" aria-label="Upcoming gig">
       <h3 className="font-bold flex flex-wrap items-center">
@@ -33,7 +34,7 @@ const UpcomingGig = ({ gig }) => {
           <MapPinIcon className="size-4 shrink-0 text-gray-500 mt-1" />
           <div>
             <p className="font-semibold">
-              <Link to={filteredGigListPath({ venueIds: [gig.venue.id] })}>
+              <Link to={gigListPath({ venueIds: [gig.venue.id] })}>
                 {gig.venue.name}
               </Link>
             </p>

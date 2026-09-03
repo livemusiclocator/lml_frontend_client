@@ -2,7 +2,7 @@ import { Link } from "react-router";
 import { compact } from "lodash-es";
 import { useAct } from "@/hooks/api";
 import getConfig from "@/config";
-import { filteredGigListPath } from "@/searchParams";
+import { useFilteredGigListPath } from "@/searchParams";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import Genres from "@/pages/GigDetails/Genres";
 import ActLinks from "./ActLinks";
@@ -32,6 +32,7 @@ const ActHeader = ({ act, className }) => {
 };
 
 const ActError = ({ error }) => {
+  const gigListPath = useFilteredGigListPath();
   return (
     <div className="p-8 m-8 flex flex-col items-center gap-8">
       <h2 className="text-4xl font-bold">Act not found</h2>
@@ -40,7 +41,7 @@ const ActError = ({ error }) => {
           <p>We don&apos;t seem to know about this act.</p>
           <p>
             Maybe you could try{" "}
-            <Link to={filteredGigListPath()} className="internal-link">
+            <Link to={gigListPath()} className="internal-link">
               looking for them here
             </Link>
             .

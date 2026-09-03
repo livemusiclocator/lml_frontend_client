@@ -6,8 +6,7 @@ import getConfig from "@/config";
 import "leaflet/dist/leaflet.css";
 import { useNavigate } from "react-router";
 
-import { filteredGigListPath } from "@/searchParams";
-import { useFlaggedPath } from "@/hooks/useNewLayout";
+import { useFilteredGigListPath } from "@/searchParams";
 
 import {
   useCurrentLocationSettings,
@@ -28,18 +27,12 @@ const VenueMarkers = () => {
   const { data: venues } = useMapVenues();
   const { locationId } = useGigSearchParams();
   const navigate = useNavigate();
-  const flaggedPath = useFlaggedPath();
+  const gigListPath = useFilteredGigListPath();
 
   const handleMarkerClick = async (venue) => {
     const newVenueFilters = venue.selected ? [] : [venue.id];
     // use the venue's location attribute to filter the venues too
-    // filteredGigListPath builds a fresh query string, so the new layout flag
-    // has to be put back or a pin tap drops you into the legacy explorer
-    await navigate(
-      flaggedPath(
-        filteredGigListPath({ venueIds: newVenueFilters, locationId }),
-      ),
-    );
+    await navigate(gigListPath({ venueIds: newVenueFilters, locationId }));
   };
   const customIcon = (venue) => {
     const { savedMapPin, defaultMapPin } = mapPinThemeForVenue(venue);

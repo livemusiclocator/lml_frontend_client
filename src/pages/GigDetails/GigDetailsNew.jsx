@@ -7,9 +7,9 @@ import {
   ChevronRightIcon,
   ArrowTopRightOnSquareIcon,
 } from "@heroicons/react/24/outline";
-import { useGig, useGigSearchParams } from "@/hooks/api";
+import { useGig } from "@/hooks/api";
 import { useFlaggedPath } from "@/hooks/useNewLayout";
-import { filteredGigListPath } from "@/searchParams";
+import { useFilteredGigListPath } from "@/searchParams";
 import DateTimeDisplay from "@/components/shared/DateTimeDisplay";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import SaveGigButton from "@/components/shared/SaveGigButton";
@@ -59,17 +59,10 @@ const GigError = ({ error }) => (
 
 const GigDetailsNew = () => {
   const { data: gig, isLoading, error } = useGig();
+  // flaggedPath is still needed directly for the act links, which are not gig
+  // list paths
   const flaggedPath = useFlaggedPath();
-  const { locationId, dateRangeId, customDate } = useGigSearchParams();
-
-  // filteredGigListPath builds the query string from scratch, so anything not
-  // handed to it is silently rebuilt from defaults. Going back to the list from
-  // here should keep where and when you were looking - only what you tapped
-  // replaces the rest of the filters.
-  const scopedListPath = (filters) =>
-    flaggedPath(
-      filteredGigListPath({ locationId, dateRangeId, customDate, ...filters }),
-    );
+  const gigListPath = useFilteredGigListPath();
 
   const venue = gig?.venue;
   const sets = gig?.sets ?? [];
@@ -144,7 +137,7 @@ const GigDetailsNew = () => {
               {venue && (
                 <Row icon={MapPinIcon}>
                   <p className="text-meta font-semibold">
-                    <Link to={scopedListPath({ venueIds: venue.id })}>
+                    <Link to={gigListPath({ venueIds: venue.id })}>
                       {venue.name}
                     </Link>
                   </p>
@@ -234,10 +227,7 @@ const GigDetailsNew = () => {
                 {gig.genreTags?.length > 0 && (
                   <div className="flex flex-wrap gap-2">
                     {gig.genreTags.map(({ id, value, caption }) => (
-                      <Link
-                        key={id}
-                        to={scopedListPath({ genreTagIds: [value] })}
-                      >
+                      <Link key={id} to={gigListPath({ genreTagIds: [value] })}>
                         <Chip variant="accent">{caption}</Chip>
                       </Link>
                     ))}
@@ -249,7 +239,7 @@ const GigDetailsNew = () => {
             {venue && (
               <div className="px-4">
                 <Link
-                  to={scopedListPath({ venueIds: venue.id })}
+                  to={gigListPath({ venueIds: venue.id })}
                   className="flex items-center justify-between gap-3 rounded-xl border border-night-line bg-night-raised p-3.5"
                 >
                   <span className="truncate text-meta font-semibold">
