@@ -210,6 +210,15 @@ a.external-link {
     @apply hidden;
   }
 
+  /* Map.jsx dims inactive venues with grayscale + 60% opacity, which was judged
+     against light tiles. Greyscaling the pink pin lands it near #393939, so on
+     the inverted dark ones it vanishes into the ground. Lift it instead of
+     dimming it: still clearly recessive next to an active pink pin, but there. */
+  .leaflet-marker-icon.grayscale {
+    filter: grayscale(1) brightness(2.4);
+    opacity: 0.85;
+  }
+
   .sheet {
     @apply absolute bottom-0 left-0 z-20 flex w-full flex-col overflow-hidden
       rounded-t-[20px] border-t border-night-line bg-night-raised;
