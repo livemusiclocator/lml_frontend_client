@@ -252,43 +252,33 @@ a.external-link {
      behind it. Instead the list becomes a rail down the left and the map takes
      the rest of the width, which is also what centres the pins in the space
      that is actually left - the same shape the legacy explorer settles into.
+     The header stays across the top, as a toolbar over both.
      ------------------------------------------------------------------------- */
   --rail: clamp(22rem, 34%, 28rem);
 
   @media (width >= 48rem) {
-    display: grid;
-    grid-template-columns: var(--rail) 1fr;
-    grid-template-rows: auto minmax(0, 1fr);
-
-    /* the stage exists to stack the map and the sheet on a phone; here they are
-       grid items in their own right */
-    .stage {
-      display: contents;
-    }
-
-    .chrome {
-      grid-column: 1;
-      grid-row: 1;
-    }
-
-    /* full height beside the list on every route - there is no reason to crop
-       the map to a hero strip when it is not underneath anything */
+    /* Everything in here stays absolutely positioned, exactly as it is on a
+       phone. That is not incidental: the explorer takes its height from the
+       flex row it sits in, so the moment anything inside the stage is in flow,
+       the gig list's full length - a few thousand pixels of it - becomes the
+       explorer's height, and leaflet dutifully centres the map a screen and a
+       half below the fold. Nothing here may contribute height. */
     .map-pane,
     .map-pane.is-full,
+    /* no reason to crop the map to a hero strip when it is beside the page
+       rather than behind it */
     .map-pane.is-hero {
-      position: static;
-      grid-column: 2;
-      grid-row: 1 / -1;
+      left: var(--rail);
+      right: 0;
+      width: auto;
       height: 100%;
     }
 
     .sheet {
-      position: static;
-      grid-column: 1;
-      grid-row: 2;
+      top: 0;
+      width: var(--rail);
       /* the snap height BottomSheet sets inline means nothing to a rail */
       height: 100% !important;
-      min-height: 0;
       border-top: 0;
       border-right: 1px solid var(--color-night-line);
       border-radius: 0;
@@ -299,11 +289,11 @@ a.external-link {
       display: none;
     }
 
+    /* a gig or act page is the rail's content too */
     .panel {
-      position: static;
-      grid-column: 1;
-      grid-row: 1 / -1;
-      min-height: 0;
+      right: auto;
+      width: var(--rail);
+      border-right: 1px solid var(--color-night-line);
     }
 
     /* the filters cover the list they belong to, not the map */

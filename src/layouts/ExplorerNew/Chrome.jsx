@@ -50,8 +50,8 @@ const Chrome = ({ view, onViewChange, onOpenFilters }) => {
   );
 
   return (
-    <div className="chrome relative z-30 flex flex-col gap-2.5 border-b border-night-line bg-night-raised/95 px-4 pt-4 pb-3 backdrop-blur">
-      <div className="flex items-center justify-between gap-3">
+    <div className="relative z-30 flex flex-col gap-2.5 border-b border-night-line bg-night-raised/95 px-4 pt-4 pb-3 backdrop-blur md:flex-row md:items-center md:gap-5 md:py-3">
+      <div className="flex items-center justify-between gap-3 md:shrink-0">
         {locations.length > 1 ? (
           <div className="relative flex items-center">
             <select
@@ -96,7 +96,7 @@ const Chrome = ({ view, onViewChange, onOpenFilters }) => {
         </div>
       </div>
 
-      <div className="chip-scroller flex items-center gap-2 overflow-x-auto">
+      <div className="chip-scroller flex items-center gap-2 overflow-x-auto md:min-w-0 md:grow">
         <Chip variant="active" onClick={onOpenFilters}>
           {selectedDateRange?.readonlyCaption ??
             selectedDateRange?.caption ??
