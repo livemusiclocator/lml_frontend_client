@@ -46,7 +46,7 @@ const FilterDrawer = ({ onClose }) => {
   const gigCount = data?.gigs?.length ?? 0;
 
   return (
-    <div className="absolute inset-0 z-40 flex flex-col bg-night">
+    <div className="filter-drawer absolute inset-0 z-40 flex flex-col bg-night">
       <header className="flex items-center justify-between gap-3 border-b border-night-line px-4 py-3">
         <h2 className="text-lead font-bold -tracking-[0.015em]">Filters</h2>
         <div className="flex items-center gap-2">

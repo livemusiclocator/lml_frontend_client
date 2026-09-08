@@ -244,6 +244,75 @@ a.external-link {
   .panel.is-legacy-content {
     @apply bg-white text-gray-900;
   }
+
+  /* -------------------------------------------------------------------------
+     Tablet and up, the sheet stops being a sheet. A phone has room for one
+     thing at a time, so the list slides over the map; a wider screen does not,
+     and a list stretched to 1400px is mostly whitespace with the map hidden
+     behind it. Instead the list becomes a rail down the left and the map takes
+     the rest of the width, which is also what centres the pins in the space
+     that is actually left - the same shape the legacy explorer settles into.
+     ------------------------------------------------------------------------- */
+  --rail: clamp(22rem, 34%, 28rem);
+
+  @media (width >= 48rem) {
+    display: grid;
+    grid-template-columns: var(--rail) 1fr;
+    grid-template-rows: auto minmax(0, 1fr);
+
+    /* the stage exists to stack the map and the sheet on a phone; here they are
+       grid items in their own right */
+    .stage {
+      display: contents;
+    }
+
+    .chrome {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    /* full height beside the list on every route - there is no reason to crop
+       the map to a hero strip when it is not underneath anything */
+    .map-pane,
+    .map-pane.is-full,
+    .map-pane.is-hero {
+      position: static;
+      grid-column: 2;
+      grid-row: 1 / -1;
+      height: 100%;
+    }
+
+    .sheet {
+      position: static;
+      grid-column: 1;
+      grid-row: 2;
+      /* the snap height BottomSheet sets inline means nothing to a rail */
+      height: 100% !important;
+      min-height: 0;
+      border-top: 0;
+      border-right: 1px solid var(--color-night-line);
+      border-radius: 0;
+      box-shadow: none;
+    }
+    /* nothing to drag, and nothing to drag it to */
+    .sheet-handle {
+      display: none;
+    }
+
+    .panel {
+      position: static;
+      grid-column: 1;
+      grid-row: 1 / -1;
+      min-height: 0;
+    }
+
+    /* the filters cover the list they belong to, not the map */
+    .filter-drawer {
+      right: auto;
+      width: var(--rail);
+      border-right: 1px solid var(--color-night-line);
+    }
+  }
 }
 
 /* gigs in a series - a festival like BIGSOUND, a residency - are named, so a

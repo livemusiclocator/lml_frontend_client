@@ -50,7 +50,7 @@ const Chrome = ({ view, onViewChange, onOpenFilters }) => {
   );
 
   return (
-    <div className="relative z-30 flex flex-col gap-2.5 border-b border-night-line bg-night-raised/95 px-4 pt-4 pb-3 backdrop-blur">
+    <div className="chrome relative z-30 flex flex-col gap-2.5 border-b border-night-line bg-night-raised/95 px-4 pt-4 pb-3 backdrop-blur">
       <div className="flex items-center justify-between gap-3">
         {locations.length > 1 ? (
           <div className="relative flex items-center">
@@ -74,10 +74,12 @@ const Chrome = ({ view, onViewChange, onOpenFilters }) => {
           </h1>
         )}
 
+        {/* from tablet up the list and the map are side by side, so there is
+            nothing to switch between */}
         <div
           role="group"
           aria-label="List or map"
-          className="flex items-center gap-0.5 rounded-full bg-night-chip p-[3px]"
+          className="flex items-center gap-0.5 rounded-full bg-night-chip p-[3px] md:hidden"
         >
           <ViewButton
             active={view === "list"}

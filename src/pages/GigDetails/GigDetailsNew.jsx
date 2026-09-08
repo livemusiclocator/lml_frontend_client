@@ -18,8 +18,10 @@ import Chip from "@/components/new/Chip";
 import BackLink from "@/layouts/ExplorerNew/BackLink";
 
 // the map behind this page is the hero image, so the top of the page is a hole
-// you can see it through
-const HERO_HEIGHT = "h-[170px]";
+// you can see it through. From tablet up the map is beside the page rather than
+// behind it, so the hole would show nothing - it shrinks to a bar holding the
+// controls instead.
+const HERO_HEIGHT = "h-[170px] md:h-17 md:bg-night";
 
 const Row = ({ icon: Icon, children }) => (
   <div className="flex items-start gap-3 border-b border-night-line p-3.5 last:border-b-0">
