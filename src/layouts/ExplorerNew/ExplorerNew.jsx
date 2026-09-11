@@ -16,7 +16,7 @@ const useRouteKind = () => {
 };
 
 /**
- * The redesigned explorer, behind ?newLayout=true.
+ * The explorer.
  *
  * One map for the whole layout: it fills the screen behind the gig list, and
  * shrinks to a hero strip on a gig page rather than being replaced by a

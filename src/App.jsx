@@ -3,10 +3,10 @@ import ReactGA from "react-ga4";
 import DefaultLayout from "./layouts/default";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router";
-import SingleGigDetails from "./pages/GigDetails/GigDetails";
+import SingleGigDetails from "./pages/GigDetails/GigDetailsNew";
 import ActDetails from "./pages/ActDetails/ActDetails";
-import Explorer from "./layouts/Explorer/Explorer";
-import GigList from "./pages/GigList/GigList";
+import Explorer from "./layouts/ExplorerNew/ExplorerNew";
+import GigList from "./pages/GigList/GigListNew";
 import getConfig from "./config";
 import { SWRConfig } from "swr";
 const APP_CONFIG = getConfig();
@@ -27,7 +27,7 @@ const router = createBrowserRouter(
           children: [
             {
               index: true,
-              element: <GigList newGigFilter={true} />,
+              element: <GigList />,
               handle: {
                 datasourceKey: "gigList",
               },

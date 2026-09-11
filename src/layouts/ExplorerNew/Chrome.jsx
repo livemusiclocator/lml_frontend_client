@@ -32,8 +32,8 @@ const paramValueFor = (item) =>
 
 /**
  * The header over the map: where you are, list or map, and the filters that are
- * on. The chips are the whole point - the legacy layout keeps all of this behind
- * a button, so you cannot see what you have filtered to without opening it.
+ * on. The chips are the whole point - filters you cannot see are filters you
+ * forget you turned on.
  */
 const Chrome = ({ view, onViewChange, onOpenFilters }) => {
   const { data } = useGigSearchResults();

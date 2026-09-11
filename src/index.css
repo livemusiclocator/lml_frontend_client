@@ -14,14 +14,14 @@
   --color-lmlpink-950: oklch(61.36% 0.252 355.28);
 
   --color-lmlpink: var(--color-lmlpink-950);
-  /* the pink is unreadable on a dark ground at full chroma, so the new layout
-     uses this lighter step of the same hue for text and icons */
+  /* the pink is unreadable on a dark ground at full chroma, so this lighter
+     step of the same hue is what text and icons use */
   --color-lmlpink-light: oklch(78% 0.16 355.28);
 
   --color-custom-blue: #1da1f2;
 
-  /* Dark surfaces for the new explorer layout (?newLayout=true). Named by role
-     rather than by number, because there are only ever these six. */
+  /* Dark surfaces for the explorer. Named by role rather than by number,
+     because there are only ever these six. */
   --color-night: #0b0b0f;
   --color-night-raised: #14141c;
   --color-night-chip: #1b1b24;
@@ -32,9 +32,8 @@
   --color-ink-dim: #4a4a5a;
   --color-ink-chip: #c9c7d2;
 
-  /* One ramp for the new layout. The mockups drifted into 10.5/11/11.5/12/13/
-     13.5/14.5/15px with no step between them; these are the six sizes it
-     actually needed. */
+  /* One type ramp. The mockups drifted into 10.5/11/11.5/12/13/13.5/14.5/15px
+     with no step between them; these are the six sizes actually needed. */
   --text-micro: 0.6875rem; /* 11px - mono date dividers, overline labels */
   --text-mini: 0.75rem; /* 12px - chips, secondary meta */
   --text-meta: 0.8125rem; /* 13px - set times, venue lines */
@@ -43,8 +42,8 @@
   --text-title: 1.5rem; /* 24px - gig detail title */
 
   /* Times are set in mono so they align down the left of the list. A webfont
-     would cost every visitor a request on the legacy layout too, so this uses
-     what the device already has. */
+     would cost every visitor a request, so this uses what the device already
+     has. */
   --font-mono:
     ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
 
@@ -103,53 +102,8 @@ a.external-link {
   m-1;
 }
 
-.explorer-common {
-  @apply: h-full;
-  .gig-list-panel nav {
-    @apply border-b border-gray-200 p-2;
-    /* todo: rework all of this with a bit more tw vs css approach coherence ! */
-    width: 100%;
-    display: grid;
-    grid-template-columns: 2em 1fr 2em;
-    gap: 1em 0px;
-    grid-auto-flow: column dense;
-    justify-content: space-between;
-    grid-template-areas: ". middle-button .";
-    .overlay-expand-button {
-      @apply cursor-pointer;
-      grid-area: middle-button;
-      svg {
-        @apply mx-auto;
-      }
-    }
-  }
-}
-.explorer-legacy {
-  @apply relative z-40 flex-1;
-  .gig-list-panel {
-    @apply z-20 absolute bottom-0 left-0 w-full max-w-2xl p-0 h-full md:max-h-full flex flex-col py-2 overflow-hidden bg-white
-  md:rounded-3xl
-  md:shadow-xl
-  ease-in-out
-  duration-150
-  transition-[height]
-  m-0 md:m-2;
-  }
-  .gig-list-panel.is-maximised {
-    height: 98%;
-  }
-  .gig-list-panel.is-minimised {
-    @apply border border-gray-200 rounded-t-3xl h-38;
-  }
-  .map-container {
-    @apply h-full w-full z-0 top-0 left-0 absolute;
-  }
-}
-
 /* ---------------------------------------------------------------------------
-   The new explorer layout, behind ?newLayout=true. Dark, dense, map-first.
-   Everything below is scoped to .explorer-new, and .explorer-new deliberately
-   does not carry .explorer-common, so none of the legacy panel rules reach it.
+   The explorer: dark, dense, map-first.
    --------------------------------------------------------------------------- */
 .explorer-new {
   @apply relative z-40 flex flex-1 min-h-0 flex-col overflow-hidden bg-night text-ink;
@@ -251,8 +205,8 @@ a.external-link {
      and a list stretched to 1400px is mostly whitespace with the map hidden
      behind it. Instead the list becomes a rail down the left and the map takes
      the rest of the width, which is also what centres the pins in the space
-     that is actually left - the same shape the legacy explorer settles into.
-     The header stays across the top, as a toolbar over both.
+     that is actually left. The header stays across the top, as a toolbar over
+     both.
      ------------------------------------------------------------------------- */
   --rail: clamp(22rem, 34%, 28rem);
 

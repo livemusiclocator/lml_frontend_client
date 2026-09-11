@@ -6,7 +6,7 @@ import React, {
   useCallback,
 } from "react";
 
-import { CloseIcon } from "./Icons";
+import { XMarkIcon } from "@heroicons/react/24/solid";
 import { useGigSearchParams } from "../../hooks/api";
 import voteVicMusicImage from "../../assets/votevicmusic.png";
 
@@ -168,7 +168,7 @@ const AnnouncementContent = ({ config, onClose }) => {
         title="Close"
         className="announcement-close-button p-2 text-xs text-white ring-1 ring-slate-400  rounded-lg hover:bg-slate-600 focus:ring-2 focus:outline-none"
       >
-        <CloseIcon />
+        <XMarkIcon className="size-4" />
       </button>
     </div>
   );

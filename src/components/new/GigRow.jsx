@@ -2,7 +2,6 @@ import { Link } from "react-router";
 import { uniqBy } from "lodash-es";
 import SaveGigButton from "@/components/shared/SaveGigButton";
 import SeriesBadge from "@/components/shared/SeriesBadge";
-import { useFlaggedPath } from "@/hooks/useNewLayout";
 
 const TICKET_STATUS_LABELS = {
   selling_fast: "Selling fast",
@@ -26,7 +25,6 @@ const Badge = ({ children, className = "" }) => (
  * already headed by the venue.
  */
 const GigRow = ({ gig, showVenue = true }) => {
-  const flaggedPath = useFlaggedPath();
   const genres = uniqBy(gig.genreTags || [], "value")
     .slice(0, 3)
     .map((tag) => tag.caption);
@@ -51,7 +49,7 @@ const GigRow = ({ gig, showVenue = true }) => {
         <h3 className="truncate text-item leading-tight font-semibold">
           {/* the link covers the whole row; the save button below sits above it */}
           <Link
-            to={flaggedPath(`gigs/${gig.id}`)}
+            to={`gigs/${gig.id}`}
             className="after:absolute after:inset-0 after:content-['']"
           >
             {gig.name}

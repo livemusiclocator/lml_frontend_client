@@ -8,7 +8,6 @@ import {
   ArrowTopRightOnSquareIcon,
 } from "@heroicons/react/24/outline";
 import { useGig } from "@/hooks/api";
-import { useFlaggedPath } from "@/hooks/useNewLayout";
 import { useFilteredGigListPath } from "@/searchParams";
 import DateTimeDisplay from "@/components/shared/DateTimeDisplay";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
@@ -61,9 +60,6 @@ const GigError = ({ error }) => (
 
 const GigDetailsNew = () => {
   const { data: gig, isLoading, error } = useGig();
-  // flaggedPath is still needed directly for the act links, which are not gig
-  // list paths
-  const flaggedPath = useFlaggedPath();
   const gigListPath = useFilteredGigListPath();
 
   const venue = gig?.venue;
@@ -172,7 +168,7 @@ const GigDetailsNew = () => {
                       >
                         <span className="truncate text-meta font-semibold">
                           {set.act?.id ? (
-                            <Link to={flaggedPath(`/acts/${set.act.id}`)}>
+                            <Link to={`/acts/${set.act.id}`}>
                               {set.act.name}
                             </Link>
                           ) : (

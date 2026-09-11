@@ -1,16 +1,13 @@
 import { Link, useNavigationType } from "react-router";
 import { ChevronLeftIcon } from "@heroicons/react/24/outline";
-import { useFlaggedPath } from "@/hooks/useNewLayout";
 
 /**
  * Back to wherever you came from, or to the gig list if you arrived here cold -
- * a shared link, or rails serving /acts/:id directly. Same rule the legacy
- * explorer uses.
+ * a shared link, or rails serving /acts/:id directly.
  */
 const BackLink = ({ className = "" }) => {
   const navigationType = useNavigationType();
-  const flaggedPath = useFlaggedPath();
-  const target = navigationType === "PUSH" ? -1 : flaggedPath(".");
+  const target = navigationType === "PUSH" ? -1 : ".";
 
   return (
     <Link

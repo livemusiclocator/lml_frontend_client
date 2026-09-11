@@ -11,7 +11,7 @@ export const PARAM_FOR_FILTER_TYPE = {
 /**
  * Reads and writes the gig filters as query params. Everything goes through
  * URLSearchParams built from the current search, so params this does not know
- * about - newLayout, anything rails adds later - survive every change.
+ * about - anything rails adds later - survive every change.
  */
 export const useGigFilterControls = () => {
   const [searchParams, setSearchParams] = useSearchParams();
