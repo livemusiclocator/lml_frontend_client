@@ -2,9 +2,9 @@ import { Fragment } from "react";
 import { groupBy } from "lodash-es";
 import { useGigSearchResults } from "@/hooks/api";
 import { useGigFilterControls } from "@/hooks/useGigFilterControls";
-import LoadingSpinner from "@/components/shared/LoadingSpinner";
-import GigRow from "@/components/new/GigRow";
-import DateDivider from "@/components/new/DateDivider";
+import LoadingSpinner from "@/components/LoadingSpinner";
+import GigRow from "@/components/GigRow";
+import DateDivider from "@/components/DateDivider";
 
 const NoGigs = ({ onClearFilters }) => (
   <div className="flex flex-col items-center gap-3 p-8 text-center">
@@ -22,7 +22,7 @@ const NoGigs = ({ onClearFilters }) => (
   </div>
 );
 
-const GigListNew = () => {
+const GigList = () => {
   const { data, isLoading, dataLoaded } = useGigSearchResults();
   const controls = useGigFilterControls();
   const gigs = data?.gigs ?? [];
@@ -46,4 +46,4 @@ const GigListNew = () => {
   );
 };
 
-export default GigListNew;
+export default GigList;

@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useGigSearchResults } from "@/hooks/api";
 import { useGigFilterControls } from "@/hooks/useGigFilterControls";
-import Chip from "@/components/new/Chip";
+import Chip from "@/components/Chip";
 
 const Section = ({ title, children }) => (
   <section className="flex flex-col gap-2.5">
@@ -34,9 +34,8 @@ const TagSection = ({ title, filterType, options, onToggle }) => {
 };
 
 /**
- * Everything you can filter by, on one surface. The legacy layout hides all of
- * this behind a "filters" button that collapses to a 48px strip; here it is a
- * full sheet you close when you are done.
+ * Everything you can filter by, on one surface: a full sheet you close when you
+ * are done, rather than a strip that collapses away what you set.
  */
 const FilterDrawer = ({ onClose }) => {
   const { data, dataLoaded } = useGigSearchResults();

@@ -9,12 +9,12 @@ import {
 } from "@heroicons/react/24/outline";
 import { useGig } from "@/hooks/api";
 import { useFilteredGigListPath } from "@/searchParams";
-import DateTimeDisplay from "@/components/shared/DateTimeDisplay";
-import LoadingSpinner from "@/components/shared/LoadingSpinner";
-import SaveGigButton from "@/components/shared/SaveGigButton";
-import SeriesBadge from "@/components/shared/SeriesBadge";
-import Chip from "@/components/new/Chip";
-import BackLink from "@/layouts/ExplorerNew/BackLink";
+import DateTimeDisplay from "@/components/DateTimeDisplay";
+import LoadingSpinner from "@/components/LoadingSpinner";
+import SaveGigButton from "@/components/SaveGigButton";
+import SeriesBadge from "@/components/SeriesBadge";
+import Chip from "@/components/Chip";
+import BackLink from "@/layouts/Explorer/BackLink";
 
 // the map behind this page is the hero image, so the top of the page is a hole
 // you can see it through. From tablet up the map is beside the page rather than
@@ -58,7 +58,7 @@ const GigError = ({ error }) => (
   </div>
 );
 
-const GigDetailsNew = () => {
+const GigDetails = () => {
   const { data: gig, isLoading, error } = useGig();
   const gigListPath = useFilteredGigListPath();
 
@@ -254,4 +254,4 @@ const GigDetailsNew = () => {
   );
 };
 
-export default GigDetailsNew;
+export default GigDetails;

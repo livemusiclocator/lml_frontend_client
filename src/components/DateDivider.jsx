@@ -1,4 +1,4 @@
-import DateTimeDisplay from "@/components/shared/DateTimeDisplay";
+import DateTimeDisplay from "@/components/DateTimeDisplay";
 
 // Sticks to the top of the scroller so you always know which night you are
 // looking at, however far down a week you have scrolled.

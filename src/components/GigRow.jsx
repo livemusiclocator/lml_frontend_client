@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 import { uniqBy } from "lodash-es";
-import SaveGigButton from "@/components/shared/SaveGigButton";
-import SeriesBadge from "@/components/shared/SeriesBadge";
+import SaveGigButton from "@/components/SaveGigButton";
+import SeriesBadge from "@/components/SeriesBadge";
 
 const TICKET_STATUS_LABELS = {
   selling_fast: "Selling fast",

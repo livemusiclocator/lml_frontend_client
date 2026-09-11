@@ -3,7 +3,7 @@ import { compact } from "lodash-es";
 import { useAct } from "@/hooks/api";
 import getConfig from "@/config";
 import { useFilteredGigListPath } from "@/searchParams";
-import LoadingSpinner from "@/components/shared/LoadingSpinner";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import Genres from "@/pages/GigDetails/Genres";
 import ActLinks from "./ActLinks";
 import UpcomingGigs from "./UpcomingGigs";

@@ -105,7 +105,7 @@ a.external-link {
 /* ---------------------------------------------------------------------------
    The explorer: dark, dense, map-first.
    --------------------------------------------------------------------------- */
-.explorer-new {
+.explorer {
   @apply relative z-40 flex flex-1 min-h-0 flex-col overflow-hidden bg-night text-ink;
 
   /* the header is in flow above this, so the map and the sheet are bounded by
@@ -195,7 +195,7 @@ a.external-link {
   }
   /* act pages have not been redesigned yet, so they keep their light styling
      inside the dark shell rather than rendering dark text on a dark ground */
-  .panel.is-legacy-content {
+  .panel.is-light-content {
     @apply bg-white text-gray-900;
   }
 

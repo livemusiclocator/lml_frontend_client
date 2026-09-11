@@ -10,7 +10,7 @@ import {
   useGigFilterControls,
   PARAM_FOR_FILTER_TYPE,
 } from "@/hooks/useGigFilterControls";
-import Chip from "@/components/new/Chip";
+import Chip from "@/components/Chip";
 
 const ViewButton = ({ active, onClick, icon: Icon, label }) => (
   <button

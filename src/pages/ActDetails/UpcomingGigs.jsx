@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 import { ClockIcon, MapPinIcon } from "@heroicons/react/24/solid";
-import DateTimeDisplay from "@/components/shared/DateTimeDisplay";
+import DateTimeDisplay from "@/components/DateTimeDisplay";
 import { useFilteredGigListPath } from "@/searchParams";
 
 // The api renders the act's gigs in date order and only the ones still to come,

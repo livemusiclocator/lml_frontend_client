@@ -1,5 +1,5 @@
-// The one pill shape the new layout uses - filter chips, tags, badges. Kept in
-// one place so a chip in the header and a chip on a gig page cannot drift apart.
+// The one pill shape - filter chips, tags, badges. Kept in one place so a chip
+// in the header and a chip on a gig page cannot drift apart.
 
 const BASE =
   "inline-flex h-8 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full px-3 text-mini transition-colors";

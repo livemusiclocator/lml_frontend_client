@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { Outlet, useLocation, useMatches } from "react-router";
 import { compact } from "lodash-es";
-import Map from "../Explorer/Map";
-import Announcements from "../Explorer/Announcements";
+import Map from "./Map";
+import Announcements from "./Announcements";
 import Chrome from "./Chrome";
 import BottomSheet from "./BottomSheet";
 import FilterDrawer from "./FilterDrawer";
@@ -22,7 +22,7 @@ const useRouteKind = () => {
  * shrinks to a hero strip on a gig page rather than being replaced by a
  * placeholder image. The list rides over it in a sheet you can drag.
  */
-export default function ExplorerNew() {
+export default function Explorer() {
   const routeKind = useRouteKind();
   const location = useLocation();
   const [snap, setSnap] = useState("full");
@@ -39,7 +39,7 @@ export default function ExplorerNew() {
   }, [location.pathname]);
 
   return (
-    <main className="explorer-new">
+    <main className="explorer">
       <Announcements />
 
       {isList && (
@@ -63,10 +63,10 @@ export default function ExplorerNew() {
           </BottomSheet>
         ) : (
           <div
-            className={`panel ${routeKind === "singleAct" ? "is-legacy-content" : ""}`}
+            className={`panel ${routeKind === "singleAct" ? "is-light-content" : ""}`}
           >
-            {/* act pages are still the legacy component, so they need a back
-                control of their own rather than the one a gig page draws */}
+            {/* act pages have not been redesigned, so they need a back control
+                of their own rather than the one a gig page draws */}
             {routeKind === "singleAct" && (
               <div className="sticky top-0 z-10 border-b border-gray-200 bg-white">
                 <BackLink className="text-gray-900" />
