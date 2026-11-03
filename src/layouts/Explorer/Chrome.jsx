@@ -60,8 +60,15 @@ const Chrome = ({ view, onViewChange, onOpenFilters }) => {
               onChange={(event) => controls.setLocation(event.target.value)}
               className="appearance-none bg-transparent pr-5 text-lead font-bold -tracking-[0.015em] text-ink focus:outline-none"
             >
+              {/* chrome on windows paints this popup itself, copying the
+                  select's transparent background (which comes out white) and
+                  its near white text - so the options need colours of their own */}
               {locations.map(({ id, caption }) => (
-                <option key={id} value={id}>
+                <option
+                  key={id}
+                  value={id}
+                  className="bg-night-raised text-ink"
+                >
                   {caption}
                 </option>
               ))}
