@@ -12,6 +12,7 @@ import { useFilteredGigListPath } from "@/searchParams";
 import DateTimeDisplay from "@/components/DateTimeDisplay";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import SaveGigButton from "@/components/SaveGigButton";
+import ShareGigButton from "@/components/ShareGigButton";
 import SeriesBadge from "@/components/SeriesBadge";
 import Chip from "@/components/Chip";
 import BackLink from "@/layouts/Explorer/BackLink";
@@ -73,11 +74,18 @@ const GigDetails = () => {
         <div className="absolute inset-x-0 top-0 flex items-start justify-between p-3">
           <BackLink className="bg-night/70 text-ink" />
           {gig && (
-            <SaveGigButton
-              gig={gig}
-              className="flex size-11 items-center justify-center rounded-full bg-night/70 text-lmlpink-light"
-              iconClassName="size-5"
-            />
+            <div className="flex gap-2">
+              <ShareGigButton
+                gig={gig}
+                className="flex size-11 items-center justify-center rounded-full bg-night/70 text-lmlpink-light"
+                iconClassName="size-5"
+              />
+              <SaveGigButton
+                gig={gig}
+                className="flex size-11 items-center justify-center rounded-full bg-night/70 text-lmlpink-light"
+                iconClassName="size-5"
+              />
+            </div>
           )}
         </div>
       </div>
